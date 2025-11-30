@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+import leafyImage from '../../public/assets/other/Leafy_Vegetables.webp';
+import rootImage from '../../public/assets/other/root_vegetables.jpg';
+import seasonalImage from '../../public/assets/other/mango.jpg';
+import marrowImage from '../../public/assets/other/Bottle_Gaurd.webp';
+
 const Vegetables = () => {
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [particles, setParticles] = useState([]);
+
+    const categories = [
+        { name: 'Leafy Greens', image: leafyImage },
+        { name: 'Root Vegetables', image: rootImage },
+        { name: 'Vegetables', image: marrowImage },
+        { name: 'Seasonal Picks', image: seasonalImage }
+    ];
 
     useEffect(() => {
         const handleMouseMove = (e) => {
@@ -23,7 +35,7 @@ const Vegetables = () => {
     }, []);
 
     const features = [
-        { title: "100% Organic", desc: "Sourced from certified organic farms" },
+        { title: "100% Farm Fresh Daily", desc: "Sourced from certified organic farms" },
         { title: "Daily Fresh", desc: "Harvested and delivered within 24 hours" },
         { title: "Hygiene Packed", desc: "Sanitized and packed with utmost care" },
         { title: "Premium Quality", desc: "Hand-picked for freshness and taste" }
@@ -228,7 +240,7 @@ const Vegetables = () => {
                                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                     >
                                         <div className="text-5xl md:text-6xl font-bold mb-4 opacity-90">100%</div>
-                                        <div className="text-xl md:text-2xl font-semibold opacity-80">Organic & Fresh</div>
+                                        <div className="text-xl md:text-2xl font-semibold opacity-80">Fresh From Farm Daily</div>
                                     </motion.div>
                                 </div>
                             </div>
@@ -281,7 +293,7 @@ const Vegetables = () => {
                     </motion.div>
 
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        {['Leafy Greens', 'Root Vegetables', 'Fresh Herbs', 'Seasonal Picks'].map((category, idx) => (
+                        {categories.map((category, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, scale: 0.9 }}
@@ -289,11 +301,19 @@ const Vegetables = () => {
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
                                 whileHover={{ scale: 1.05 }}
-                                className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer"
+                                className="group relative aspect-square rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-xl"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-600 opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <h3 className="text-white font-bold text-lg md:text-xl text-center px-4">{category}</h3>
+                                {/* Background Image */}
+                                <div
+                                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                                    style={{ backgroundImage: `url(${category.image})` }}
+                                ></div>
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity"></div>
+
+                                <div className="absolute inset-0 flex items-end justify-center pb-6">
+                                    <h3 className="text-white font-bold text-lg md:text-xl text-center px-2 drop-shadow-md">{category.name}</h3>
                                 </div>
                             </motion.div>
                         ))}

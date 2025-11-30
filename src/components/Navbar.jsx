@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logo from '../../public/assets/logo/2.png';
+import logo from '../../public/assets/logo/NPA_Logo_Enlarge.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
@@ -21,6 +21,7 @@ const Navbar = () => {
 
   const links = [
     { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
     { name: 'Vegetables', path: '/vegetables' },
     { name: 'Software', path: '/software' },
     { name: 'Seasonal', path: '/seasonal' },
@@ -39,6 +40,14 @@ const Navbar = () => {
           activeText: 'text-green-800',
           glow: 'shadow-green-500/20',
           gradientText: 'from-green-700 to-emerald-900'
+        };
+      case '/about':
+        return {
+          border: 'border-indigo-200/50',
+          activeBg: 'bg-indigo-100',
+          activeText: 'text-indigo-800',
+          glow: 'shadow-indigo-500/20',
+          gradientText: 'from-indigo-700 to-violet-900'
         };
       case '/software':
         return {
