@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import vegImage from '../assets/other/Vegetables.webp';
 import softImage from '../assets/other/Software.webp';
-import companyImage from '../assets/logo/NPA_Logo_withoutText.png';
+import companyImage from '../assets/logo/NPA_Logo_WithoutText.png';
 
 const Home = () => {
     const services = [
