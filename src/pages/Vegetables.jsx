@@ -70,8 +70,11 @@ const Vegetables = () => {
                                 We ensure quality, hygiene, and taste in every basket.
                             </motion.p>
 
-                            <motion.button
-                                className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                            <motion.a
+                                href="https://nave-web-ecommerc.vercel.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
@@ -79,7 +82,7 @@ const Vegetables = () => {
                                 whileTap={{ scale: 0.95 }}
                             >
                                 Order Now
-                            </motion.button>
+                            </motion.a>
                         </motion.div>
 
                         {/* Visual Element */}

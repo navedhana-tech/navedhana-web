@@ -117,8 +117,8 @@ const Navbar = () => {
                   key={link.path}
                   to={link.path}
                   className={`relative text-sm font-medium transition-colors duration-200 ${isActive(link.path)
-                      ? theme.activeText
-                      : 'text-gray-700 hover:text-gray-900'
+                    ? theme.activeText
+                    : 'text-gray-700 hover:text-gray-900'
                     }`}
                 >
                   {link.name}
@@ -141,12 +141,19 @@ const Navbar = () => {
               >
                 GET STARTED
               </Link>
-              <Link
-                to="/vegetables"
-                className={`px-5 py-2.5 text-sm font-semibold text-white ${theme.buttonBg} rounded-lg transition-all shadow-md hover:shadow-lg`}
+              <a
+                href="#footer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const footer = document.getElementById('footer');
+                  if (footer) {
+                    footer.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className={`px-5 py-2.5 text-sm font-semibold text-white ${theme.buttonBg} rounded-lg transition-all shadow-md hover:shadow-lg cursor-pointer`}
               >
                 CONTACT US
-              </Link>
+              </a>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -177,8 +184,8 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center justify-center px-4 py-3 rounded-2xl text-base font-medium transition-all ${isActive(link.path)
-                      ? `${theme.activeBg} text-white`
-                      : 'text-gray-600 hover:bg-gray-50'
+                    ? `${theme.activeBg} text-white`
+                    : 'text-gray-600 hover:bg-gray-50'
                     }`}
                 >
                   {link.name}
