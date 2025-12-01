@@ -126,18 +126,12 @@ const Home = () => {
                                         e.preventDefault();
                                         document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
                                     }}
-                                    className="group relative inline-block px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl shadow-green-500/30 hover:shadow-2xl hover:shadow-green-500/40 transition-all overflow-hidden"
+                                    className="group relative inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white lg:bg-gradient-to-r lg:from-green-600 lg:to-green-500 text-green-700 lg:text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all border-2 border-white lg:border-0"
                                 >
                                     <span className="relative z-10 flex items-center justify-center gap-2">
                                         Explore Services
                                         <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
                                     </span>
-                                    <motion.div
-                                        className="absolute inset-0 bg-gradient-to-r from-green-500 to-green-600"
-                                        initial={{ x: "-100%" }}
-                                        whileHover={{ x: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                    />
                                 </a>
                             </motion.div>
 
