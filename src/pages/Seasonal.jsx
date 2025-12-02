@@ -8,7 +8,7 @@ const Seasonal = () => {
             desc: "Organic, skin-friendly, and vibrant gulal for a safe and joyful Holi celebration.",
             gradient: "from-pink-500 to-purple-600",
             bgGradient: "from-pink-50 to-purple-50",
-            status: "Available Now",
+            status: "Coming Soon",
             statusColor: "bg-green-100 text-green-700"
         },
         {
@@ -24,7 +24,7 @@ const Seasonal = () => {
             desc: "Beautiful diyas, rangoli colors, and decorative items for the festival of lights.",
             gradient: "from-yellow-500 to-orange-600",
             bgGradient: "from-yellow-50 to-orange-50",
-            status: "Pre-Order",
+            status: "Coming Soon",
             statusColor: "bg-orange-100 text-orange-700"
         }
     ];
@@ -78,16 +78,14 @@ const Seasonal = () => {
                                 high-flying kites, and authentic seasonal products.
                             </motion.p>
 
-                            <motion.button
-                                className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
+                            <motion.div
+                                className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-orange-100 border-2 border-orange-400 rounded-xl sm:rounded-2xl text-orange-700 font-bold text-base sm:text-lg shadow-lg"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
                             >
-                                Browse Products
-                            </motion.button>
+                                Launching Soon
+                            </motion.div>
                         </motion.div>
 
                         {/* Visual Element - Festive Cards */}

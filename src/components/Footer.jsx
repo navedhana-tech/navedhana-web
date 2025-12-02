@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mail, Phone, MapPin, Instagram, Linkedin, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import { FaInstagram, FaLinkedin, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
 import logo from '../../public/assets/logo/NPA_Logo_Enlarge.png';
 import blueLogo from '../../public/assets/logo/blueLogo_Englarge.png';
 import orangeLogo from '../../public/assets/logo/orangeLogo_Englarge.png';
@@ -95,10 +96,10 @@ const Footer = () => {
                         {/* Social Media Icons */}
                         <div className="flex gap-4">
                             {[
-                                { name: 'Instagram', icon: Instagram, link: 'https://instagram.com', color: 'hover:text-pink-400' },
-                                { name: 'LinkedIn', icon: Linkedin, link: 'https://linkedin.com', color: 'hover:text-blue-400' },
-                                { name: 'WhatsApp', icon: MessageCircle, link: 'https://wa.me/', color: 'hover:text-green-400' },
-                                { name: 'Email', icon: Mail, link: 'mailto:info@navedhana.com', color: 'hover:text-red-400' }
+                                { name: 'Instagram', icon: FaInstagram, link: 'https://instagram.com', color: 'hover:text-pink-500' },
+                                { name: 'LinkedIn', icon: FaLinkedin, link: 'https://linkedin.com', color: 'hover:text-blue-500' },
+                                { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/', color: 'hover:text-green-500' },
+                                { name: 'Email', icon: FaEnvelope, link: 'mailto:info@navedhana.com', color: 'hover:text-orange-500' }
                             ].map((social) => {
                                 const IconComponent = social.icon;
                                 return (
@@ -107,10 +108,10 @@ const Footer = () => {
                                         href={social.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-all hover:scale-110 text-gray-400 ${social.color}`}
+                                        className={`w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-all hover:scale-110 text-gray-300 ${social.color}`}
                                         title={social.name}
                                     >
-                                        <IconComponent size={20} />
+                                        <IconComponent size={22} />
                                     </a>
                                 );
                             })}

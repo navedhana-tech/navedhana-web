@@ -15,7 +15,7 @@ const Home = () => {
             gradient: "from-lime-500 to-lime-600",
             bgGradient: "from-lime-50 to-lime-100",
             link: "/vegetables",
-            features: ["100% Organic", "Daily Fresh", "Farm Direct"],
+            features: ["100% Organic", "Farm Fresh", "Growing"],
             image: vegImage
         },
         {
@@ -24,16 +24,16 @@ const Home = () => {
             gradient: "from-blue-500 to-cyan-600",
             bgGradient: "from-blue-50 to-cyan-50",
             link: "/software",
-            features: ["Modern Tech", "Scalable", "Reliable"],
+            features: ["Innovative", "Partnering", "Scalable"],
             image: softImage
         },
         {
             title: "Seasonal Products",
-            description: "Celebrate every festival with authentic, vibrant seasonal products.",
+            description: "Coming soon! Celebrate every festival with authentic, vibrant seasonal products.",
             gradient: "from-orange-500 to-amber-600",
             bgGradient: "from-orange-50 to-amber-50",
             link: "/seasonal",
-            features: ["Festive Joy", "Premium Quality", "Authentic"],
+            features: ["Launching Soon", "Premium Quality", "Authentic"],
             image: companyImage
         }
     ];
@@ -83,7 +83,7 @@ const Home = () => {
                                 className="inline-block mb-6"
                             >
                                 <span className="px-4 py-2 bg-lime-100 text-lime-700 rounded-full text-sm font-semibold tracking-wide uppercase">
-                                    Empowering Growth Since 2023
+                                    Starting Our Journey in 2023
                                 </span>
                             </motion.div>
 
@@ -105,13 +105,13 @@ const Home = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4, duration: 0.6 }}
                             >
-                                <span className="text-white lg:text-gray-600">Where </span>
-                                <span className="font-semibold text-white lg:text-lime-600">Nature</span>
+                                <span className="text-white lg:text-gray-600">Building the Future of </span>
+                                <span className="font-semibold text-white lg:text-lime-600">Fresh Produce</span>
                                 <span className="text-white lg:text-gray-600">, </span>
-                                <span className="font-semibold text-blue-300 lg:text-blue-600">Technology</span>
+                                <span className="font-semibold text-blue-300 lg:text-blue-600">Digital Solutions</span>
                                 <span className="text-white lg:text-gray-600">, and </span>
-                                <span className="font-semibold text-orange-300 lg:text-orange-600">Tradition</span>
-                                <span className="text-white lg:text-gray-600"> Come Together To Create Something Extraordinary.</span>
+                                <span className="font-semibold text-orange-300 lg:text-orange-600">Festive Joy</span>
+                                <span className="text-white lg:text-gray-600">.</span>
                             </motion.p>
 
                             <motion.div
@@ -143,9 +143,9 @@ const Home = () => {
                                 transition={{ delay: 0.6, duration: 0.6 }}
                             >
                                 {[
-                                    { value: "100+", label: "Happy Customers" },
+                                    { value: "2+", label: "Happy Customers" },
                                     { value: "3", label: "Services" },
-                                    { value: "24/7", label: "Support" }
+                                    { value: "2023", label: "Founded" }
                                 ].map((stat, idx) => (
                                     <motion.div
                                         key={idx}
@@ -271,16 +271,16 @@ const Home = () => {
                                 Why Choose <span className="bg-gradient-to-r from-lime-400 to-lime-500 bg-clip-text text-transparent">Navedhana</span>?
                             </h2>
                             <p className="text-base md:text-lg text-gray-300 mb-8 leading-relaxed">
-                                As a passionate startup, we're committed to excellence in everything we do.
-                                From the freshness of our vegetables to the reliability of our code,
-                                we put our heart into every service.
+                                As a passionate startup launching in 2023, we're committed to excellence in everything we do.
+                                From the freshness of our vegetables to the reliability of our software solutions,
+                                we're building trust one customer at a time.
                             </p>
 
                             <div className="space-y-4">
                                 {[
-                                    { text: 'Customer-First Approach', desc: 'Your satisfaction is our priority' },
+                                    { text: 'Customer-First Approach', desc: 'Building relationships from day one' },
                                     { text: 'Quality Assurance', desc: 'Premium standards in every delivery' },
-                                    { text: 'Innovative Solutions', desc: 'Modern approaches to traditional needs' }
+                                    { text: 'Growing Together', desc: 'Your success is our success' }
                                 ].map((item, i) => (
                                     <motion.div
                                         key={i}
@@ -312,9 +312,9 @@ const Home = () => {
                             <div className="grid grid-cols-2 gap-4 md:gap-6">
                                 {[
                                     { label: 'Fresh Daily', value: '100%' },
-                                    { label: 'On-Time', value: '99%' },
-                                    { label: 'Satisfaction', value: '98%' },
-                                    { label: 'Support', value: '24/7' }
+                                    { label: 'Customers', value: '2+' },
+                                    { label: 'Services', value: '3' },
+                                    { label: 'Founded', value: '2023' }
                                 ].map((stat, i) => (
                                     <motion.div
                                         key={i}
