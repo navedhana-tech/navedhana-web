@@ -79,7 +79,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-12">
                     {/* Brand Section */}
-                    <div className="col-span-2 md:col-span-2">
+                    <div className="col-span-2 md:col-span-2 flex flex-col items-center md:items-start">
                         <div className="flex items-center gap-3 mb-4 sm:mb-6">
                             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
                                 <img src={getCurrentLogo()} alt="Navedhana" className="w-full h-full object-contain" />
@@ -89,12 +89,12 @@ const Footer = () => {
                                 <span className="text-xs sm:text-sm text-gray-400">Profit Amplifier Pvt. Ltd</span>
                             </div>
                         </div>
-                        <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md">
+                        <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md text-center md:text-left">
                             Empowering growth through fresh produce, innovative software solutions,
                             and seasonal joy. Your trusted partner for quality and excellence.
                         </p>
                         {/* Social Media Icons */}
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 justify-center md:justify-start">
                             {[
                                 { name: 'Instagram', icon: FaInstagram, link: 'https://instagram.com', color: 'hover:text-pink-500' },
                                 { name: 'LinkedIn', icon: FaLinkedin, link: 'https://linkedin.com', color: 'hover:text-blue-500' },
@@ -132,10 +132,10 @@ const Footer = () => {
                                 <li key={item.path}>
                                     <Link
                                         to={item.path}
-                                        className="text-gray-400 hover:text-white transition-colors flex items-center gap-3 group text-sm sm:text-base"
+                                        className="text-gray-400 hover:text-white transition-colors flex items-center gap-3 group text-xs sm:text-sm md:text-base"
                                     >
-                                        <img src={item.logo} alt={item.name} className="w-8 h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
-                                        {item.name}
+                                        <img src={item.logo} alt={item.name} className="w-6 h-6 sm:w-8 sm:h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
+                                        <span className="break-words">{item.name}</span>
                                     </Link>
                                 </li>
                             ))}
@@ -148,17 +148,17 @@ const Footer = () => {
                             Contact Us
                         </h3>
                         <ul className="space-y-2 sm:space-y-4">
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-sm sm:text-base">
+                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <Mail className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
                                 <span className="break-all">info@navedhana.com</span>
                             </li>
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-sm sm:text-base">
+                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
                                 <span>+91 123 456 7890</span>
                             </li>
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-sm sm:text-base">
+                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span>Hyderabad, India</span>
+                                <span className="break-words">Hyderabad, India</span>
                             </li>
                         </ul>
                     </div>
