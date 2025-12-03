@@ -125,16 +125,16 @@ const Footer = () => {
                         </h3>
                         <ul className="space-y-2 sm:space-y-3">
                             {[
-                                { name: 'Vegetables Supply', path: '/vegetables' },
-                                { name: 'Software Services', path: '/software' },
-                                { name: 'Seasonal Products', path: '/seasonal' }
+                                { name: 'Vegetables Supply', path: '/vegetables', logo: logo },
+                                { name: 'Software Services', path: '/software', logo: blueLogo },
+                                { name: 'Seasonal Products', path: '/seasonal', logo: orangeLogo }
                             ].map((item) => (
                                 <li key={item.path}>
                                     <Link
                                         to={item.path}
-                                        className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group text-sm sm:text-base"
+                                        className="text-gray-400 hover:text-white transition-colors flex items-center gap-3 group text-sm sm:text-base"
                                     >
-                                        <span className={`w-1.5 h-1.5 ${theme.iconColor} rounded-full opacity-0 group-hover:opacity-100 transition-opacity`}></span>
+                                        <img src={item.logo} alt={item.name} className="w-8 h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
                                         {item.name}
                                     </Link>
                                 </li>
