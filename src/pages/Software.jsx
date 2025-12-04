@@ -5,23 +5,23 @@ const Software = () => {
     const services = [
         {
             title: "Web Development",
-            desc: "Responsive, fast, and beautiful websites that convert visitors into customers.",
-            tech: ["React", "Next.js", "Tailwind"]
+            desc: "Scalable, high-performance web applications built with modern frameworks for optimal user experience.",
+            tech: ["React", "Next.js", "TypeScript", "Tailwind"]
+        },
+        {
+            title: "AI Development",
+            desc: "Custom AI agents and intelligent automation solutions that streamline operations and enhance decision-making.",
+            tech: ["LLMs", "RAG", "Generative AI", "Python"]
         },
         {
             title: "App Development",
-            desc: "Native and cross-platform mobile applications for iOS and Android.",
-            tech: ["React Native", "Flutter", "Swift"]
-        },
-        {
-            title: "Cloud Solutions",
-            desc: "Scalable cloud infrastructure and deployment on AWS, Azure, and GCP.",
-            tech: ["AWS", "Docker", "Kubernetes"]
+            desc: "Feature-rich mobile applications for iOS and Android, delivering seamless native experiences.",
+            tech: ["React Native", "Flutter", "Swift", "Kotlin"]
         },
         {
             title: "Backend Systems",
-            desc: "Robust APIs and database architecture for enterprise applications.",
-            tech: ["Node.js", "Python", "PostgreSQL"]
+            desc: "Secure, scalable backend architectures and microservices designed for high-availability enterprise needs.",
+            tech: ["Node.js", "Python", "PostgreSQL", "AWS"]
         }
     ];
 
@@ -215,6 +215,39 @@ const Software = () => {
                                 </motion.div>
                             ))}
                         </div>
+                    </motion.div>
+                </div>
+            </div>
+
+            {/* Partner Section */}
+            <div className="py-16 md:py-20 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-10"></div>
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12">
+                            Our <span className="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Partner</span>
+                        </h2>
+
+                        <a
+                            href="https://yugminds.org/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block"
+                        >
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                className="p-8 md:p-12 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all max-w-md mx-auto"
+                            >
+                                <h3 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">
+                                    Yugminds
+                                </h3>
+                            </motion.div>
+                        </a>
                     </motion.div>
                 </div>
             </div>

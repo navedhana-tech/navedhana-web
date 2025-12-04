@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 
 const About = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-lime-50">
             {/* Hero Section */}
-            <div className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[70vh] flex items-center">
+            <div className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[70vh] flex items-center bg-gradient-to-br from-lime-50 via-white to-blue-50">
                 {/* Abstract Background Shapes */}
                 <div className="absolute inset-0 overflow-hidden">
                     {[...Array(5)].map((_, i) => (
@@ -14,9 +14,9 @@ const About = () => {
                             className="absolute rounded-full mix-blend-multiply filter blur-xl opacity-30"
                             style={{
                                 background: [
-                                    'linear-gradient(to right, #818cf8, #c084fc)',
-                                    'linear-gradient(to right, #6366f1, #a855f7)',
-                                    'linear-gradient(to right, #4f46e5, #7c3aed)'
+                                    'linear-gradient(to right, #84cc16, #3b82f6)', // lime-500 to blue-500
+                                    'linear-gradient(to right, #65a30d, #2563eb)', // lime-600 to blue-600
+                                    'linear-gradient(to right, #a3e635, #60a5fa)'  // lime-400 to blue-400
                                 ][i % 3],
                                 width: `${Math.random() * 400 + 200}px`,
                                 height: `${Math.random() * 400 + 200}px`,
@@ -43,12 +43,12 @@ const About = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
                     >
-                        <span className="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 text-sm font-semibold mb-6 tracking-wide uppercase">
+                        <span className="inline-block py-1 px-3 rounded-full bg-lime-100 text-lime-700 text-sm font-semibold mb-6 tracking-wide uppercase">
                             Our Story
                         </span>
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight">
                             Driving Innovation, <br />
-                            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-lime-600 to-blue-600 bg-clip-text text-transparent">
                                 Delivering Excellence
                             </span>
                         </h1>
@@ -67,10 +67,10 @@ const About = () => {
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-indigo-50 hover:shadow-2xl transition-all"
+                            className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-lime-50 hover:shadow-2xl transition-all"
                         >
-                            <div className="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6">
-                                <div className="w-8 h-8 bg-indigo-600 rounded-lg"></div>
+                            <div className="w-16 h-16 bg-lime-100 rounded-2xl flex items-center justify-center mb-6">
+                                <div className="w-8 h-8 bg-lime-600 rounded-lg"></div>
                             </div>
                             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
                             <p className="text-gray-600 leading-relaxed text-lg">
@@ -82,10 +82,10 @@ const About = () => {
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-violet-50 hover:shadow-2xl transition-all"
+                            className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-blue-50 hover:shadow-2xl transition-all"
                         >
-                            <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center mb-6">
-                                <div className="w-8 h-8 bg-violet-600 rounded-full"></div>
+                            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                                <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
                             </div>
                             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Vision</h2>
                             <p className="text-gray-600 leading-relaxed text-lg">
@@ -107,7 +107,7 @@ const About = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {[
                             { title: "Integrity", desc: "Honesty and transparency in all our dealings.", color: "bg-blue-500" },
-                            { title: "Innovation", desc: "Constantly pushing boundaries to find better solutions.", color: "bg-purple-500" },
+                            { title: "Innovation", desc: "Constantly pushing boundaries to find better solutions.", color: "bg-lime-500" },
                             { title: "Quality", desc: "Uncompromising standards in products and services.", color: "bg-emerald-500" },
                             { title: "Customer Focus", desc: "Your success and satisfaction are our top priority.", color: "bg-orange-500" }
                         ].map((value, idx) => (
@@ -136,14 +136,14 @@ const About = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-600 to-violet-600 text-center py-16 px-8 shadow-2xl"
+                        className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-lime-600 to-blue-600 text-center py-16 px-8 shadow-2xl"
                     >
                         <div className="relative z-10">
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Work With Us?</h2>
-                            <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
+                            <p className="text-lime-100 text-lg mb-8 max-w-2xl mx-auto">
                                 Whether you need fresh organic produce, custom software solutions, or seasonal festival supplies, Navedhana is here to serve you.
                             </p>
-                            <button className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-lg transform hover:scale-105">
+                            <button className="px-8 py-4 bg-white text-lime-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-lg transform hover:scale-105">
                                 Contact Us Today
                             </button>
                         </div>

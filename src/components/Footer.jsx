@@ -28,10 +28,10 @@ const Footer = () => {
                 };
             case '/about':
                 return {
-                    gradient: 'from-indigo-500 to-violet-600',
-                    accentColor: 'text-indigo-400',
-                    iconColor: 'text-indigo-500',
-                    bgGradient: 'from-indigo-900 via-gray-800 to-black'
+                    gradient: 'from-lime-500 to-lime-600',
+                    accentColor: 'text-lime-400',
+                    iconColor: 'text-lime-500',
+                    bgGradient: 'from-lime-900 via-gray-800 to-black'
                 };
             case '/software':
                 return {

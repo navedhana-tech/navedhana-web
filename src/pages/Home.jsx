@@ -20,11 +20,11 @@ const Home = () => {
         },
         {
             title: "Software Services",
-            description: "Innovative digital solutions that transform businesses and drive growth.",
+            description: "Innovative digital solutions and AI agents that transform businesses and drive growth.",
             gradient: "from-blue-500 to-cyan-600",
             bgGradient: "from-blue-50 to-cyan-50",
             link: "/software",
-            features: ["Innovative", "Partnering", "Scalable"],
+            features: ["AI Solutions", "Innovative", "Scalable"],
             image: softImage
         },
         {
@@ -108,9 +108,9 @@ const Home = () => {
                                 <span className="text-white lg:text-gray-600">Building the Future of </span>
                                 <span className="font-semibold text-white lg:text-lime-600">Fresh Produce</span>
                                 <span className="text-white lg:text-gray-600">, </span>
-                                <span className="font-semibold text-blue-300 lg:text-blue-600">Digital Solutions</span>
+                                <span className="font-semibold text-white lg:text-blue-700">Digital Solutions</span>
                                 <span className="text-white lg:text-gray-600">, and </span>
-                                <span className="font-semibold text-orange-300 lg:text-orange-600">Festive Joy</span>
+                                <span className="font-semibold text-white lg:text-orange-700">Festive Joy</span>
                                 <span className="text-white lg:text-gray-600">.</span>
                             </motion.p>
 

@@ -23,10 +23,10 @@ const Navbar = () => {
 
   const links = [
     { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
     { name: 'Vegetables', path: '/vegetables' },
     { name: 'Software', path: '/software' },
     { name: 'Seasonal', path: '/seasonal' },
+    { name: 'About', path: '/about' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -68,13 +68,13 @@ const Navbar = () => {
         };
       case '/about':
         return {
-          border: 'border-indigo-200/50',
-          activeBg: 'bg-indigo-600',
-          activeText: 'text-indigo-600',
-          buttonBg: 'bg-indigo-600 hover:bg-indigo-700',
-          buttonBorder: 'border-indigo-600',
-          glow: 'shadow-indigo-500/20',
-          gradientText: 'from-indigo-700 to-violet-900'
+          border: 'border-lime-200/50',
+          activeBg: 'bg-lime-600',
+          activeText: 'text-lime-600',
+          buttonBg: 'bg-lime-600 hover:bg-lime-700',
+          buttonBorder: 'border-lime-600',
+          glow: 'shadow-lime-500/20',
+          gradientText: 'from-lime-700 to-lime-900'
         };
       case '/software':
         return {
@@ -195,21 +195,22 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden lg:hidden"
+            className="fixed top-[80px] left-1/2 -translate-x-1/2 z-[2000] w-[90%] max-w-sm bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden lg:hidden"
+
           >
             <div className="p-2 space-y-1">
               {links.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center justify-center px-4 py-3 rounded-2xl text-base font-medium transition-all ${isActive(link.path)
-                    ? `${theme.activeBg} text-white`
-                    : 'text-gray-600 hover:bg-gray-50'
-                    }`}
-                >
-                  {link.name}
-                </Link>
+                <div key={link.path} onClick={() => setIsOpen(false)} className="w-full">
+                  <Link
+                    to={link.path}
+                    className={`flex items-center justify-center px-4 py-3 rounded-2xl text-base font-medium transition-all w-full ${isActive(link.path)
+                      ? `${theme.activeBg} text-white`
+                      : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                  >
+                    {link.name}
+                  </Link>
+                </div>
               ))}
             </div>
           </motion.div>
