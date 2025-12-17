@@ -59,7 +59,7 @@ const Software = () => {
                                 transition={{ delay: 0.3 }}
                             >
                                 <span className="block bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                                    Software Solutions
+                                    Software
                                 </span>
                                 Services
                             </motion.h1>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { BadgeCheck, Clock, Leaf, ShieldCheck } from 'lucide-react';
 
 const leafyImage = '/assets/other/Leafy_Vegetables.webp';
 const rootImage = '/assets/other/root_vegetables.jpg';
@@ -15,10 +16,10 @@ const Vegetables = () => {
     ];
 
     const features = [
-        { title: "100% Farm Fresh Daily", desc: "Sourced from certified organic farms" },
-        { title: "Daily Fresh", desc: "Harvested and delivered within 24 hours" },
-        { title: "Hygiene Packed", desc: "Sanitized and packed with utmost care" },
-        { title: "Premium Quality", desc: "Hand-picked for freshness and taste" }
+        { title: "100% Farm Fresh Daily", desc: "Sourced from certified organic farms", icon: Leaf },
+        { title: "Daily Fresh", desc: "Harvested and delivered within 24 hours", icon: Clock },
+        { title: "Hygiene Packed", desc: "Sanitized and packed with utmost care", icon: ShieldCheck },
+        { title: "Premium Quality", desc: "Hand-picked for freshness and taste", icon: BadgeCheck }
     ];
 
     return (
@@ -139,7 +140,7 @@ const Vegetables = () => {
                                 <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
                                 <div className="relative p-8 bg-white rounded-2xl border border-green-100 hover:border-green-300 shadow-lg hover:shadow-2xl transition-all">
                                     <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-4 transform group-hover:scale-110 transition-transform">
-                                        <div className="w-7 h-7 bg-white/30 rounded"></div>
+                                        <feature.icon className="w-7 h-7 text-white" aria-hidden="true" />
                                     </div>
                                     <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
                                     <p className="text-gray-600">{feature.desc}</p>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { BadgeCheck, Eye, HeartHandshake, Lightbulb, ShieldCheck, Target } from 'lucide-react';
 
 const About = () => {
     return (
@@ -70,7 +71,7 @@ const About = () => {
                             className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-lime-50 hover:shadow-2xl transition-all"
                         >
                             <div className="w-16 h-16 bg-lime-100 rounded-2xl flex items-center justify-center mb-6">
-                                <div className="w-8 h-8 bg-lime-600 rounded-lg"></div>
+                                <Target className="w-8 h-8 text-lime-700" aria-hidden="true" />
                             </div>
                             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
                             <p className="text-gray-600 leading-relaxed text-lg">
@@ -85,7 +86,7 @@ const About = () => {
                             className="p-8 md:p-12 bg-white rounded-3xl shadow-xl border border-blue-50 hover:shadow-2xl transition-all"
                         >
                             <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-                                <div className="w-8 h-8 bg-blue-600 rounded-full"></div>
+                                <Eye className="w-8 h-8 text-blue-700" aria-hidden="true" />
                             </div>
                             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Vision</h2>
                             <p className="text-gray-600 leading-relaxed text-lg">
@@ -106,10 +107,10 @@ const About = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {[
-                            { title: "Integrity", desc: "Honesty and transparency in all our dealings.", color: "bg-blue-500" },
-                            { title: "Innovation", desc: "Constantly pushing boundaries to find better solutions.", color: "bg-lime-500" },
-                            { title: "Quality", desc: "Uncompromising standards in products and services.", color: "bg-emerald-500" },
-                            { title: "Customer Focus", desc: "Your success and satisfaction are our top priority.", color: "bg-orange-500" }
+                            { title: "Integrity", desc: "Honesty and transparency in all our dealings.", color: "bg-blue-500", icon: ShieldCheck },
+                            { title: "Innovation", desc: "Constantly pushing boundaries to find better solutions.", color: "bg-lime-500", icon: Lightbulb },
+                            { title: "Quality", desc: "Uncompromising standards in products and services.", color: "bg-emerald-500", icon: BadgeCheck },
+                            { title: "Customer Focus", desc: "Your success and satisfaction are our top priority.", color: "bg-orange-500", icon: HeartHandshake }
                         ].map((value, idx) => (
                             <motion.div
                                 key={idx}
@@ -120,7 +121,9 @@ const About = () => {
                                 whileHover={{ y: -5 }}
                                 className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all"
                             >
-                                <div className={`w-12 h-12 ${value.color} rounded-xl mx-auto mb-6 shadow-md transform rotate-3`}></div>
+                                <div className={`w-12 h-12 ${value.color} rounded-xl mx-auto mb-6 shadow-md transform rotate-3 flex items-center justify-center`}>
+                                    <value.icon className="w-6 h-6 text-white" aria-hidden="true" />
+                                </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
                                 <p className="text-gray-600">{value.desc}</p>
                             </motion.div>

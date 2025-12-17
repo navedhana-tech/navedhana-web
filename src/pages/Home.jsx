@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BadgeCheck, Handshake, Sprout } from 'lucide-react';
 import { Link } from 'react-router-dom';
 const vegImage = '/assets/other/Vegetables.webp';
 const softImage = '/assets/other/Software.webp';
@@ -278,9 +278,9 @@ const Home = () => {
 
                             <div className="space-y-4">
                                 {[
-                                    { text: 'Customer-First Approach', desc: 'Building relationships from day one' },
-                                    { text: 'Quality Assurance', desc: 'Premium standards in every delivery' },
-                                    { text: 'Growing Together', desc: 'Your success is our success' }
+                                    { text: 'Customer-First Approach', desc: 'Building relationships from day one', icon: Handshake },
+                                    { text: 'Quality Assurance', desc: 'Premium standards in every delivery', icon: BadgeCheck },
+                                    { text: 'Growing Together', desc: 'Your success is our success', icon: Sprout }
                                 ].map((item, i) => (
                                     <motion.div
                                         key={i}
@@ -291,7 +291,7 @@ const Home = () => {
                                         className="flex items-start gap-4 p-4 rounded-xl bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors border border-white/5"
                                     >
                                         <div className="w-12 h-12 bg-gradient-to-br from-lime-500 to-lime-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-lime-900/20">
-                                            <div className="w-6 h-6 bg-white/30 rounded"></div>
+                                            <item.icon className="w-6 h-6 text-white" aria-hidden="true" />
                                         </div>
                                         <div>
                                             <h4 className="font-semibold text-lg mb-1 text-white">{item.text}</h4>

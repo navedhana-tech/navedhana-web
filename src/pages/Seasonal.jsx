@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { BadgeCheck, PartyPopper, Palette, Flame, Sparkles, Wind } from 'lucide-react';
 
 const Seasonal = () => {
     const products = [
@@ -8,6 +9,7 @@ const Seasonal = () => {
             desc: "Organic, skin-friendly, and vibrant gulal for a safe and joyful Holi celebration.",
             gradient: "from-pink-500 to-purple-600",
             bgGradient: "from-pink-50 to-purple-50",
+            icon: Sparkles,
             status: "Coming Soon",
             statusColor: "bg-green-100 text-green-700"
         },
@@ -16,6 +18,7 @@ const Seasonal = () => {
             desc: "High-quality kites and manjha for Makar Sankranti and other celebrations.",
             gradient: "from-blue-500 to-indigo-600",
             bgGradient: "from-blue-50 to-indigo-50",
+            icon: Wind,
             status: "Coming Soon",
             statusColor: "bg-blue-100 text-blue-700"
         },
@@ -24,6 +27,7 @@ const Seasonal = () => {
             desc: "Beautiful diyas, rangoli colors, and decorative items for the festival of lights.",
             gradient: "from-yellow-500 to-orange-600",
             bgGradient: "from-yellow-50 to-orange-50",
+            icon: Flame,
             status: "Coming Soon",
             statusColor: "bg-orange-100 text-orange-700"
         }
@@ -170,7 +174,7 @@ const Seasonal = () => {
 
                                 <div className={`relative bg-gradient-to-br ${product.bgGradient} rounded-3xl p-6 md:p-8 border border-white shadow-xl hover:shadow-2xl transition-all h-full flex flex-col`}>
                                     <div className={`w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br ${product.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-transform`}>
-                                        <div className="w-8 h-8 md:w-10 md:h-10 bg-white/30 rounded"></div>
+                                        <product.icon className="w-8 h-8 md:w-10 md:h-10 text-white" aria-hidden="true" />
                                     </div>
 
                                     <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{product.title}</h3>
@@ -195,9 +199,9 @@ const Seasonal = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                         {[
-                            { title: "Vibrant Colors", desc: "Safe and eco-friendly" },
-                            { title: "Premium Quality", desc: "Handpicked products" },
-                            { title: "Festive Joy", desc: "Celebrate with happiness" }
+                            { title: "Vibrant Colors", desc: "Safe and eco-friendly", icon: Palette },
+                            { title: "Premium Quality", desc: "Handpicked products", icon: BadgeCheck },
+                            { title: "Festive Joy", desc: "Celebrate with happiness", icon: PartyPopper }
                         ].map((feature, idx) => (
                             <motion.div
                                 key={idx}
@@ -208,7 +212,7 @@ const Seasonal = () => {
                                 className="p-6"
                             >
                                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                    <div className="w-8 h-8 bg-white/30 rounded"></div>
+                                    <feature.icon className="w-8 h-8 text-white" aria-hidden="true" />
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
                                 <p className="text-gray-600">{feature.desc}</p>
