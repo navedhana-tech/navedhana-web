@@ -137,7 +137,7 @@ const Home = () => {
 
                             {/* Stats Row */}
                             <motion.div
-                                className="flex flex-wrap gap-4 sm:gap-6 md:gap-8 items-center justify-center sm:justify-start"
+                                className="flex flex-wrap gap-4 sm:gap-6 md:gap-8 items-center justify-center sm:justify-start bg-white rounded-3xl px-5 py-4 shadow-xl sm:bg-transparent sm:rounded-none sm:px-0 sm:py-0 sm:shadow-none"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.6, duration: 0.6 }}
@@ -153,10 +153,12 @@ const Home = () => {
                                         whileHover={{ scale: 1.05, y: -5 }}
                                         transition={{ type: "spring", stiffness: 300 }}
                                     >
-                                        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-white lg:text-transparent lg:bg-gradient-to-r lg:from-lime-600 lg:to-lime-500 lg:bg-clip-text mb-1 sm:mb-2">
+                                        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-lime-600 via-lime-500 to-lime-500 bg-clip-text mb-1 sm:mb-2">
                                             {stat.value}
                                         </div>
-                                        <div className="text-xs sm:text-sm md:text-base text-white lg:text-gray-600 font-medium">{stat.label}</div>
+                                        <div className="text-xs sm:text-sm md:text-base text-lime-700 font-medium">
+                                            {stat.label}
+                                        </div>
                                     </motion.div>
                                 ))}
                             </motion.div>
