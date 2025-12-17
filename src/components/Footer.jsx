@@ -86,7 +86,6 @@ const Footer = () => {
                             </div>
                             <div>
                                 <span className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent block">Navedhana</span>
-                                <span className="text-xs sm:text-sm text-gray-400">Profit Amplifier Pvt. Ltd</span>
                             </div>
                         </div>
                         <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md text-center md:text-left">
@@ -96,10 +95,10 @@ const Footer = () => {
                         {/* Social Media Icons */}
                         <div className="flex gap-4 justify-center md:justify-start">
                             {[
-                                { name: 'Instagram', icon: FaInstagram, link: 'https://instagram.com', color: 'hover:text-pink-500' },
-                                { name: 'LinkedIn', icon: FaLinkedin, link: 'https://linkedin.com', color: 'hover:text-blue-500' },
+                                { name: 'Instagram', icon: FaInstagram, link: 'https://www.instagram.com/navedhana.pvt.ltd/', color: 'hover:text-pink-500' },
+                                { name: 'LinkedIn', icon: FaLinkedin, link: 'https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A107910599&keywords=Navedhana%20Profit%20Amplifier%20Private%20Limited&origin=ENTITY_SEARCH_HOME_HISTORY&sid=wLX', color: 'hover:text-blue-500' },
                                 { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/', color: 'hover:text-green-500' },
-                                { name: 'Email', icon: FaEnvelope, link: 'mailto:info@navedhana.com', color: 'hover:text-orange-500' }
+                                { name: 'Email', icon: FaEnvelope, link: 'mailto:navedhanaprofitamplifier@gmail.com', color: 'hover:text-orange-500' }
                             ].map((social) => {
                                 const IconComponent = social.icon;
                                 return (
@@ -126,7 +125,7 @@ const Footer = () => {
                         <ul className="space-y-2 sm:space-y-3">
                             {[
                                 { name: 'Vegetables Supply', path: '/vegetables', logo: logo },
-                                { name: 'Software Solutions', path: '/software', logo: blueLogo },
+                                { name: 'Software Services', path: '/software', logo: blueLogo },
                                 { name: 'Seasonal Products', path: '/seasonal', logo: orangeLogo }
                             ].map((item) => (
                                 <li key={item.path}>
@@ -150,11 +149,11 @@ const Footer = () => {
                         <ul className="space-y-2 sm:space-y-4">
                             <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <Mail className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span className="break-all">info@navedhana.com</span>
+                                <span className="break-all">navedhanaprofitamplifier@gmail.com</span>
                             </li>
                             <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span>+91 123 456 7890</span>
+                                <span>+91 6305304978</span>
                             </li>
                             <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
                                 <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
@@ -169,6 +168,10 @@ const Footer = () => {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
                         <p className="text-gray-500 text-xs sm:text-sm text-center md:text-left">
                             &copy; {new Date().getFullYear()} Navedhana. All rights reserved.
+                            <span className="hidden md:inline"> | </span>
+                            <span className="block md:inline mt-1 md:mt-0 md:ml-1 text-gray-500">
+                                Developed & maintained by Navedhana Profit Amplifier Private Limited
+                            </span>
                         </p>
                         <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-500">
                             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

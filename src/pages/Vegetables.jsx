@@ -6,6 +6,7 @@ const leafyImage = '/assets/other/Leafy_Vegetables.webp';
 const rootImage = '/assets/other/root_vegetables.jpg';
 const seasonalImage = '/assets/other/mango.jpg';
 const marrowImage = '/assets/other/Bottle_Gaurd.webp';
+const heroBgImage = '/assets/other/image.png';
 
 const Vegetables = () => {
     const categories = [
@@ -107,9 +108,16 @@ const Vegetables = () => {
                                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                                     style={{ opacity: 0.3 }}
                                 />
-                                <div className="relative aspect-square bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl shadow-2xl flex items-center justify-center overflow-hidden">
+                                <div className="relative aspect-square rounded-3xl shadow-2xl flex items-center justify-center overflow-hidden">
+                                    {/* Background image */}
+                                    <div
+                                        className="absolute inset-0 bg-cover bg-center brightness-120 saturate-150"
+                                        style={{ backgroundImage: `url(${heroBgImage})` }}
+                                    />
+                                    {/* Overlay for text readability */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-green-900/40 via-emerald-900/30 to-black/20" />
                                     <motion.div
-                                        className="text-white text-center p-8"
+                                        className="relative z-10 text-white text-center p-8"
                                         animate={{ scale: [1, 1.02, 1] }}
                                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                     >

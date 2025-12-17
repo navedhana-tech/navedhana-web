@@ -1,27 +1,42 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import {
+    BrainCircuit,
+    Cloud,
+    Code2,
+    LayoutGrid,
+    LifeBuoy,
+    MonitorSmartphone,
+    Rocket,
+    Settings,
+    Workflow
+} from 'lucide-react';
 
 const Software = () => {
     const services = [
         {
-            title: "Web Development",
-            desc: "Scalable, high-performance web applications built with modern frameworks for optimal user experience.",
-            tech: ["React", "Next.js", "TypeScript", "Tailwind"]
-        },
-        {
             title: "AI Development",
-            desc: "Custom AI agents and intelligent automation solutions that streamline operations and enhance decision-making.",
-            tech: ["LLMs", "RAG", "Generative AI", "Python"]
+            desc: "AI agents, copilots, and RAG-powered assistants that automate workflows, improve support, and unlock insights from your data securely.",
+            tech: ["LLMs", "RAG", "LangChain", "LlamaIndex", "&", "More"],
+            icon: BrainCircuit
         },
         {
-            title: "App Development",
-            desc: "Feature-rich mobile applications for iOS and Android, delivering seamless native experiences.",
-            tech: ["React Native", "Flutter", "Swift", "Kotlin"]
+            title: "SaaS Applications",
+            desc: "Subscription-ready SaaS platforms with authentication, billing, role-based access, analytics, and scalable multi-tenant architecture.",
+            tech: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "&", "More"],
+            icon: LayoutGrid
         },
         {
-            title: "Backend Systems",
-            desc: "Secure, scalable backend architectures and microservices designed for high-availability enterprise needs.",
-            tech: ["Node.js", "Python", "PostgreSQL", "AWS"]
+            title: "Web & Mobile Applications",
+            desc: "Beautiful, fast web and mobile apps with consistent design systems, offline-ready experiences, and performance-first engineering.",
+            tech: ["React", "React Native", "Expo", "Tailwind", "&", "More"],
+            icon: MonitorSmartphone
+        },
+        {
+            title: "Management Systems",
+            desc: "Custom ERP/CRM, admin portals, dashboards, and internal tools with approvals, audit trails, reporting, and integrations.",
+            tech: ["NestJS", "PostgreSQL", "Redis", "Docker", "&", "More"],
+            icon: Settings
         }
     ];
 
@@ -166,7 +181,7 @@ const Software = () => {
                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
                                 <div className="relative p-6 md:p-8 bg-white rounded-3xl border border-blue-100 hover:border-blue-300 shadow-xl hover:shadow-2xl transition-all">
                                     <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg transform group-hover:scale-110 transition-transform">
-                                        <div className="w-7 h-7 md:w-8 md:h-8 bg-white/30 rounded"></div>
+                                        <item.icon className="w-7 h-7 md:w-8 md:h-8 text-white" aria-hidden="true" />
                                     </div>
                                     <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
                                     <p className="text-gray-600 mb-6 leading-relaxed">{item.desc}</p>
@@ -197,21 +212,30 @@ const Software = () => {
                         <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
                             Powered by <span className="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Modern Technologies</span>
                         </h2>
-                        <p className="text-gray-400 mb-12">We use the latest and greatest tools</p>
+                        <p className="text-gray-400 mb-12">We use the latest and most reliable tools to build scalable, secure, and high-performance solutions</p>
 
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
-                            {['React', 'Node.js', 'Python', 'AWS', 'Docker'].map((tech, idx) => (
+                            {[
+                                { label: 'High-level Programming Languages', icon: Code2 },
+                                { label: 'Agile Development Practices', icon: Workflow },
+                                { label: 'Cloud Integrations', icon: Cloud },
+                                { label: 'Seamless Deployment', icon: Rocket },
+                                { label: 'Ongoing Maintenance & Support', icon: LifeBuoy }
+                            ].map((tech, idx) => (
                                 <motion.div
-                                    key={tech}
+                                    key={tech.label}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: idx * 0.1 }}
                                     whileHover={{ scale: 1.05 }}
-                                    className="p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all"
+                                    className="group relative p-6 min-h-[170px] flex flex-col items-center justify-center gap-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all"
                                 >
-                                    <div className="w-8 h-8 bg-blue-400 mx-auto mb-3 rounded"></div>
-                                    <span className="text-white font-semibold text-lg">{tech}</span>
+                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 to-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <tech.icon className="relative z-10 w-10 h-10 text-blue-300 drop-shadow-[0_0_12px_rgba(59,130,246,0.55)]" aria-hidden="true" />
+                                    <span className="relative z-10 text-white font-semibold text-base md:text-lg leading-snug text-center">
+                                        {tech.label}
+                                    </span>
                                 </motion.div>
                             ))}
                         </div>
@@ -220,8 +244,8 @@ const Software = () => {
             </div>
 
             {/* Partner Section */}
-            <div className="py-16 md:py-20 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-10"></div>
+            <div className="py-16 md:py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-15"></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     <motion.div
@@ -243,9 +267,12 @@ const Software = () => {
                                 whileHover={{ scale: 1.05 }}
                                 className="p-8 md:p-12 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all max-w-md mx-auto"
                             >
-                                <h3 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-500">
-                                    Yugminds
-                                </h3>
+                                <img
+                                    src="/assets/other/yug.png"
+                                    alt="Yugminds"
+                                    className="mx-auto w-full max-w-none h-auto object-contain scale-110 md:scale-125"
+                                    loading="lazy"
+                                />
                             </motion.div>
                         </a>
                     </motion.div>
