@@ -24,7 +24,7 @@ const Navbar = () => {
   const links = [
     { name: 'Home', path: '/' },
     { name: 'Vegetables', path: '/vegetables' },
-    { name: 'Software', path: '/software' },
+    { name: 'Software Solutions', path: '/software' },
     { name: 'Seasonal', path: '/seasonal' },
     { name: 'About', path: '/about' },
   ];

@@ -19,7 +19,7 @@ const Home = () => {
             image: vegImage
         },
         {
-            title: "Software Services",
+            title: "Software Solutions",
             description: "Innovative digital solutions and AI agents that transform businesses and drive growth.",
             gradient: "from-blue-500 to-cyan-600",
             bgGradient: "from-blue-50 to-cyan-50",
@@ -109,7 +109,7 @@ const Home = () => {
                                 <span className="font-semibold text-white lg:text-lime-600">Fresh Produce</span>
                                 <span className="text-white lg:text-gray-600">, </span>
                                 <span className="font-semibold text-white lg:text-blue-700">Digital Solutions</span>
-                                <span className="text-white lg:text-gray-600">, and </span>
+                                <span className="text-white lg:text-gray-600">,<br /> and </span>
                                 <span className="font-semibold text-white lg:text-orange-700">Festive Joy</span>
                                 <span className="text-white lg:text-gray-600">.</span>
                             </motion.p>
@@ -143,7 +143,7 @@ const Home = () => {
                                 transition={{ delay: 0.6, duration: 0.6 }}
                             >
                                 {[
-                                    { value: "2+", label: "Happy Customers" },
+                                    { value: "200+", label: "Happy Customers" },
                                     { value: "3", label: "Services" },
                                     { value: "2023", label: "Founded" }
                                 ].map((stat, idx) => (
@@ -311,8 +311,8 @@ const Home = () => {
                         >
                             <div className="grid grid-cols-2 gap-4 md:gap-6">
                                 {[
-                                    { label: 'Fresh Daily', value: '100%' },
-                                    { label: 'Customers', value: '2+' },
+                                    { label: 'Quality Service', value: '100%' },
+                                    { label: 'Customers', value: '200+' },
                                     { label: 'Services', value: '3' },
                                     { label: 'Founded', value: '2023' }
                                 ].map((stat, i) => (

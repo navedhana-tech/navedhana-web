@@ -71,7 +71,7 @@ const Vegetables = () => {
                             </motion.p>
 
                             <motion.a
-                                href="https://nave-web-ecommerc.vercel.app/"
+                                href="http://fresh.navedhana.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer"

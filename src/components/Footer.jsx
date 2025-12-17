@@ -126,7 +126,7 @@ const Footer = () => {
                         <ul className="space-y-2 sm:space-y-3">
                             {[
                                 { name: 'Vegetables Supply', path: '/vegetables', logo: logo },
-                                { name: 'Software Services', path: '/software', logo: blueLogo },
+                                { name: 'Software Solutions', path: '/software', logo: blueLogo },
                                 { name: 'Seasonal Products', path: '/seasonal', logo: orangeLogo }
                             ].map((item) => (
                                 <li key={item.path}>

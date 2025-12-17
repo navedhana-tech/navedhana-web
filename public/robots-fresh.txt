@@ -1,0 +1,7 @@
+# robots.txt for fresh.navedhana.com
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://fresh.navedhana.com/sitemap.xml
