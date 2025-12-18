@@ -7,6 +7,7 @@ import Vegetables from './pages/Vegetables';
 import Software from './pages/Software';
 import Seasonal from './pages/Seasonal';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 import ScrollToTop from './components/ScrollToTop';
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/vegetables" element={<Vegetables />} />
             <Route path="/software" element={<Software />} />
             <Route path="/seasonal" element={<Seasonal />} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </main>
         <Footer />

@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { BadgeCheck, Eye, HeartHandshake, Lightbulb, ShieldCheck, Target } from 'lucide-react';
 
 const About = () => {
@@ -146,9 +147,12 @@ const About = () => {
                             <p className="text-lime-100 text-lg mb-8 max-w-2xl mx-auto">
                                 Whether you need fresh organic produce, custom software solutions, or seasonal festival supplies, Navedhana is here to serve you.
                             </p>
-                            <button className="px-8 py-4 bg-white text-lime-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-lg transform hover:scale-105">
+                            <Link
+                                to="/contact"
+                                className="inline-block px-8 py-4 bg-white text-lime-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-lg transform hover:scale-105"
+                            >
                                 Contact Us Today
-                            </button>
+                            </Link>
                         </div>
                         {/* Decorative Circles */}
                         <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>

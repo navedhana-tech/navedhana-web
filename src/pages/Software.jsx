@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
     BrainCircuit,
     Cloud,
@@ -292,9 +293,12 @@ const Software = () => {
                         <div className="relative px-6 md:px-8 py-12 md:py-16 text-center">
                             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Let's Build Something Amazing</h2>
                             <p className="text-blue-100 text-lg mb-8">Transform your ideas into reality with our expert team</p>
-                            <button className="px-8 md:px-10 py-4 bg-white text-blue-700 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-105">
+                            <Link
+                                to="/contact"
+                                className="inline-block px-8 md:px-10 py-4 bg-white text-blue-700 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-105"
+                            >
                                 Start Your Project
-                            </button>
+                            </Link>
                         </div>
                     </motion.div>
                 </div>

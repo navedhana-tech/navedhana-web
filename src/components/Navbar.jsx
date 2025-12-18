@@ -27,6 +27,7 @@ const Navbar = () => {
     { name: 'Software Services', path: '/software' },
     { name: 'Seasonal', path: '/seasonal' },
     { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -96,6 +97,16 @@ const Navbar = () => {
           glow: 'shadow-orange-500/20',
           gradientText: 'from-orange-700 to-amber-900'
         };
+      case '/contact':
+        return {
+          border: 'border-blue-200/50',
+          activeBg: 'bg-blue-600',
+          activeText: 'text-blue-600',
+          buttonBg: 'bg-blue-600 hover:bg-blue-700',
+          buttonBorder: 'border-blue-600',
+          glow: 'shadow-blue-500/20',
+          gradientText: 'from-blue-700 to-cyan-900'
+        };
       default:
         return {
           border: 'border-gray-200/50',
@@ -155,25 +166,28 @@ const Navbar = () => {
 
             {/* Action Buttons - Right */}
             <div className="hidden lg:flex items-center gap-4">
-              <Link
-                to="/about"
-                className={`px-5 py-2.5 text-sm font-semibold ${theme.activeText} border-2 ${theme.buttonBorder} rounded-lg hover:bg-opacity-10 transition-all`}
+              <a
+                href="/#services"
+                onClick={(e) => {
+                  if (location.pathname === '/') {
+                    e.preventDefault();
+                    const servicesSection = document.getElementById('services');
+                    if (servicesSection) {
+                      servicesSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }
+                  // If on another page, let the default href="/#services" handle navigation
+                }}
+                className={`px-5 py-2.5 text-sm font-semibold ${theme.activeText} border-2 ${theme.buttonBorder} rounded-lg hover:bg-opacity-10 transition-all cursor-pointer`}
               >
                 GET STARTED
-              </Link>
-              <a
-                href="#footer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  const footer = document.getElementById('footer');
-                  if (footer) {
-                    footer.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+              </a>
+              <Link
+                to="/contact"
                 className={`px-5 py-2.5 text-sm font-semibold text-white ${theme.buttonBg} rounded-lg transition-all shadow-md hover:shadow-lg cursor-pointer`}
               >
                 CONTACT US
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Menu Toggle */}

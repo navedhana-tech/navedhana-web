@@ -47,6 +47,13 @@ const Footer = () => {
                     iconColor: 'text-orange-500',
                     bgGradient: 'from-orange-900 via-gray-800 to-black'
                 };
+            case '/contact':
+                return {
+                    gradient: 'from-blue-500 to-cyan-600',
+                    accentColor: 'text-blue-400',
+                    iconColor: 'text-blue-500',
+                    bgGradient: 'from-blue-900 via-gray-800 to-black'
+                };
             default:
                 return {
                     gradient: 'from-green-500 to-emerald-600',

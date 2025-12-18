@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, BadgeCheck, Handshake, Sprout } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 const vegImage = '/assets/other/Vegetables.webp';
 const softImage = '/assets/other/Software.webp';
 const companyImage = '/assets/logo/NPA_Logo_WithoutText.png';
 const whitecompanyImage = '/assets/logo/NPA_Logo_whiteWithoutText.png';
 
 const Home = () => {
+    const location = useLocation();
+
+    // Handle hash navigation to services section
+    useEffect(() => {
+        if (location.hash === '#services') {
+            // Small delay to ensure page is rendered
+            setTimeout(() => {
+                const servicesSection = document.getElementById('services');
+                if (servicesSection) {
+                    servicesSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    }, [location.hash]);
+
     const services = [
         {
             title: "Vegetables Supply",

@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Routes to prerender
-const routes = ['/', '/about', '/vegetables', '/software', '/seasonal'];
+const routes = ['/', '/about', '/vegetables', '/software', '/seasonal', '/contact'];
 
 // This script creates static HTML files for each route
 // It should be run after the Vite build
