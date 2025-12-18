@@ -3,19 +3,66 @@
   <head>
     <meta charset="UTF-8" />
     <!-- Favicons (Google SERP usually uses these) -->
-    <link rel="icon" type="image/x-icon" href="/favicon_io/favicon.ico" />
-    <link rel="icon" href="/favicon_io/favicon-16x16.png" sizes="16x16" type="image/png" />
-    <link rel="icon" href="/favicon_io/favicon-32x32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/favicon_io/apple-touch-icon.png" sizes="180x180" />
+    <!-- Root favicon.ico for search engines (Google looks for /favicon.ico first) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Standard favicon sizes -->
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <!-- Apple touch icon -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <!-- Web manifest -->
     <link rel="manifest" href="/favicon_io/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
     
+    <!-- Dynamic Domain Detection Script -->
+    <script>
+      (function() {
+        const hostname = window.location.hostname;
+        const isFresh = hostname === 'fresh.navedhana.com' || hostname.includes('fresh.navedhana.com');
+        const baseUrl = isFresh ? 'https://fresh.navedhana.com' : 'https://www.navedhana.com';
+        const currentPath = window.location.pathname;
+        const fullUrl = baseUrl + currentPath;
+        
+        // Set canonical URL
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+          canonical = document.createElement('link');
+          canonical.rel = 'canonical';
+          document.head.appendChild(canonical);
+        }
+        canonical.href = fullUrl;
+        
+        // Update sitemap reference
+        let sitemap = document.querySelector('link[rel="sitemap"]');
+        if (!sitemap) {
+          sitemap = document.createElement('link');
+          sitemap.rel = 'sitemap';
+          sitemap.type = 'application/xml';
+          document.head.appendChild(sitemap);
+        }
+        sitemap.href = baseUrl + (isFresh ? '/sitemap-fresh.xml' : '/sitemap.xml');
+        
+        // Update preconnect
+        let preconnect = document.querySelector('link[rel="preconnect"]');
+        if (preconnect) {
+          preconnect.href = baseUrl;
+        }
+        
+        // Store for use in structured data
+        window.__NAVEDHANA_BASE_URL__ = baseUrl;
+        window.__NAVEDHANA_FULL_URL__ = fullUrl;
+      })();
+    </script>
+    
     <!-- Performance & Preconnect -->
     <link rel="preconnect" href="https://www.navedhana.com" />
+    <link rel="preconnect" href="https://fresh.navedhana.com" />
     <link rel="dns-prefetch" href="https://www.navedhana.com" />
+    <link rel="dns-prefetch" href="https://fresh.navedhana.com" />
     
     <!-- Primary Meta Tags -->
-    <title>Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products | www.navedhana.com</title>
+    <title id="page-title">Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products | www.navedhana.com</title>
     <meta name="title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
     <meta name="description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
     <meta name="keywords" content="Navedhana, vegetables, delivery vegetables, fresh vegetables, fresh produce, software development, web development, AI solutions, mobile app development, seasonal products, festival supplies, organic farming, digital solutions, navedhana.com, best organic vegetables, software company, AI development services, farm fresh vegetables, custom software solutions, web app development, mobile app development company, seasonal festival products, organic produce delivery" />
@@ -30,17 +77,15 @@
     <meta name="target" content="all" />
     <meta name="audience" content="all" />
     
-    <!-- Canonical URL -->
-    <!-- NOTE: if deploying this same build to fresh.navedhana.com, update this to https://fresh.navedhana.com -->
-    <link rel="canonical" href="https://www.navedhana.com" />
+    <!-- Canonical URL (dynamically set by script above) -->
+    <link rel="canonical" href="https://www.navedhana.com" id="canonical-link" />
     
-    <!-- Sitemap -->
-    <link rel="sitemap" type="application/xml" href="https://www.navedhana.com/sitemap.xml" />
+    <!-- Sitemap (dynamically set by script above) -->
+    <link rel="sitemap" type="application/xml" href="https://www.navedhana.com/sitemap.xml" id="sitemap-link" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <!-- NOTE: if deploying this same build to fresh.navedhana.com, update og:url too -->
-    <meta property="og:url" content="https://www.navedhana.com" />
+    <meta property="og:url" content="https://www.navedhana.com" id="og-url" />
     <meta property="og:title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
     <meta property="og:description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
     <meta property="og:image" content="https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png" />
@@ -51,7 +96,7 @@
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://www.navedhana.com" />
+    <meta name="twitter:url" content="https://www.navedhana.com" id="twitter-url" />
     <meta name="twitter:title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
     <meta name="twitter:description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
     <meta name="twitter:image" content="https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png" />
@@ -72,7 +117,7 @@
     <!-- <meta name="yandex-verification" content="YOUR_YANDEX_VERIFICATION_CODE" /> -->
     
     <!-- Enhanced Structured Data for Better SEO -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="structured-data">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -81,6 +126,7 @@
           "@id": "https://www.navedhana.com/#organization",
           "name": "Navedhana",
           "url": "https://www.navedhana.com",
+          "alternateName": ["fresh.navedhana.com"],
           "logo": {
             "@type": "ImageObject",
             "url": "https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png",
@@ -146,6 +192,7 @@
           "@type": "WebSite",
           "@id": "https://www.navedhana.com/#website",
           "url": "https://www.navedhana.com",
+          "alternateName": "fresh.navedhana.com",
           "name": "Navedhana",
           "description": "Fresh Organic Produce, Software Solutions & Seasonal Products",
           "publisher": {
@@ -208,6 +255,74 @@
         }
       ]
     }
+    </script>
+    <script>
+        // Update structured data and meta tags with current domain
+      (function() {
+        const hostname = window.location.hostname;
+        const isFresh = hostname === 'fresh.navedhana.com' || hostname.includes('fresh.navedhana.com');
+        const baseUrl = isFresh ? 'https://fresh.navedhana.com' : 'https://www.navedhana.com';
+        const domainDisplay = isFresh ? 'fresh.navedhana.com' : 'www.navedhana.com';
+        const currentPath = window.location.pathname;
+        const fullUrl = baseUrl + currentPath;
+        
+        // Update page title
+        const title = document.getElementById('page-title');
+        if (title) {
+          title.textContent = 'Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products | ' + domainDisplay;
+        }
+        
+        // Update Open Graph URL
+        const ogUrl = document.getElementById('og-url');
+        if (ogUrl) ogUrl.content = fullUrl;
+        
+        // Update Twitter URL
+        const twitterUrl = document.getElementById('twitter-url');
+        if (twitterUrl) twitterUrl.content = fullUrl;
+        
+        // Update structured data
+        const structuredData = document.getElementById('structured-data');
+        if (structuredData) {
+          try {
+            const data = JSON.parse(structuredData.textContent);
+            if (data['@graph']) {
+              data['@graph'].forEach(item => {
+                if (item['@id']) {
+                  item['@id'] = item['@id'].replace('https://www.navedhana.com', baseUrl);
+                }
+                if (item.url) {
+                  item.url = item.url.replace('https://www.navedhana.com', baseUrl);
+                }
+                if (item['@type'] === 'WebPage' && item.url) {
+                  item.url = fullUrl;
+                }
+                if (item.logo && item.logo.url) {
+                  // Keep logo URL as is (same for both domains)
+                }
+                if (item.image && typeof item.image === 'string') {
+                  // Keep image URL as is
+                }
+                if (item.image && item.image.url) {
+                  // Keep image URL as is
+                }
+                if (item.target && item.target.urlTemplate) {
+                  item.target.urlTemplate = item.target.urlTemplate.replace('https://www.navedhana.com', baseUrl);
+                }
+                if (item.itemListElement) {
+                  item.itemListElement.forEach(li => {
+                    if (li.item) {
+                      li.item = li.item.replace('https://www.navedhana.com', baseUrl);
+                    }
+                  });
+                }
+              });
+              structuredData.textContent = JSON.stringify(data);
+            }
+          } catch(e) {
+            console.error('Error updating structured data:', e);
+          }
+        }
+      })();
     </script>
   </head>
   <body>
