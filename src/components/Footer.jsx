@@ -1,195 +1,136 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { FaInstagram, FaLinkedin, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-const logo = '/assets/logo/NPA_Logo_Enlarge.png';
-const blueLogo = '/assets/logo/blueLogo_Englarge.png';
-const orangeLogo = '/assets/logo/orangeLogo_Englarge.png';
+import LogoMark from './intro/LogoMark';
+import TypingText from './ui/TypingText';
+
+const siteLinks = [
+ { name: 'Home', path: '/' },
+ { name: 'Services', path: '/services' },
+ { name: 'About', path: '/about' },
+ { name: 'Contact', path: '/contact' },
+];
+
+const otherVentures = [
+ { name: 'Vegetables Supply', path: '/vegetables' },
+ { name: 'Seasonal Products', path: '/seasonal' },
+];
 
 const Footer = () => {
-    const location = useLocation();
+ return (
+ <footer id="footer" className="bg-surface text-ink relative overflow-hidden border-t border-white/5">
+ <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-12">
+ {/* Brand */}
+ <div className="col-span-2 md:col-span-2 flex flex-col items-center md:items-start">
+ <div className="flex items-center gap-3 mb-4 sm:mb-6">
+ <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
+ <LogoMark size={48} className="w-full h-full object-contain" />
+ </div>
+ <span className="font-display font-bold text-xl sm:text-2xl text-ink block">Navedhana</span>
+ </div>
+ <p className="text-muted text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md text-center md:text-left">
+ <TypingText
+ text="A software engineering and AI company building intelligent digital products — web, mobile, desktop, cloud, and AI."
+ speed={12}
+ />
+ </p>
+ <div className="flex gap-4 justify-center md:justify-start">
+ {[
+ { name: 'Instagram', icon: FaInstagram, link: 'https://www.instagram.com/navedhana.pvt.ltd/', color: 'hover:text-pink-400' },
+ { name: 'LinkedIn', icon: FaLinkedin, link: 'https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A107910599&keywords=Navedhana%20Profit%20Amplifier%20Private%20Limited&origin=ENTITY_SEARCH_HOME_HISTORY&sid=wLX', color: 'hover:text-electric' },
+ { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/', color: 'hover:text-green' },
+ { name: 'Email', icon: FaEnvelope, link: 'mailto:navedhanaprofitamplifier@gmail.com', color: 'hover:text-orange' },
+ ].map((social) => {
+ const IconComponent = social.icon;
+ return (
+ <a
+ key={social.name}
+ href={social.link}
+ target="_blank"
+ rel="noopener noreferrer"
+ className={`w-10 h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all hover:scale-110 text-muted ${social.color}`}
+ title={social.name}
+ >
+ <IconComponent size={22} />
+ </a>
+ );
+ })}
+ </div>
+ </div>
 
-    // Dynamic theme based on current page
-    const getThemeColors = () => {
-        switch (location.pathname) {
-            case '/':
-                return {
-                    gradient: 'from-lime-500 to-lime-600',
-                    accentColor: 'text-lime-400',
-                    iconColor: 'text-lime-500',
-                    bgGradient: 'from-lime-900 via-gray-800 to-black'
-                };
-            case '/vegetables':
-                return {
-                    gradient: 'from-green-500 to-emerald-600',
-                    accentColor: 'text-green-400',
-                    iconColor: 'text-green-500',
-                    bgGradient: 'from-green-900 via-gray-800 to-black'
-                };
-            case '/about':
-                return {
-                    gradient: 'from-lime-500 to-lime-600',
-                    accentColor: 'text-lime-400',
-                    iconColor: 'text-lime-500',
-                    bgGradient: 'from-lime-900 via-gray-800 to-black'
-                };
-            case '/software':
-                return {
-                    gradient: 'from-blue-500 to-cyan-600',
-                    accentColor: 'text-blue-400',
-                    iconColor: 'text-blue-500',
-                    bgGradient: 'from-blue-900 via-gray-800 to-black'
-                };
-            case '/seasonal':
-                return {
-                    gradient: 'from-orange-500 to-amber-600',
-                    accentColor: 'text-orange-400',
-                    iconColor: 'text-orange-500',
-                    bgGradient: 'from-orange-900 via-gray-800 to-black'
-                };
-            case '/contact':
-                return {
-                    gradient: 'from-blue-500 to-cyan-600',
-                    accentColor: 'text-blue-400',
-                    iconColor: 'text-blue-500',
-                    bgGradient: 'from-blue-900 via-gray-800 to-black'
-                };
-            default:
-                return {
-                    gradient: 'from-green-500 to-emerald-600',
-                    accentColor: 'text-green-400',
-                    iconColor: 'text-green-500',
-                    bgGradient: 'from-gray-900 via-gray-800 to-black'
-                };
-        }
-    };
+ {/* Site links */}
+ <div>
+ <h3 className="text-base sm:text-lg font-display font-bold mb-3 sm:mb-6 text-electric">
+ <TypingText text="Navigate" speed={40} />
+ </h3>
+ <ul className="space-y-2 sm:space-y-3">
+ {siteLinks.map((item) => (
+ <li key={item.path}>
+ <Link
+ to={item.path}
+ className="text-muted hover:text-ink transition-colors text-xs sm:text-sm md:text-base"
+ >
+ <TypingText text={item.name} speed={28} />
+ </Link>
+ </li>
+ ))}
+ </ul>
+ </div>
 
-    const theme = getThemeColors();
+ {/* Contact */}
+ <div>
+ <h3 className="text-base sm:text-lg font-display font-bold mb-3 sm:mb-6 text-electric">
+ <TypingText text="Contact Us" speed={40} />
+ </h3>
+ <ul className="space-y-2 sm:space-y-4">
+ <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
+ <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
+ <span className="break-all">
+ <TypingText text="navedhanaprofitamplifier@gmail.com" speed={18} />
+ </span>
+ </li>
+ <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
+ <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
+ <span>
+ <TypingText text="+91 6305304978" speed={28} />
+ </span>
+ </li>
+ <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
+ <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
+ <span className="break-words">
+ <TypingText text="Hyderabad, India" speed={28} />
+ </span>
+ </li>
+ </ul>
+ </div>
+ </div>
 
-    // Get logo based on current route
-    const getCurrentLogo = () => {
-        switch (location.pathname) {
-            case '/software':
-                return blueLogo;
-            case '/seasonal':
-                return orangeLogo;
-            default:
-                return logo;
-        }
-    };
-
-    return (
-        <footer id="footer" className={`bg-gradient-to-br ${theme.bgGradient} text-white relative overflow-hidden`}>
-            {/* Decorative Elements */}
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-10"></div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-12">
-                    {/* Brand Section */}
-                    <div className="col-span-2 md:col-span-2 flex flex-col items-center md:items-start">
-                        <div className="flex items-center gap-3 mb-4 sm:mb-6">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center">
-                                <img src={getCurrentLogo()} alt="Navedhana" className="w-full h-full object-contain" />
-                            </div>
-                            <div>
-                                <span className="font-bold text-xl sm:text-2xl bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent block">Navedhana</span>
-                            </div>
-                        </div>
-                        <p className="text-gray-400 text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md text-center md:text-left">
-                            Empowering growth through fresh produce, innovative software solutions,
-                            and seasonal joy. Your trusted partner for quality and excellence.
-                        </p>
-                        {/* Social Media Icons */}
-                        <div className="flex gap-4 justify-center md:justify-start">
-                            {[
-                                { name: 'Instagram', icon: FaInstagram, link: 'https://www.instagram.com/navedhana.pvt.ltd/', color: 'hover:text-pink-500' },
-                                { name: 'LinkedIn', icon: FaLinkedin, link: 'https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A107910599&keywords=Navedhana%20Profit%20Amplifier%20Private%20Limited&origin=ENTITY_SEARCH_HOME_HISTORY&sid=wLX', color: 'hover:text-blue-500' },
-                                { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/', color: 'hover:text-green-500' },
-                                { name: 'Email', icon: FaEnvelope, link: 'mailto:navedhanaprofitamplifier@gmail.com', color: 'hover:text-orange-500' }
-                            ].map((social) => {
-                                const IconComponent = social.icon;
-                                return (
-                                    <a
-                                        key={social.name}
-                                        href={social.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className={`w-10 h-10 bg-white/5 hover:bg-white/10 rounded-lg flex items-center justify-center transition-all hover:scale-110 text-gray-300 ${social.color}`}
-                                        title={social.name}
-                                    >
-                                        <IconComponent size={22} />
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Services */}
-                    <div>
-                        <h3 className={`text-base sm:text-lg font-bold mb-3 sm:mb-6 bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent`}>
-                            Our Services
-                        </h3>
-                        <ul className="space-y-2 sm:space-y-3">
-                            {[
-                                { name: 'Vegetables Supply', path: '/vegetables', logo: logo },
-                                { name: 'Software Services', path: '/software', logo: blueLogo },
-                                { name: 'Seasonal Products', path: '/seasonal', logo: orangeLogo }
-                            ].map((item) => (
-                                <li key={item.path}>
-                                    <Link
-                                        to={item.path}
-                                        className="text-gray-400 hover:text-white transition-colors flex items-center gap-3 group text-xs sm:text-sm md:text-base"
-                                    >
-                                        <img src={item.logo} alt={item.name} className="w-6 h-6 sm:w-8 sm:h-8 object-contain opacity-80 group-hover:opacity-100 transition-opacity" />
-                                        <span className="break-words">{item.name}</span>
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Contact */}
-                    <div>
-                        <h3 className={`text-base sm:text-lg font-bold mb-3 sm:mb-6 bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent`}>
-                            Contact Us
-                        </h3>
-                        <ul className="space-y-2 sm:space-y-4">
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
-                                <Mail className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span className="break-all">navedhanaprofitamplifier@gmail.com</span>
-                            </li>
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
-                                <Phone className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span>+91 6305304978</span>
-                            </li>
-                            <li className="flex items-start gap-2 sm:gap-3 text-gray-400 text-xs sm:text-sm md:text-base">
-                                <MapPin className={`w-4 h-4 sm:w-5 sm:h-5 ${theme.iconColor} mt-0.5 flex-shrink-0`} />
-                                <span className="break-words">Hyderabad, India</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Bottom Bar */}
-                <div className="pt-4 sm:pt-6 md:pt-8 border-t border-gray-800">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
-                        <p className="text-gray-500 text-xs sm:text-sm text-center md:text-left">
-                            &copy; {new Date().getFullYear()} Navedhana. All rights reserved.
-                            <span className="hidden md:inline"> | </span>
-                            <span className="block md:inline mt-1 md:mt-0 md:ml-1 text-gray-500">
-                                Developed & maintained by Navedhana Profit Amplifier Private Limited
-                            </span>
-                        </p>
-                        <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-500">
-                            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
+ {/* Bottom Bar */}
+ <div className="pt-4 sm:pt-6 md:pt-8 border-t border-white/10">
+ <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
+ <p className="text-muted/70 text-xs sm:text-sm text-center md:text-left">
+ &copy; {new Date().getFullYear()} Navedhana. All rights reserved.
+ <span className="hidden md:inline"> | </span>
+ <span className="block md:inline mt-1 md:mt-0 md:ml-1">
+ Developed &amp; maintained by Navedhana Profit Amplifier Private Limited
+ </span>
+ </p>
+ <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted/70">
+ <span className="text-muted/50">Other Ventures:</span>
+ {otherVentures.map((v, i) => (
+ <React.Fragment key={v.path}>
+ <Link to={v.path} className="hover:text-ink transition-colors">{v.name}</Link>
+ {i < otherVentures.length - 1 && <span className="text-muted/30">·</span>}
+ </React.Fragment>
+ ))}
+ </div>
+ </div>
+ </div>
+ </div>
+ </footer>
+ );
 };
 
 export default Footer;

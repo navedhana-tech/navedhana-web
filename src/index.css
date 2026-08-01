@@ -1,1 +1,81 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #020617;
+  --color-secondary: #071126;
+  --color-surface: #0f172a;
+  --color-card: #131e35;
+  --color-electric: #00d4ff;
+  --color-royal: #2563eb;
+  --color-purple: #7c3aed;
+  --color-cyan: #06b6d4;
+  --color-ink: #f8fafc;
+  --color-muted: #cbd5e1;
+  --color-green: #22c55e;
+  --color-orange: #f59e0b;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-signature: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-drift: drift 20s ease-in-out infinite;
+  --animate-grid-pan: grid-pan 40s linear infinite;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(3%, -2%) scale(1.05);
+  }
+}
+
+@keyframes grid-pan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 64px 64px;
+  }
+}
+
+:root {
+  /* Motion tokens (Design System) — read by CSS animations directly; components/motion.js
+     mirrors these values for Framer Motion, which is JS-driven and can't read CSS vars. */
+  --motion-micro: 150ms;
+  --motion-base: 300ms;
+  --motion-reveal: 700ms;
+  --motion-step: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-micro: 0ms;
+    --motion-base: 0ms;
+    --motion-reveal: 150ms;
+    --motion-step: 150ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-primary);
+    color: var(--color-ink);
+    /* Body/UI text sitewide reads as code (JetBrains Mono); headings opt
+       into font-display (Space Grotesk) explicitly for visual weight. */
+    font-family: var(--font-mono);
+  }
+}

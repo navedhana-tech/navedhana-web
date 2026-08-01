@@ -1,310 +1,222 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import {
-    BrainCircuit,
-    Cloud,
-    Code2,
-    LayoutGrid,
-    LifeBuoy,
-    MonitorSmartphone,
-    Rocket,
-    Settings,
-    Workflow
-} from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
+import StepFlow from '../components/ui/StepFlow';
+import GradientMesh from '../components/background/GradientMesh';
+import TypingText from '../components/ui/TypingText';
+import { SERVICES } from '../data/services';
+import { PIPELINE } from '../data/engineeringPipeline';
+import { EASE_SIGNATURE } from '../lib/motion';
 
-const Software = () => {
-    const services = [
-        {
-            title: "AI Development",
-            desc: "AI agents, copilots, and RAG-powered assistants that automate workflows, improve support, and unlock insights from your data securely.",
-            tech: ["LLMs", "RAG", "LangChain", "LlamaIndex", "&", "More"],
-            icon: BrainCircuit
-        },
-        {
-            title: "SaaS Applications",
-            desc: "Subscription-ready SaaS platforms with authentication, billing, role-based access, analytics, and scalable multi-tenant architecture.",
-            tech: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "&", "More"],
-            icon: LayoutGrid
-        },
-        {
-            title: "Web & Mobile Applications",
-            desc: "Beautiful, fast web and mobile apps with consistent design systems, offline-ready experiences, and performance-first engineering.",
-            tech: ["React", "React Native", "Expo", "Tailwind", "&", "More"],
-            icon: MonitorSmartphone
-        },
-        {
-            title: "Management Systems",
-            desc: "Custom ERP/CRM, admin portals, dashboards, and internal tools with approvals, audit trails, reporting, and integrations.",
-            tech: ["NestJS", "PostgreSQL", "Redis", "Docker", "&", "More"],
-            icon: Settings
-        }
-    ];
+const TIMELINE_STAGES = ['Architecture', 'Tech Stack', 'Features', 'CTA'];
 
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-            {/* Hero Section */}
-            <div className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[80vh] flex items-center">
-                {/* Digital Code Rain Effect */}
-                {/* Static Background Pattern */}
-                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+const Services = () => {
+ const [openId, setOpenId] = useState(SERVICES[0].id);
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        {/* Text Content */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="inline-block mb-6"
-                            >
-                                <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold tracking-wide uppercase">
-                                    Digital Innovation
-                                </span>
-                            </motion.div>
+ return (
+ <div className="min-h-screen bg-primary">
+ {/* Header */}
+ <div className="relative pt-32 md:pt-40 pb-16 md:pb-20 overflow-hidden">
+ <GradientMesh />
+ <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+ <motion.span
+ initial={{ opacity: 0, y: 10 }}
+ animate={{ opacity: 1, y: 0 }}
+ className="inline-block px-4 py-2 mb-6 border border-electric/30 text-electric text-xs font-mono font-semibold tracking-widest uppercase"
+ >
+ <TypingText text="Our Disciplines" speed={32} />
+ </motion.span>
+ <motion.h1
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.1 }}
+ className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-ink mb-6"
+ >
+ <TypingText text="Software Engineering, " speed={26} delay={300} />
+ <span className="bg-gradient-to-r from-royal to-electric bg-clip-text text-transparent">
+ <TypingText text="Applied." speed={26} delay={870} />
+ </span>
+ </motion.h1>
+ <motion.p
+ initial={{ opacity: 0, y: 20 }}
+ animate={{ opacity: 1, y: 0 }}
+ transition={{ delay: 0.2 }}
+ className="text-base sm:text-lg md:text-xl text-muted max-w-2xl mx-auto"
+ >
+ <TypingText
+ text="Six disciplines, one engineering standard. Select one to see how we actually build it."
+ speed={14}
+ delay={1250}
+ />
+ </motion.p>
+ </div>
+ </div>
 
-                            <motion.h1
-                                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 mb-6 leading-tight"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
-                            >
-                                <span className="block bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                                    Software
-                                </span>
-                                Services
-                            </motion.h1>
+ {/* Engineering pipeline strip — the named, literal tech pipeline (moved out of the Hero) */}
+ <div className="py-10 md:py-12 border-y border-white/5 bg-surface">
+ <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+ <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2">
+ {PIPELINE.map((node, i) => (
+ <React.Fragment key={node.id}>
+ <div className="flex flex-col items-center gap-2 flex-shrink-0">
+ <div className="w-10 h-10 border border-white/10 bg-card flex items-center justify-center">
+ {node.icon ? (
+ <node.icon className="w-5 h-5 text-electric" aria-hidden="true" />
+ ) : (
+ <span className="w-2 h-2 bg-electric" />
+ )}
+ </div>
+ <span className="font-mono text-[10px] uppercase tracking-wide text-muted whitespace-nowrap">
+ <TypingText text={node.label} speed={30} />
+ </span>
+ </div>
+ {i < PIPELINE.length - 1 && (
+ <div className="w-6 md:w-10 h-px bg-white/10 flex-shrink-0 mb-5" />
+ )}
+ </React.Fragment>
+ ))}
+ </div>
+ </div>
+ </div>
 
-                            <motion.p
-                                className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 sm:mb-8 leading-relaxed"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
-                            >
-                                Building robust, scalable, and innovative digital solutions
-                                for businesses of all sizes.
-                            </motion.p>
+ {/* Disciplines accordion — documentary style, not a static grid */}
+ <div className="py-16 md:py-20">
+ <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+ {SERVICES.map((service) => {
+ const isOpen = openId === service.id;
+ return (
+ <div
+ key={service.id}
+ className="border border-white/10 bg-card overflow-hidden"
+ >
+ <button
+ onClick={() => setOpenId(isOpen ? null : service.id)}
+ className="w-full flex items-center justify-between gap-4 px-6 md:px-8 py-5 md:py-6 text-left"
+ aria-expanded={isOpen}
+ >
+ <span className="font-display text-xl md:text-2xl font-bold text-ink">
+ <TypingText text={service.title} speed={28} />
+ </span>
+ <ChevronDown
+ className={`w-5 h-5 text-electric flex-shrink-0 transition-transform duration-base ${isOpen ? 'rotate-180' : ''}`}
+ />
+ </button>
 
-                            <motion.button
-                                className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all transform hover:scale-105"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                Start Your Project
-                            </motion.button>
-                        </motion.div>
+ <AnimatePresence initial={false}>
+ {isOpen && (
+ <motion.div
+ initial={{ height: 0, opacity: 0 }}
+ animate={{ height: 'auto', opacity: 1 }}
+ exit={{ height: 0, opacity: 0 }}
+ transition={{ duration: 0.35, ease: EASE_SIGNATURE }}
+ className="overflow-hidden"
+ >
+ <div className="px-6 md:px-8 pb-8">
+ <StepFlow steps={TIMELINE_STAGES} className="mb-6" />
 
-                        {/* Visual Element - Floating Window */}
-                        <motion.div
-                            className="relative mt-12 lg:mt-0"
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                        >
-                            <div className="relative">
-                                {/* Code Window */}
-                                <motion.div
-                                    className="bg-gray-900 rounded-2xl shadow-2xl overflow-hidden"
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                    whileHover={{ scale: 1.02 }}
-                                >
-                                    {/* Window Header */}
-                                    <div className="bg-gray-800 px-4 py-3 flex items-center gap-2">
-                                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                        <span className="ml-4 text-gray-400 text-sm font-mono">app.jsx</span>
-                                    </div>
+ <p className="text-muted leading-relaxed mb-6">
+ <TypingText text={service.description} speed={9} />
+ </p>
 
-                                    {/* Code Content */}
-                                    <div className="p-6 font-mono text-sm md:text-base">
-                                        <motion.div
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.8, staggerChildren: 0.1 }}
-                                        >
-                                            <div className="text-purple-400">const <span className="text-blue-400">buildApp</span> = () =&gt; {'{'}</div>
-                                            <div className="text-gray-400 ml-4">  <span className="text-green-400">// Innovation starts here</span></div>
-                                            <div className="text-blue-400 ml-4">  return <span className="text-yellow-400">&lt;Success /&gt;</span>;</div>
-                                            <div className="text-purple-400">{'}'}</div>
-                                        </motion.div>
-                                    </div>
-                                </motion.div>
+ <div className="flex flex-wrap gap-2 mb-6">
+ {service.tags.map((tag) => (
+ <span
+ key={tag}
+ className="px-2.5 py-1 bg-white/5 text-muted text-xs font-mono"
+ >
+ {tag}
+ </span>
+ ))}
+ </div>
 
-                                {/* Floating Elements */}
-                                <motion.div
-                                    className="absolute -top-6 -right-6 w-20 h-20 md:w-24 md:h-24 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-xl"
-                                    animate={{
-                                        rotate: [0, 10, 0],
-                                        y: [0, -10, 0]
-                                    }}
-                                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                    style={{ opacity: 0.8 }}
-                                />
-                                <motion.div
-                                    className="absolute -bottom-6 -left-6 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full shadow-xl"
-                                    animate={{
-                                        scale: [1, 1.1, 1],
-                                        rotate: [0, -10, 0]
-                                    }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                                    style={{ opacity: 0.6 }}
-                                />
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </div>
+ <ul className="space-y-2 mb-8">
+ {service.features.map((feature) => (
+ <li key={feature} className="flex items-start gap-2 text-sm text-ink">
+ <span className="w-1.5 h-1.5 mt-1.5 bg-electric flex-shrink-0" />
+ {feature}
+ </li>
+ ))}
+ </ul>
 
-            {/* Services Grid */}
-            <div className="py-16 md:py-20">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                        {services.map((item, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                whileHover={{ y: -5 }}
-                                className="group relative"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-3xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                                <div className="relative p-6 md:p-8 bg-white rounded-3xl border border-blue-100 hover:border-blue-300 shadow-xl hover:shadow-2xl transition-all">
-                                    <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg transform group-hover:scale-110 transition-transform">
-                                        <item.icon className="w-7 h-7 md:w-8 md:h-8 text-white" aria-hidden="true" />
-                                    </div>
-                                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                                    <p className="text-gray-600 mb-6 leading-relaxed">{item.desc}</p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {item.tech.map((tech, i) => (
-                                            <span key={i} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </div>
+ <Link
+ to="/contact"
+ className="inline-flex items-center gap-2 px-5 py-3 bg-electric text-primary font-bold text-sm hover:shadow-lg hover:shadow-electric/20 transition-all"
+ >
+ Start a Project
+ <ArrowRight size={16} />
+ </Link>
+ </div>
+ </motion.div>
+ )}
+ </AnimatePresence>
+ </div>
+ );
+ })}
+ </div>
+ </div>
 
-            {/* Tech Stack Section */}
-            <div className="py-16 md:py-20 bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-10"></div>
+ {/* Partner Section */}
+ <div className="py-16 md:py-20 bg-surface border-t border-white/5">
+ <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ whileInView={{ opacity: 1, y: 0 }}
+ viewport={{ once: true }}
+ >
+ <h2 className="font-display text-2xl md:text-3xl font-bold text-ink mb-12">
+ <TypingText text="Our" speed={40} />
+ <span className="bg-gradient-to-r from-royal to-electric bg-clip-text text-transparent">
+ <TypingText text="Partner" speed={40} delay={200} />
+ </span>
+ </h2>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                            Powered by <span className="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Modern Technologies</span>
-                        </h2>
-                        <p className="text-gray-400 mb-12">We use the latest and most reliable tools to build scalable, secure, and high-performance solutions</p>
+ <a href="https://yugminds.org/" target="_blank" rel="noopener noreferrer" className="inline-block">
+ <motion.div
+ whileHover={{ scale: 1.05 }}
+ className="p-8 md:p-12 bg-card border border-white/10 hover:border-electric/30 transition-all max-w-md mx-auto"
+ >
+ <img
+ src="/assets/other/yug.png"
+ alt="Yugminds"
+ className="mx-auto w-full max-w-none h-auto object-contain scale-110 md:scale-125"
+ loading="lazy"
+ />
+ </motion.div>
+ </a>
+ </motion.div>
+ </div>
+ </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-6">
-                            {[
-                                { label: 'High-level Programming Languages', icon: Code2 },
-                                { label: 'Agile Development Practices', icon: Workflow },
-                                { label: 'Cloud Integrations', icon: Cloud },
-                                { label: 'Seamless Deployment', icon: Rocket },
-                                { label: 'Ongoing Maintenance & Support', icon: LifeBuoy }
-                            ].map((tech, idx) => (
-                                <motion.div
-                                    key={tech.label}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    whileHover={{ scale: 1.05 }}
-                                    className="group relative p-6 min-h-[170px] flex flex-col items-center justify-center gap-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-white/20 hover:bg-white/10 transition-all"
-                                >
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/10 to-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    <tech.icon className="relative z-10 w-10 h-10 text-blue-300 drop-shadow-[0_0_12px_rgba(59,130,246,0.55)]" aria-hidden="true" />
-                                    <span className="relative z-10 text-white font-semibold text-base md:text-lg leading-snug text-center">
-                                        {tech.label}
-                                    </span>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-
-            {/* Partner Section */}
-            <div className="py-16 md:py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-15"></div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-12">
-                            Our <span className="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Partner</span>
-                        </h2>
-
-                        <a
-                            href="https://yugminds.org/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block"
-                        >
-                            <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                className="p-8 md:p-12 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all max-w-md mx-auto"
-                            >
-                                <img
-                                    src="/assets/other/yug.png"
-                                    alt="Yugminds"
-                                    className="mx-auto w-full max-w-none h-auto object-contain scale-110 md:scale-125"
-                                    loading="lazy"
-                                />
-                            </motion.div>
-                        </a>
-                    </motion.div>
-                </div>
-            </div>
-
-            {/* CTA Section */}
-            <div className="py-16 md:py-20">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="relative rounded-3xl overflow-hidden"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600"></div>
-                        <div className="relative px-6 md:px-8 py-12 md:py-16 text-center">
-                            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Let's Build Something Amazing</h2>
-                            <p className="text-blue-100 text-lg mb-8">Transform your ideas into reality with our expert team</p>
-                            <Link
-                                to="/contact"
-                                className="inline-block px-8 md:px-10 py-4 bg-white text-blue-700 rounded-2xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-105"
-                            >
-                                Start Your Project
-                            </Link>
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-        </div>
-    );
+ {/* CTA Section */}
+ <div className="py-16 md:py-20">
+ <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+ <motion.div
+ initial={{ opacity: 0, y: 20 }}
+ whileInView={{ opacity: 1, y: 0 }}
+ viewport={{ once: true }}
+ className="relative overflow-hidden border border-white/10"
+ >
+ <div className="absolute inset-0 bg-gradient-to-r from-royal to-electric opacity-90" />
+ <div className="relative px-6 md:px-8 py-12 md:py-16 text-center">
+ <h2 className="font-display text-3xl md:text-4xl font-bold text-primary mb-4">
+ <TypingText text="Let's Build Something Amazing" speed={22} />
+ </h2>
+ <p className="text-primary/80 text-lg mb-8">
+ <TypingText text="Transform your ideas into reality with our expert team" speed={16} delay={700} />
+ </p>
+ <Link
+ to="/contact"
+ className="inline-block px-8 md:px-10 py-4 bg-primary text-ink font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
+ >
+ <TypingText text="Start Your Project" speed={26} delay={1400} />
+ </Link>
+ </div>
+ </motion.div>
+ </div>
+ </div>
+ </div>
+ );
 };
 
-export default Software;
+export default Services;
