@@ -1,366 +1,174 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, MessageSquare, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
-import { FaInstagram, FaLinkedin, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
-import GradientMesh from '../components/background/GradientMesh';
-import TypingText from '../components/ui/TypingText';
+import SectionKicker from '../components/ui/SectionKicker';
+
+const inputClasses =
+  'w-full px-4 py-3.5 rounded-xl bg-ink/[0.035] border border-ink/15 text-ink placeholder:text-muted/50 text-[14.5px] focus:ring-2 focus:ring-electric focus:border-transparent transition-all outline-none';
+
+// Local, self-contained page effects (scroll progress + cursor glow) — not
+// shared components, this is the one page in the design that has them.
+function useScrollProgress(ref) {
+  useEffect(() => {
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      if (ref.current) ref.current.style.transform = `scaleX(${pct})`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [ref]);
+}
+
+function useCursorGlow(ref) {
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return undefined;
+    const target = { x: -9999, y: -9999 };
+    const current = { x: -9999, y: -9999 };
+    const onMove = (e) => { target.x = e.clientX; target.y = e.clientY; };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    let raf;
+    const loop = () => {
+      current.x += (target.x - current.x) * 0.1;
+      current.y += (target.y - current.y) * 0.1;
+      if (ref.current) ref.current.style.transform = `translate3d(${current.x - 230}px, ${current.y - 230}px, 0)`;
+      raf = requestAnimationFrame(loop);
+    };
+    loop();
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [ref]);
+}
 
 const Contact = () => {
- const [formData, setFormData] = useState({
- name: '',
- email: '',
- phone: '',
- subject: '',
- message: ''
- });
- const [isSubmitting, setIsSubmitting] = useState(false);
- const [submitStatus, setSubmitStatus] = useState(null);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formSent, setFormSent] = useState(false);
 
- const handleChange = (e) => {
- setFormData({
- ...formData,
- [e.target.name]: e.target.value
- });
- };
+  const progressRef = useRef(null);
+  const glowRef = useRef(null);
+  useScrollProgress(progressRef);
+  useCursorGlow(glowRef);
 
- const handleSubmit = async (e) => {
- e.preventDefault();
- setIsSubmitting(true);
- setSubmitStatus(null);
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
- try {
- // EmailJS configuration
- // You'll need to set these up in your EmailJS account
- const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
- const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
- const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
- // Prepare email template parameters
- const templateParams = {
- from_name: formData.name,
- from_email: formData.email,
- phone: formData.phone || 'Not provided',
- subject: formData.subject,
- message: formData.message,
- to_email: 'navedhanaprofitamplifier@gmail.com',
- };
+    try {
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
 
- // Send email using EmailJS
- await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone || 'Not provided',
+        subject: 'Website Contact Form',
+        message: formData.message,
+        to_email: 'navedhanaprofitamplifier@gmail.com',
+      };
 
- setIsSubmitting(false);
- setSubmitStatus('success');
- setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
 
- // Reset status message after 5 seconds
- setTimeout(() => setSubmitStatus(null), 5000);
- } catch (error) {
- console.error('Email sending failed: ', error);
- setIsSubmitting(false);
- setSubmitStatus('error');
+      setIsSubmitting(false);
+      setFormSent(true);
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Email sending failed: ', error);
+      setIsSubmitting(false);
+      alert('Failed to send message. Please try again or contact us directly at navedhanaprofitamplifier@gmail.com');
+    }
+  };
 
- // Reset error message after 5 seconds
- setTimeout(() => setSubmitStatus(null), 5000);
- }
- };
+  return (
+    <div className="bg-primary relative">
+      <div className="fixed top-0 left-0 right-0 h-[3px] z-[70] bg-ink/5">
+        <div ref={progressRef} className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-electric to-royal" />
+      </div>
+      <div
+        ref={glowRef}
+        className="fixed top-0 left-0 w-[460px] h-[460px] rounded-full pointer-events-none z-[1] hidden lg:block"
+        style={{ background: 'radial-gradient(circle, oklch(55% 0.19 232 / 0.16), transparent 70%)', filter: 'blur(10px)' }}
+      />
 
- const contactInfo = [
- {
- icon: Mail,
- title: 'Email Us',
- content: 'navedhanaprofitamplifier@gmail.com',
- link: 'mailto:navedhanaprofitamplifier@gmail.com',
- },
- {
- icon: Phone,
- title: 'Call Us',
- content: '+91 6305304978',
- link: 'tel:+916305304978',
- },
- {
- icon: MapPin,
- title: 'Visit Us',
- content: 'Hyderabad, India',
- link: '#',
- },
- {
- icon: Clock,
- title: 'Business Hours',
- content: 'Mon - Sat: 9:00 AM - 6:00 PM',
- link: '#',
- }
- ];
+      <section className="pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">
+        <SectionKicker centered className="mb-3.5">Contact Us</SectionKicker>
+        <h1 className="font-display text-[28px] sm:text-[44px] font-bold tracking-tight text-ink">Tell us your goals</h1>
+      </section>
 
- const socialLinks = [
- { name: 'Instagram', icon: FaInstagram, link: 'https://www.instagram.com/navedhana.pvt.ltd/', color: 'hover:text-pink-400' },
- { name: 'LinkedIn', icon: FaLinkedin, link: 'https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A107910599&keywords=Navedhana%20Profit%20Amplifier%20Private%20Limited&origin=ENTITY_SEARCH_HOME_HISTORY&sid=wLX', color: 'hover:text-electric' },
- { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/916305304978', color: 'hover:text-green' },
- { name: 'Email', icon: FaEnvelope, link: 'mailto:navedhanaprofitamplifier@gmail.com', color: 'hover:text-orange' }
- ];
+      <section className="py-6 pb-14 px-4 sm:px-8 max-w-[1180px] mx-auto">
+        <div className="grid md:grid-cols-2 gap-14 items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 1.05, y: 16 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="flex items-center justify-center order-2 md:order-1"
+          >
+            <img
+              src="/assets/redesign/leaf-binary-art.png"
+              alt="Navedhana"
+              className="w-full max-w-[340px] h-auto rounded-2xl"
+              style={{ filter: 'drop-shadow(0 0 40px oklch(55% 0.19 232 / 0.25))' }}
+            />
+          </motion.div>
 
- const inputClasses =
-'w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm bg-surface border border-white/10 text-ink placeholder:text-muted/50 focus:ring-2 focus:ring-electric focus:border-transparent transition-all outline-none';
- const labelClasses = 'block text-xs sm:text-sm font-semibold text-muted mb-1.5 sm:mb-2';
+          <div className="order-1 md:order-2">
+            <AnimatePresence mode="wait">
+              {formSent ? (
+                <motion.div
+                  key="sent"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-8 rounded-2xl bg-ink/[0.04] border border-ink/15 text-center"
+                >
+                  <div className="font-display text-xl font-semibold text-ink mb-2">Thanks — message received.</div>
+                  <p className="text-sm text-muted">We'll get back to you shortly at the email you provided.</p>
+                </motion.div>
+              ) : (
+                <motion.form key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} onSubmit={handleSubmit} className="flex flex-col gap-3.5">
+                  <input name="name" placeholder="Name" required value={formData.name} onChange={handleChange} className={inputClasses} />
+                  <input name="email" type="email" placeholder="Your email" required value={formData.email} onChange={handleChange} className={inputClasses} />
+                  <input name="phone" type="tel" placeholder="Mobile number" value={formData.phone} onChange={handleChange} className={inputClasses} />
+                  <textarea
+                    name="message"
+                    placeholder="Additional message"
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className={`${inputClasses} resize-y rounded-xl`}
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="self-start mt-1 px-7 py-3.5 rounded-xl bg-electric text-primary font-bold text-[15px] shadow-lg shadow-electric/25 disabled:opacity-50 transition-transform"
+                  >
+                    {isSubmitting ? 'Sending…' : 'Submit ↗'}
+                  </button>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </section>
 
- return (
- <div className="min-h-screen bg-primary">
- {/* Hero Section */}
- <div className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 overflow-hidden min-h-[40vh] sm:min-h-[50vh] flex items-center">
- <GradientMesh />
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ duration: 0.8 }}
- >
- <span className="inline-block py-1 px-2 sm:px-3 border border-electric/30 text-electric text-xs sm:text-sm font-mono font-semibold mb-4 sm:mb-6 tracking-widest uppercase">
- <TypingText text="Get In Touch" speed={34} />
- </span>
- <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-ink mb-4 sm:mb-6 leading-tight px-2">
- <TypingText text="Let's Start a" speed={30} delay={200} /> <br className="hidden sm:block" />
- <span className="bg-gradient-to-r from-royal to-electric bg-clip-text text-transparent">
- <TypingText text="Conversation" speed={30} delay={650} />
- </span>
- </h1>
- <p className="text-sm sm:text-base md:text-lg text-muted max-w-3xl mx-auto leading-relaxed px-4">
- <TypingText
- text="Have a project in mind? We'd love to hear from you. Send us a message and we'll respond as soon as possible."
- speed={12}
- delay={1150}
- />
- </p>
- </motion.div>
- </div>
- </div>
-
- {/* Contact Section */}
- <div className="py-8 sm:py-12 md:py-16 lg:py-20">
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
- {/* Contact Form */}
- <motion.div
- initial={{ opacity: 0, x: -50 }}
- whileInView={{ opacity: 1, x: 0 }}
- viewport={{ once: true }}
- className="bg-card shadow-xl p-4 sm:p-6 md:p-8 border border-white/10"
- >
- <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
- <div className="w-8 h-8 sm:w-10 sm:h-10 bg-electric flex items-center justify-center flex-shrink-0">
- <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
- </div>
- <h2 className="font-display text-xl sm:text-2xl md:text-2xl font-bold text-ink">
- <TypingText text="Send us a Message" speed={26} />
- </h2>
- </div>
-
- <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
- <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
- <div>
- <label htmlFor="name" className={labelClasses}>
- Full Name *
- </label>
- <input
- type="text"
- id="name"
- name="name"
- required
- value={formData.name}
- onChange={handleChange}
- className={inputClasses}
- placeholder="John Doe"
- />
- </div>
- <div>
- <label htmlFor="email" className={labelClasses}>
- Email Address *
- </label>
- <input
- type="email"
- id="email"
- name="email"
- required
- value={formData.email}
- onChange={handleChange}
- className={inputClasses}
- placeholder="john@example.com"
- />
- </div>
- </div>
-
- <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
- <div>
- <label htmlFor="phone" className={labelClasses}>
- Phone Number
- </label>
- <input
- type="tel"
- id="phone"
- name="phone"
- value={formData.phone}
- onChange={handleChange}
- className={inputClasses}
- placeholder="+91 1234567890"
- />
- </div>
- <div>
- <label htmlFor="subject" className={labelClasses}>
- Subject *
- </label>
- <input
- type="text"
- id="subject"
- name="subject"
- required
- value={formData.subject}
- onChange={handleChange}
- className={inputClasses}
- placeholder="How can we help? "
- />
- </div>
- </div>
-
- <div>
- <label htmlFor="message" className={labelClasses}>
- Message *
- </label>
- <textarea
- id="message"
- name="message"
- required
- rows="5"
- value={formData.message}
- onChange={handleChange}
- className={`${inputClasses} resize-none`}
- placeholder="Tell us more about your project..."
- />
- </div>
-
- {submitStatus ==='success' && (
- <motion.div
- initial={{ opacity: 0, y: -10 }}
- animate={{ opacity: 1, y: 0 }}
- className="flex items-start gap-2 p-3 sm:p-4 bg-green/10 border border-green/30 text-green text-xs sm:text-sm"
- >
- <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5" />
- <span className="font-medium">Message sent successfully! We'll get back to you soon.</span>
- </motion.div>
- )}
-
- {submitStatus ==='error' && (
- <motion.div
- initial={{ opacity: 0, y: -10 }}
- animate={{ opacity: 1, y: 0 }}
- className="flex items-start gap-2 p-3 sm:p-4 bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm"
- >
- <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0 mt-0.5" />
- <span className="font-medium">Failed to send message. Please try again or contact us directly at navedhanaprofitamplifier@gmail.com</span>
- </motion.div>
- )}
-
- <button
- type="submit"
- disabled={isSubmitting}
- className="w-full px-6 sm:px-8 py-3 sm:py-3.5 bg-electric text-primary font-bold text-sm sm:text-base hover:shadow-lg hover:shadow-electric/20 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-card"
- >
- {isSubmitting ? (
- <>
- <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-primary border-t-transparent animate-spin"></div>
- <span className="text-xs sm:text-sm">Sending...</span>
- </>
- ) : (
- <>
- <Send className="w-4 h-4 sm:w-5 sm:h-5" />
- <span>Send Message</span>
- </>
- )}
- </button>
- </form>
- </motion.div>
-
- {/* Contact Information */}
- <div className="space-y-3 sm:space-y-4">
- <motion.div
- initial={{ opacity: 0, x: 50 }}
- whileInView={{ opacity: 1, x: 0 }}
- viewport={{ once: true }}
- >
- <h2 className="font-display text-lg sm:text-xl font-bold text-ink mb-2 sm:mb-3">
- <TypingText text="Contact Information" speed={26} />
- </h2>
- <p className="text-xs sm:text-sm text-muted mb-3 sm:mb-4">
- <TypingText
- text="Reach out to us through any of these channels. We're here to help and answer any questions you may have."
- speed={12}
- delay={550}
- />
- </p>
- </motion.div>
-
- <div className="space-y-2 sm:space-y-3">
- {contactInfo.map((info, idx) => {
- const IconComponent = info.icon;
- return (
- <motion.a
- key={idx}
- href={info.link}
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- transition={{ delay: idx * 0.1 }}
- whileHover={{ x: 5 }}
- className="block p-3 sm:p-4 bg-card border border-white/10 hover:border-electric/30 transition-all group focus-visible:ring-2 focus-visible:ring-electric outline-none"
- >
- <div className="flex items-start gap-2 sm:gap-3">
- <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-electric/10 transition-transform">
- <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-electric" />
- </div>
- <div className="flex-1 min-w-0">
- <h3 className="text-sm sm:text-base font-bold text-ink mb-0.5 sm:mb-1">
- <TypingText text={info.title} speed={26} />
- </h3>
- <p className="text-xs sm:text-sm text-muted break-words">{info.content}</p>
- </div>
- </div>
- </motion.a>
- );
- })}
- </div>
-
- {/* Social Media */}
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- className="pt-3 sm:pt-4"
- >
- <h3 className="font-display text-base sm:text-lg font-bold text-ink mb-2 sm:mb-3">
- <TypingText text="Follow Us" speed={34} />
- </h3>
- <div className="flex gap-2 sm:gap-3">
- {socialLinks.map((social) => {
- const IconComponent = social.icon;
- return (
- <a
- key={social.name}
- href={social.link}
- target="_blank"
- rel="noopener noreferrer"
- className={`w-8 h-8 sm:w-10 sm:h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all hover:scale-110 border border-white/10 text-muted focus-visible:ring-2 focus-visible:ring-electric outline-none ${social.color}`}
- title={social.name}
- >
- <IconComponent size={16} className="sm:w-5 sm:h-5" />
- </a>
- );
- })}
- </div>
- </motion.div>
- </div>
- </div>
- </div>
- </div>
- </div>
- );
+      <section className="py-6 px-4 sm:px-8 border-y border-ink/15">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-9 text-[13.5px] text-muted">
+          <span>Phone: <span className="text-ink">+91 63053 04978</span></span>
+          <span>Email: <span className="text-ink">navedhanaprofitamplifier@gmail.com</span></span>
+          <span>Remote-First · Serving Clients Worldwide</span>
+        </div>
+      </section>
+    </div>
+  );
 };
 
 export default Contact;

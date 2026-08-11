@@ -1,18 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #020617;
-  --color-secondary: #071126;
-  --color-surface: #0f172a;
-  --color-card: #131e35;
-  --color-electric: #00d4ff;
-  --color-royal: #2563eb;
-  --color-purple: #7c3aed;
-  --color-cyan: #06b6d4;
-  --color-ink: #f8fafc;
-  --color-muted: #cbd5e1;
-  --color-green: #22c55e;
-  --color-orange: #f59e0b;
+  /* Warm paper neutrals. The four background tokens previously spanned 2.5%
+     lightness (#fafcfe / #f8fafe / #f2f5fb / #f0f4fa) — functionally one
+     colour, so every alternating section boundary was invisible. These span
+     ~10 points, so sections separate and cards lift off the page. */
+  --color-primary: #f7f4ee;
+  /* Darkest surface that keeps `muted` body copy above AA on it (4.62:1).
+     #e8e1d3 separates better but drops muted to 4.49:1 — under the line. */
+  --color-surface: #eae4d8;
+  --color-card: #fffdf9;
+
+  /* One blue, two stops — sampled from the leaf mark (dominant #0164f5, 6636px).
+     The old electric/royal pair sat 3 degrees apart in hue and read as an
+     inconsistency rather than a system. These are 19 lightness points apart:
+     `electric` for fills, `royal` for small text that needs the contrast
+     (8.6:1 on paper, vs 4.6:1 for electric). */
+  --color-electric: #0164f5;
+  --color-royal: #083f9e;
+
+  --color-ink: #221f1b;
+  --color-muted: #6b6459;
+
+  /* Semantic status only — the LIVE product badge. Not decoration. */
+  --color-green: #0f6b45;
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -74,8 +85,6 @@
   body {
     background-color: var(--color-primary);
     color: var(--color-ink);
-    /* Body/UI text sitewide reads as code (JetBrains Mono); headings opt
-       into font-display (Space Grotesk) explicitly for visual weight. */
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
   }
 }

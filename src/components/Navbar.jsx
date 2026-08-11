@@ -2,118 +2,129 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import LogoMark from './intro/LogoMark';
 import Button from './ui/Button';
-import TypingText from './ui/TypingText';
+import { trackEvent } from '../lib/analytics';
 
 const links = [
- { name: 'Home', path: '/' },
- { name: 'Services', path: '/services' },
- { name: 'About', path: '/about' },
- { name: 'Contact', path: '/contact' },
+  { name: 'Services', path: '/services' },
+  { name: 'Products', path: '/products' },
+  { name: 'Work', path: '/work' },
+  { name: 'About', path: '/about' },
 ];
 
-const Navbar = ({ logoVisible = true }) => {
- const [isOpen, setIsOpen] = useState(false);
- const [scrolled, setScrolled] = useState(false);
- const location = useLocation();
+// Full-width on scroll — a flat solid bar with one hairline border, not a
+// floating inset pill. Secondary destinations (AI Agent, Insights, Vegetable
+// Service) live in the footer — keeping the primary nav to four links is
+// what lets the dropdown go away entirely. The active-link dot-on-a-trace
+// echoes the logo mark's circuit-stem motif rather than a plain underline.
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path;
 
- useEffect(() => {
- const handleScroll = () => setScrolled(window.scrollY > 20);
- window.addEventListener('scroll', handleScroll);
- return () => window.removeEventListener('scroll', handleScroll);
- }, []);
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
- const isActive = (path) => location.pathname === path;
+  return (
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 mx-auto flex items-center justify-between gap-6 max-w-none w-full px-4 sm:px-8 transition-all duration-300 ease-in-out ${
+          isScrolled
+            ? 'h-[72px] bg-card border-b border-ink/15'
+            : 'h-[84px] bg-transparent border-b border-transparent'
+        }`}
+      >
+        <Link to="/" className="group relative flex items-center gap-2.5 flex-shrink-0">
+          <span
+            className="absolute -left-2 -top-2 w-11 h-11 rounded-full bg-electric/0 group-hover:bg-electric/10 blur-md transition-colors duration-base"
+            aria-hidden="true"
+          />
+          <motion.img
+            src="/assets/redesign/logo-blue.png"
+            alt="Navedhana"
+            className="relative h-10 w-auto"
+            whileHover={{ scale: 1.08, rotate: -4 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+          />
+          <span className="font-display font-semibold text-xl text-ink tracking-tight">Navedhana</span>
+        </Link>
 
- return (
- <>
- <nav
- className={`fixed top-0 left-0 right-0 z-50 border-b transition-colors duration-base ${
- scrolled ? 'bg-primary/90 backdrop-blur-lg border-white/10' : 'bg-primary/60 backdrop-blur-md border-white/5'
- }`}
- >
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- <div className="flex justify-between items-center h-20">
- <Link to="/" className="flex items-center gap-3 group">
- <motion.div
- layoutId="brand-mark"
- className="w-10 h-10 group-hover:scale-110 transition-transform duration-base"
- style={{ opacity: logoVisible ? 1 : 0 }}
- >
- <LogoMark size={40} />
- </motion.div>
- <span className="font-display font-bold text-xl text-ink tracking-tight">
- Navedhana
- </span>
- </Link>
+        <div className="relative hidden lg:flex items-center gap-2 text-[14.5px] font-medium text-ink/70 whitespace-nowrap">
+          <span className="absolute left-3.5 right-3.5 bottom-0.5 h-px bg-ink/15" aria-hidden="true" />
+          {links.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`relative px-3.5 py-2 transition-colors duration-base ${
+                isActive(link.path) ? 'text-ink' : 'hover:text-ink'
+              }`}
+            >
+              {link.name}
+              {isActive(link.path) && (
+                <motion.span
+                  layoutId="navbar-node"
+                  className="absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-[5px] h-[5px] rounded-full bg-electric"
+                  style={{ boxShadow: '0 0 6px rgba(1,100,245,0.65)' }}
+                  transition={{ type: 'spring', bounce: 0.25, duration: 0.55 }}
+                />
+              )}
+            </Link>
+          ))}
+        </div>
 
- <div className="hidden lg:flex items-center space-x-8">
- {links.map((link) => (
- <Link
- key={link.path}
- to={link.path}
- className={`relative text-sm font-medium transition-colors duration-base ${
- isActive(link.path) ? 'text-electric' : 'text-muted hover:text-ink'
- }`}
- >
- <TypingText text={link.name} speed={30} />
- {isActive(link.path) && (
- <motion.div
- layoutId="navbar-underline"
- className="absolute -bottom-1 left-0 right-0 h-0.5 bg-electric"
- transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
- />
- )}
- </Link>
- ))}
- </div>
+        <div className="hidden lg:block flex-shrink-0">
+          <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'navbar' })}>
+            Discuss Your Project →
+          </Button>
+        </div>
 
- <div className="hidden lg:flex items-center">
- <Button to="/contact" size="sm">
- <TypingText text="Start a Project" speed={26} />
- </Button>
- </div>
+        <button
+          onClick={() => setIsOpen((v) => !v)}
+          className="lg:hidden p-2 -mr-2 text-ink"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        >
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </nav>
 
- <button
- onClick={() => setIsOpen((v) => !v)}
- className="lg:hidden p-2 hover:bg-white/5 transition-colors text-ink"
- aria-label={isOpen ? 'Close menu' : 'Open menu'}
- >
- {isOpen ? <X size={24} /> : <Menu size={24} />}
- </button>
- </div>
- </div>
- </nav>
-
- <AnimatePresence>
- {isOpen && (
- <motion.div
- initial={{ opacity: 0, y: -20, scale: 0.95 }}
- animate={{ opacity: 1, y: 0, scale: 1 }}
- exit={{ opacity: 0, y: -20, scale: 0.95 }}
- transition={{ duration: 0.2 }}
- className="fixed top-[84px] left-1/2 -translate-x-1/2 z-[2000] w-[90%] max-w-sm bg-surface/95 backdrop-blur-xl shadow-2xl border border-white/10 overflow-hidden lg:hidden"
- >
- <div className="p-2 space-y-1">
- {[...links, { name: 'Start a Project', path: '/contact' }].map((link) => (
- <div key={link.path} onClick={() => setIsOpen(false)} className="w-full">
- <Link
- to={link.path}
- className={`flex items-center justify-center px-4 py-3 text-base font-medium transition-all w-full ${
- isActive(link.path) ? 'bg-electric text-primary' : 'text-muted hover:bg-white/5'
- }`}
- >
- <TypingText text={link.name} speed={26} />
- </Link>
- </div>
- ))}
- </div>
- </motion.div>
- )}
- </AnimatePresence>
- </>
- );
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -16, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-[92px] left-4 right-4 z-[2000] rounded-2xl bg-card border border-ink/15 shadow-2xl p-2 max-h-[calc(100vh-110px)] overflow-auto lg:hidden"
+          >
+            {links.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={`block px-4 py-3 rounded-xl text-[15px] font-medium transition-colors ${
+                  isActive(link.path) ? 'bg-ink/[0.06] text-ink' : 'text-ink/70 hover:bg-ink/[0.06]'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link
+              to="/contact"
+              onClick={() => setIsOpen(false)}
+              className="block mt-2 px-4 py-3 rounded-xl bg-electric text-primary font-bold text-center"
+            >
+              Discuss Your Project →
+            </Link>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 };
 
 export default Navbar;

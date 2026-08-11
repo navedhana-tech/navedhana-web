@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const VARIANTS = {
- primary: 'bg-electric text-primary hover:shadow-lg hover:shadow-electric/20',
- outline: 'border border-white/15 text-ink hover:border-electric/40 hover:text-electric',
+ primary: 'bg-electric text-primary shadow-lg shadow-electric/25 hover:shadow-xl hover:shadow-electric/30',
+ outline: 'border border-ink/15 text-ink bg-ink/[0.03] hover:bg-ink/[0.08]',
 };
 
 const SIZES = {
@@ -36,7 +36,7 @@ const Button = ({ to, href, variant = 'primary', size = 'lg', className = '', ch
  y.set(0);
  };
 
- const classes = `group inline-flex items-center justify-center gap-2 font-bold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${SIZES[size]} ${VARIANTS[variant]} ${className}`;
+ const classes = `group inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${SIZES[size]} ${VARIANTS[variant]} ${className}`;
 
  const Component = to ? Link : href ? 'a' : 'button';
  const linkProps = to ? { to } : href ? { href } : {};

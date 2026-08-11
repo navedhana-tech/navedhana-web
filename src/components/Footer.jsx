@@ -1,136 +1,117 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin } from 'lucide-react';
-import { FaInstagram, FaLinkedin, FaWhatsapp, FaEnvelope } from 'react-icons/fa';
-import LogoMark from './intro/LogoMark';
-import TypingText from './ui/TypingText';
+import { Linkedin, Mail } from 'lucide-react';
 
-const siteLinks = [
- { name: 'Home', path: '/' },
- { name: 'Services', path: '/services' },
- { name: 'About', path: '/about' },
- { name: 'Contact', path: '/contact' },
+const SERVICE_LINKS = [
+  'AI Engineering',
+  'Custom Software',
+  'Intelligent Automation',
+  'Product Engineering',
 ];
 
-const otherVentures = [
- { name: 'Vegetables Supply', path: '/vegetables' },
- { name: 'Seasonal Products', path: '/seasonal' },
+const PRODUCT_LINKS = [
+  { name: 'Lekvya', href: 'https://ca.navedhana.com/', external: true },
+  { name: 'AI Agent', path: '/ai-agent' },
+  { name: 'Data Factory', path: '/products' },
+  { name: 'QA Foundation', path: '/products' },
 ];
 
-const Footer = () => {
- return (
- <footer id="footer" className="bg-surface text-ink relative overflow-hidden border-t border-white/5">
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 relative z-10">
- <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 md:mb-12">
- {/* Brand */}
- <div className="col-span-2 md:col-span-2 flex flex-col items-center md:items-start">
- <div className="flex items-center gap-3 mb-4 sm:mb-6">
- <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
- <LogoMark size={48} className="w-full h-full object-contain" />
- </div>
- <span className="font-display font-bold text-xl sm:text-2xl text-ink block">Navedhana</span>
- </div>
- <p className="text-muted text-sm sm:text-base leading-relaxed mb-4 sm:mb-6 max-w-md text-center md:text-left">
- <TypingText
- text="A software engineering and AI company building intelligent digital products — web, mobile, desktop, cloud, and AI."
- speed={12}
- />
- </p>
- <div className="flex gap-4 justify-center md:justify-start">
- {[
- { name: 'Instagram', icon: FaInstagram, link: 'https://www.instagram.com/navedhana.pvt.ltd/', color: 'hover:text-pink-400' },
- { name: 'LinkedIn', icon: FaLinkedin, link: 'https://www.linkedin.com/search/results/all/?heroEntityKey=urn%3Ali%3Aorganization%3A107910599&keywords=Navedhana%20Profit%20Amplifier%20Private%20Limited&origin=ENTITY_SEARCH_HOME_HISTORY&sid=wLX', color: 'hover:text-electric' },
- { name: 'WhatsApp', icon: FaWhatsapp, link: 'https://wa.me/', color: 'hover:text-green' },
- { name: 'Email', icon: FaEnvelope, link: 'mailto:navedhanaprofitamplifier@gmail.com', color: 'hover:text-orange' },
- ].map((social) => {
- const IconComponent = social.icon;
- return (
- <a
- key={social.name}
- href={social.link}
- target="_blank"
- rel="noopener noreferrer"
- className={`w-10 h-10 bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all hover:scale-110 text-muted ${social.color}`}
- title={social.name}
- >
- <IconComponent size={22} />
- </a>
- );
- })}
- </div>
- </div>
+const COMPANY_LINKS = [
+  { name: 'Home', path: '/' },
+  { name: 'About', path: '/about' },
+  { name: 'Work', path: '/work' },
+  { name: 'Insights', path: '/insights' },
+  { name: 'Vegetable Service', path: '/vegetables' },
+  { name: 'Contact', path: '/contact' },
+];
 
- {/* Site links */}
- <div>
- <h3 className="text-base sm:text-lg font-display font-bold mb-3 sm:mb-6 text-electric">
- <TypingText text="Navigate" speed={40} />
- </h3>
- <ul className="space-y-2 sm:space-y-3">
- {siteLinks.map((item) => (
- <li key={item.path}>
- <Link
- to={item.path}
- className="text-muted hover:text-ink transition-colors text-xs sm:text-sm md:text-base"
- >
- <TypingText text={item.name} speed={28} />
- </Link>
- </li>
- ))}
- </ul>
- </div>
+const Footer = () => (
+  <footer className="relative z-10 pt-14 pb-7 px-4 sm:px-8 border-t border-ink/15 bg-surface">
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-11">
+        <div className="col-span-2 md:col-span-1">
+          <Link to="/" className="flex items-center gap-2.5 mb-4">
+            <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-6 w-auto" />
+            <span className="font-display font-semibold text-lg text-ink">Navedhana</span>
+          </Link>
+          <p className="text-[13.5px] leading-relaxed text-muted/80 max-w-[280px] mb-5">
+            Software + AI engineering for real-world problems.
+          </p>
+          <div className="flex gap-3">
+            <a
+              href="https://www.linkedin.com/company/navedhana-profit-amplifier-private-limited/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin size={16} />
+            </a>
+            <a
+              href="mailto:navedhanaprofitamplifier@gmail.com"
+              className="w-9 h-9 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              aria-label="Email"
+            >
+              <Mail size={16} />
+            </a>
+          </div>
+        </div>
 
- {/* Contact */}
- <div>
- <h3 className="text-base sm:text-lg font-display font-bold mb-3 sm:mb-6 text-electric">
- <TypingText text="Contact Us" speed={40} />
- </h3>
- <ul className="space-y-2 sm:space-y-4">
- <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
- <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
- <span className="break-all">
- <TypingText text="navedhanaprofitamplifier@gmail.com" speed={18} />
- </span>
- </li>
- <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
- <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
- <span>
- <TypingText text="+91 6305304978" speed={28} />
- </span>
- </li>
- <li className="flex items-start gap-2 sm:gap-3 text-muted text-xs sm:text-sm md:text-base">
- <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-electric mt-0.5 flex-shrink-0" />
- <span className="break-words">
- <TypingText text="Hyderabad, India" speed={28} />
- </span>
- </li>
- </ul>
- </div>
- </div>
+        <div>
+          <h5 className="text-[12.5px] font-bold uppercase tracking-wide text-muted/60 mb-4">Services</h5>
+          <div className="flex flex-col gap-2.5 text-[13.5px] text-muted">
+            {SERVICE_LINKS.map((name) => (
+              <Link key={name} to="/services" className="hover:text-ink transition-colors">
+                {name}
+              </Link>
+            ))}
+          </div>
+        </div>
 
- {/* Bottom Bar */}
- <div className="pt-4 sm:pt-6 md:pt-8 border-t border-white/10">
- <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
- <p className="text-muted/70 text-xs sm:text-sm text-center md:text-left">
- &copy; {new Date().getFullYear()} Navedhana. All rights reserved.
- <span className="hidden md:inline"> | </span>
- <span className="block md:inline mt-1 md:mt-0 md:ml-1">
- Developed &amp; maintained by Navedhana Profit Amplifier Private Limited
- </span>
- </p>
- <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-xs sm:text-sm text-muted/70">
- <span className="text-muted/50">Other Ventures:</span>
- {otherVentures.map((v, i) => (
- <React.Fragment key={v.path}>
- <Link to={v.path} className="hover:text-ink transition-colors">{v.name}</Link>
- {i < otherVentures.length - 1 && <span className="text-muted/30">·</span>}
- </React.Fragment>
- ))}
- </div>
- </div>
- </div>
- </div>
- </footer>
- );
-};
+        <div>
+          <h5 className="text-[12.5px] font-bold uppercase tracking-wide text-muted/60 mb-4">Products</h5>
+          <div className="flex flex-col gap-2.5 text-[13.5px] text-muted">
+            {PRODUCT_LINKS.map((link) =>
+              link.external ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-ink transition-colors"
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link key={link.name} to={link.path} className="hover:text-ink transition-colors">
+                  {link.name}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+
+        <div>
+          <h5 className="text-[12.5px] font-bold uppercase tracking-wide text-muted/60 mb-4">Company</h5>
+          <div className="flex flex-col gap-2.5 text-[13.5px] text-muted">
+            {COMPANY_LINKS.map((link) => (
+              <Link key={link.path} to={link.path} className="hover:text-ink transition-colors">
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 border-t border-ink/15 text-[12.5px] text-muted/60">
+        <span>&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
+        <div className="flex gap-5">
+          <a href="#" className="hover:text-ink transition-colors">Terms of Service</a>
+          <a href="#" className="hover:text-ink transition-colors">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;

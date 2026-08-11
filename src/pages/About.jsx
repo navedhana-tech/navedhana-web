@@ -1,168 +1,113 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BadgeCheck, Eye, HeartHandshake, Lightbulb, ShieldCheck, Target } from 'lucide-react';
-import GradientMesh from '../components/background/GradientMesh';
-import TypingText from '../components/ui/TypingText';
+import SectionKicker from '../components/ui/SectionKicker';
+import Button from '../components/ui/Button';
+import { trackEvent } from '../lib/analytics';
 
-const About = () => {
- return (
- <div className="min-h-screen bg-primary">
- {/* Hero Section */}
- <div className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[70vh] flex items-center">
- <GradientMesh />
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
- <motion.div
- initial={{ opacity: 0, y: 20 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ duration: 0.8 }}
- >
- <span className="inline-block py-1 px-3 border border-electric/30 text-electric text-sm font-mono font-semibold mb-6 tracking-widest uppercase">
- <TypingText text="Our Story" speed={34} />
- </span>
- <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-ink mb-6 leading-tight">
- <TypingText text="Engineering Intelligence, " speed={30} delay={200} /> <br />
- <span className="bg-gradient-to-r from-royal to-electric bg-clip-text text-transparent">
- <TypingText text="Delivering Excellence" speed={30} delay={950} />
- </span>
- </h1>
- <p className="text-lg md:text-xl text-muted max-w-3xl mx-auto leading-relaxed">
- <TypingText
- text="Navedhana is a software engineering and AI company, founded in 2023 and based in Hyderabad, India. We design, build, and scale intelligent digital products — web, mobile, desktop, and AI — for startups and enterprises."
- speed={9}
- delay={1650}
- />
- </p>
- </motion.div>
- </div>
- </div>
+const PILLARS = [
+  { title: 'Problem-first thinking', desc: 'We start with the business problem, not the technology.' },
+  { title: 'Engineering-led', desc: 'We care about architecture, reliability and maintainability.' },
+  { title: 'AI where it matters', desc: 'We use AI where it creates meaningful business value.' },
+  { title: 'Product mindset', desc: 'We think beyond individual features and build complete products.' },
+  { title: 'Build and learn', desc: 'We build our own products as well as software for businesses.' },
+];
 
- {/* Mission & Vision Section */}
- <div className="py-16 md:py-24 bg-surface">
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- <div className="grid md:grid-cols-2 gap-12">
- <motion.div
- initial={{ opacity: 0, x: -50 }}
- whileInView={{ opacity: 1, x: 0 }}
- viewport={{ once: true }}
- className="p-8 md:p-12 bg-card border border-white/10 hover:border-electric/30 transition-all"
- >
- <div className="w-16 h-16 bg-electric/10 flex items-center justify-center mb-6">
- <Target className="w-8 h-8 text-electric" aria-hidden="true" />
- </div>
- <h2 className="font-display text-3xl font-bold text-ink mb-4">
- <TypingText text="Our Mission" speed={34} />
- </h2>
- <p className="text-muted leading-relaxed text-lg">
- <TypingText
- text="To engineer intelligent, reliable software that helps businesses move faster — combining rigorous engineering practice with applied AI to solve real problems, not just ship features."
- speed={10}
- delay={450}
- />
- </p>
- </motion.div>
+const TECH_GROUPS = [
+  { label: 'AI / ML', items: 'Python, PyTorch, TensorFlow, LLMs, RAG, NLP, Computer Vision' },
+  { label: 'Frontend', items: 'React, Next.js, Flutter, HTML/CSS' },
+  { label: 'Backend', items: 'Python, FastAPI, Node.js, REST APIs' },
+  { label: 'Data', items: 'PostgreSQL, MongoDB, Firebase, Vector Databases' },
+  { label: 'Automation', items: 'Playwright, Selenium, Browser Automation' },
+];
 
- <motion.div
- initial={{ opacity: 0, x: 50 }}
- whileInView={{ opacity: 1, x: 0 }}
- viewport={{ once: true }}
- className="p-8 md:p-12 bg-card border border-white/10 hover:border-electric/30 transition-all"
- >
- <div className="w-16 h-16 bg-electric/10 flex items-center justify-center mb-6">
- <Eye className="w-8 h-8 text-electric" aria-hidden="true" />
- </div>
- <h2 className="font-display text-3xl font-bold text-ink mb-4">
- <TypingText text="Our Vision" speed={34} />
- </h2>
- <p className="text-muted leading-relaxed text-lg">
- <TypingText
- text="To be the engineering partner ambitious companies call first — where software is engineered to last, scale, and adapt as AI reshapes what's possible."
- speed={10}
- delay={450}
- />
- </p>
- </motion.div>
- </div>
- </div>
- </div>
+const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
 
- {/* Core Values Section */}
- <div className="py-16 md:py-24">
- <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
- <div className="text-center mb-16">
- <h2 className="font-display text-3xl md:text-4xl font-bold text-ink mb-4">
- <TypingText text="Our Core Values" speed={34} />
- </h2>
- <p className="text-muted text-lg">
- <TypingText text="The principles that guide every decision we make" speed={20} delay={550} />
- </p>
- </div>
+const About = () => (
+  <div className="bg-primary">
+    <section className="pt-[168px] pb-10 px-4 sm:px-8 max-w-7xl mx-auto">
+      <motion.div {...fadeUp} className="max-w-2xl">
+        <SectionKicker className="mb-3.5">About Navedhana</SectionKicker>
+        <h1 className="font-display text-[32px] sm:text-[50px] font-semibold tracking-tight text-ink leading-tight">
+          Software and AI, built by people who ship
+        </h1>
+        <p className="text-[15.5px] leading-relaxed text-muted mt-4 max-w-xl">
+          Navedhana is a software and AI engineering company building intelligent products and custom technology for
+          businesses. Founded in 2023, we're small, technically driven, and product-minded.
+        </p>
+      </motion.div>
+    </section>
 
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
- {[
- { title: "Integrity", desc: "Honest estimates, transparent progress, no surprises.", icon: ShieldCheck },
- { title: "Innovation", desc: "We bring AI and modern engineering practice to problems that used to need neither.", icon: Lightbulb },
- { title: "Quality", desc: "Code reviewed, tested, and built to last — not just to demo.", icon: BadgeCheck },
-                            { title: "Customer Focus", desc: "Your product's success is the only metric that matters to us.", icon: HeartHandshake }
- ].map((value, idx) => (
- <motion.div
- key={idx}
- initial={{ opacity: 0, y: 20 }}
- whileInView={{ opacity: 1, y: 0 }}
- viewport={{ once: true }}
- transition={{ delay: idx * 0.1 }}
- whileHover={{ y: -5 }}
- className="bg-card p-8 border border-white/10 text-center hover:border-electric/30 transition-all"
- >
- <div className="w-12 h-12 bg-electric/10 mx-auto mb-6 flex items-center justify-center">
- <value.icon className="w-6 h-6 text-electric" aria-hidden="true" />
- </div>
- <h3 className="text-xl font-bold text-ink mb-3">
- <TypingText text={value.title} speed={32} />
- </h3>
- <p className="text-muted">
- <TypingText text={value.desc} speed={14} delay={value.title.length * 32 + 150} />
- </p>
- </motion.div>
- ))}
- </div>
- </div>
- </div>
+    <section className="py-4 pb-16 px-4 sm:px-8 max-w-3xl mx-auto">
+      <motion.div {...fadeUp} className="flex flex-col gap-7">
+        <div>
+          <h3 className="font-display text-lg font-semibold text-ink mb-2.5">What we build</h3>
+          <p className="text-[14.5px] leading-relaxed text-muted">
+            We build our own products, and we build custom software for other businesses — with the same engineering
+            standard either way. That means AI systems that connect to real data and tools, not demos; software
+            architecture that holds up in production, not just in a pitch.
+          </p>
+        </div>
+        <div>
+          <h3 className="font-display text-lg font-semibold text-ink mb-2.5">Our approach</h3>
+          <p className="text-[14.5px] leading-relaxed text-muted">
+            We start with the business problem, not the technology — then move from discovery through architecture,
+            iterative engineering, validation, and deployment.{' '}
+            <Link to="/" className="text-electric hover:underline">See how we work</Link>.
+          </p>
+        </div>
+        <div>
+          <h3 className="font-display text-lg font-semibold text-ink mb-2.5">Where we are today</h3>
+          <p className="text-[14.5px] leading-relaxed text-muted">
+            Lekvya, our AI-powered workflow platform for Chartered Accountants, is live and used by 2 active CA
+            customers. We're also building Data Factory and a QA Foundation Platform, both currently in development,
+            and we build custom software for clients like Yugminds.{' '}
+            <Link to="/products" className="text-electric hover:underline">See our products</Link> or{' '}
+            <Link to="/work" className="text-electric hover:underline">our work</Link>.
+          </p>
+        </div>
+      </motion.div>
+    </section>
 
- {/* CTA Section */}
- <div className="py-20">
- <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
- <motion.div
- initial={{ opacity: 0, scale: 0.95 }}
- whileInView={{ opacity: 1, scale: 1 }}
- viewport={{ once: true }}
- className="relative overflow-hidden bg-gradient-to-r from-royal to-electric text-center py-16 px-8 border border-white/10"
- >
- <div className="relative z-10">
- <h2 className="font-display text-3xl md:text-4xl font-bold text-primary mb-6">
- <TypingText text="Ready to Build Something? " speed={26} />
- </h2>
- <p className="text-primary/80 text-lg mb-8 max-w-2xl mx-auto">
- <TypingText
- text="Whether it's a web platform, an AI agent, or a full product rebuild, Navedhana is ready to engineer it with you."
- speed={12}
- delay={700}
- />
- </p>
- <Link
- to="/contact"
- className="inline-block px-8 py-4 bg-primary text-ink font-bold text-lg hover:shadow-2xl transition-all transform hover:scale-105"
- >
- <TypingText text="Contact Us Today" speed={26} delay={1400} />
- </Link>
- </div>
- <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 -translate-x-1/2 -translate-y-1/2"></div>
- <div className="absolute bottom-0 right-0 w-64 h-64 bg-white opacity-5 translate-x-1/2 translate-y-1/2"></div>
- </motion.div>
- </div>
- </div>
- </div>
- );
-};
+    <section className="py-16 px-4 sm:px-8 bg-surface">
+      <div className="max-w-7xl mx-auto">
+        <motion.div {...fadeUp} className="max-w-xl mx-auto mb-10 text-center">
+          <SectionKicker centered className="mb-3.5">What We Believe</SectionKicker>
+        </motion.div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
+          {PILLARS.map((p, i) => (
+            <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.06 }} className="bg-primary p-6">
+              <h4 className="font-display text-[15.5px] font-semibold text-ink mb-2">{p.title}</h4>
+              <p className="text-[13px] leading-snug text-muted">{p.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section className="py-16 px-4 sm:px-8 max-w-7xl mx-auto">
+      <motion.div {...fadeUp} className="max-w-xl mx-auto mb-8 text-center">
+        <SectionKicker centered className="mb-3.5">Technology</SectionKicker>
+      </motion.div>
+      <div className="max-w-3xl mx-auto flex flex-col">
+        {TECH_GROUPS.map((g) => (
+          <div key={g.label} className="grid sm:grid-cols-[150px_1fr] gap-5 py-4 border-t border-ink/15">
+            <span className="font-display text-[11.5px] font-bold tracking-wide uppercase text-royal">{g.label}</span>
+            <span className="text-[13.5px] text-ink/70">{g.items}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section className="py-16 px-4 sm:px-8 text-center">
+      <motion.div {...fadeUp} className="max-w-xl mx-auto">
+        <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink mb-3">Want to talk through a project?</h2>
+        <Button to="/contact" className="mt-1" onClick={() => trackEvent('cta_click', { location: 'about' })}>
+          Discuss Your Project →
+        </Button>
+      </motion.div>
+    </section>
+  </div>
+);
 
 export default About;
