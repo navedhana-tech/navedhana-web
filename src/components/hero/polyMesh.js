@@ -101,7 +101,7 @@ export function createPolyMesh(width, height) {
     const cx = (points[t[0]].hx + points[t[1]].hx + points[t[2]].hx) / 3 / width;
     const cy = (points[t[0]].hy + points[t[1]].hy + points[t[2]].hy) / 3 / height;
     const bias = Math.min(1, Math.max(0, cx * 0.55 + cy * 0.45));
-    return 0.012 + rand() * 0.055 + bias * 0.035;
+    return 0.025 + rand() * 0.09 + bias * 0.06;
   });
 
   function update(t) {
@@ -124,7 +124,7 @@ export function createPolyMesh(width, height) {
       ctx.closePath();
       ctx.fillStyle = `rgba(37,99,235,${shades[i]})`;
       ctx.fill();
-      ctx.strokeStyle = 'rgba(37,99,235,0.10)';
+      ctx.strokeStyle = 'rgba(37,99,235,0.20)';
       ctx.lineWidth = 0.6;
       ctx.stroke();
     }

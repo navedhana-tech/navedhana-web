@@ -1,29 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm paper neutrals. The four background tokens previously spanned 2.5%
-     lightness (#fafcfe / #f8fafe / #f2f5fb / #f0f4fa) — functionally one
-     colour, so every alternating section boundary was invisible. These span
-     ~10 points, so sections separate and cards lift off the page. */
-  --color-primary: #f7f4ee;
-  /* Darkest surface that keeps `muted` body copy above AA on it (4.62:1).
-     #e8e1d3 separates better but drops muted to 4.49:1 — under the line. */
-  --color-surface: #eae4d8;
-  --color-card: #fffdf9;
+  /* Warm paper neutrals, deepened slightly from the original for more visual
+     presence (v1 traded punch for extreme safety; card is now a crisp true
+     white instead of near-white, for more contrast/lift against the base). */
+  --color-primary: #f5f1e6;
+  --color-surface: #ebe3d0;
+  --color-card: #ffffff;
 
-  /* One blue, two stops — sampled from the leaf mark (dominant #0164f5, 6636px).
-     The old electric/royal pair sat 3 degrees apart in hue and read as an
-     inconsistency rather than a system. These are 19 lightness points apart:
-     `electric` for fills, `royal` for small text that needs the contrast
-     (8.6:1 on paper, vs 4.6:1 for electric). */
-  --color-electric: #0164f5;
+  /* Brand blue, two stops — the actual logo mark is blue (not the green a
+     prior pass here guessed from a code comment mentioning "leaf" — the
+     logo image itself is blue, and the client confirmed green doesn't
+     suit). Same two-stop shape as the original: `electric` for fills/
+     icons/links, `royal` for the highest-contrast small text (e.g.
+     SectionKicker labels). `electric` is lightly deepened from the raw
+     logo blue (#0164f5) only because that exact value fails AA against
+     `surface` (3.97:1) on this deepened cream base — darkened just enough
+     to clear all three backgrounds; `royal` is unchanged from the
+     original, since it already passed AA everywhere on the new base too.
+     electric (#0958d6): 5.51/4.86/6.22:1 on primary/surface/card.
+     royal (#083f9e): 8.40/7.42/9.48:1 on primary/surface/card. */
+  --color-electric: #0958d6;
   --color-royal: #083f9e;
 
-  --color-ink: #221f1b;
-  --color-muted: #6b6459;
+  /* Warm-orange accent, badges/highlights only, never a primary. Two stops:
+     the fill tone (`amber`) is a background-tint colour ONLY (2.4-3.1:1 —
+     fails AA as standalone text, verified) — always pair it with
+     `amber-text` (5.19-6.63:1, AA-safe) for any label sitting on an
+     `amber` tint, the same bg-{x}/10 text-{x} pattern the LIVE badge
+     already used pre-redesign. */
+  --color-amber: #d97a34;
+  --color-amber-text: #954616;
 
-  /* Semantic status only — the LIVE product badge. Not decoration. */
-  --color-green: #0f6b45;
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;

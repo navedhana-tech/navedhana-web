@@ -57,11 +57,20 @@ const PolyMeshField = () => {
       return () => sizeObserver.disconnect();
     }
 
-    // Pause when scrolled out of view — this is the tallest, busiest canvas
-    // on the site and the page below it is long.
+    // Pause once the curtain-reveal content overlay has fully covered the
+    // hero — this is the tallest, busiest canvas on the site and the page
+    // below it is long. IntersectionObserver can't tell us this: the hero
+    // is `position: fixed; height: 100vh` (see Home.jsx), so its bounding
+    // rect is always exactly the viewport and IO would report 100%
+    // intersecting forever, regardless of what the z-index-2 overlay has
+    // painted on top of it. A scroll-position check is the correct signal
+    // here — the overlay's top sits at `100vh` in document coordinates
+    // (Home.jsx's `mt-[100vh]`), so once scrollY reaches one viewport
+    // height, the hero is fully covered.
     let inView = true;
-    const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; }, { threshold: 0 });
-    observer.observe(canvas);
+    const onScroll = () => { inView = window.scrollY < window.innerHeight; };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     const loop = (now) => {
       if (!running) return;
@@ -73,7 +82,7 @@ const PolyMeshField = () => {
     return () => {
       running = false;
       cancelAnimationFrame(frame);
-      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
       sizeObserver.disconnect();
     };
   }, [reducedMotion]);

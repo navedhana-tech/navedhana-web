@@ -32,8 +32,7 @@ const About = () => (
           Software and AI, built by people who ship
         </h1>
         <p className="text-[15.5px] leading-relaxed text-muted mt-4 max-w-xl">
-          Navedhana is a software and AI engineering company building intelligent products and custom technology for
-          businesses. Founded in 2023, we're small, technically driven, and product-minded.
+          Founded in 2023. Still small. We'd rather ship one thing well than announce ten things we haven't built yet.
         </p>
       </motion.div>
     </section>
@@ -88,6 +87,7 @@ const About = () => (
     <section className="py-16 px-4 sm:px-8 max-w-7xl mx-auto">
       <motion.div {...fadeUp} className="max-w-xl mx-auto mb-8 text-center">
         <SectionKicker centered className="mb-3.5">Technology</SectionKicker>
+        <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">What we build with</h2>
       </motion.div>
       <div className="max-w-3xl mx-auto flex flex-col">
         {TECH_GROUPS.map((g) => (
@@ -96,6 +96,10 @@ const About = () => (
             <span className="text-[13.5px] text-ink/70">{g.items}</span>
           </div>
         ))}
+        <p className="text-[13px] text-muted mt-5 text-center sm:text-left">
+          Not on this list? <Link to="/contact" className="text-electric hover:underline">Ask us about your stack</Link> —
+          this is what we reach for most, not the limit of what we work with.
+        </p>
       </div>
     </section>
 

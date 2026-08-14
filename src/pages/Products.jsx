@@ -1,42 +1,51 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Bot, Database, CheckCircle2 } from 'lucide-react';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 
 const DEV_PRODUCTS = [
-  { title: 'AI Agent', desc: 'An agent built to act, not just answer — it reasons over a request, uses tools and data, and returns a completed result.', to: '/ai-agent' },
-  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release." },
-  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.' },
+  { title: 'AI Agent', desc: 'An agent built to act, not just answer — it reasons over a request, uses tools and data, and returns a completed result.', to: '/ai-agent', icon: <Bot size={18} /> },
+  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release.", icon: <Database size={18} /> },
+  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
 ];
 
 const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
 
 const Products = () => (
   <div className="bg-primary">
-    <section className="pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">
-      <motion.div {...fadeUp} className="max-w-2xl mx-auto">
-        <SectionKicker centered className="mb-3.5">Our Products</SectionKicker>
-        <h1 className="font-display text-[30px] sm:text-[46px] font-semibold tracking-tight text-ink leading-tight mb-4">
-          We build our own technology
-        </h1>
-        <p className="text-[15px] leading-relaxed text-muted">
+    {/* Product-first: unlike every other page, Products has a real shipped
+        visual to open with, so it doesn't need the shared centered-kicker/
+        H1/paragraph hero block every other page uses. A compact inline label
+        replaces it; the Lekvya screenshot itself is the first real thing a
+        visitor sees. */}
+    <section className="pt-[128px] pb-2 px-4 sm:px-8 max-w-[1120px] mx-auto">
+      <motion.div {...fadeUp}>
+        <SectionKicker className="mb-2">Our Products</SectionKicker>
+        <h1 className="font-display text-[13.5px] font-normal text-muted max-w-md normal-case tracking-normal">
           Real products, at different stages — built to solve problems we understand firsthand.
-        </p>
+        </h1>
       </motion.div>
     </section>
 
-    <section className="py-6 px-4 sm:px-8 max-w-[1120px] mx-auto">
-      <motion.div {...fadeUp} className="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-ink/15 bg-card">
+    <section className="pt-4 pb-6 px-4 sm:px-8 max-w-[1120px] mx-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        className="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-ink/15 bg-card shadow-sm"
+      >
         <div className="p-2 flex items-center">
           <img src="/assets/redesign/lekvya-screenshot.png" alt="Lekvya product screenshot" className="w-full h-auto rounded-xl" />
         </div>
         <div className="p-9 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-4">
             <img src="/assets/redesign/lekvya-logo.png" alt="Lekvya" className="h-6 w-auto" />
-            <span className="px-2.5 py-1 rounded-full bg-green/10 text-green font-display text-[10.5px] font-bold tracking-wide">LIVE</span>
+            <span className="px-2.5 py-1 rounded-full bg-amber/15 text-amber-text font-display text-[10.5px] font-bold tracking-wide">LIVE</span>
           </div>
           <h2 className="font-display text-xl font-semibold text-ink mb-3">Lekvya</h2>
           <p className="text-[14px] leading-relaxed text-muted mb-5">
@@ -60,7 +69,7 @@ const Products = () => (
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {DEV_PRODUCTS.map((p, i) => (
           <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.1 }} className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-col">
-            <PlaceholderShot label={`Add ${p.title} screenshot`} className="w-full h-[170px]" />
+            <PlaceholderShot icon={p.icon} label="Preview coming soon" className="w-full h-[170px]" />
             <div className="p-6">
               <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
                 IN DEVELOPMENT

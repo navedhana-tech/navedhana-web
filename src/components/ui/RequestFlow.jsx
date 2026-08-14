@@ -1,37 +1,40 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
-// Numbered vertical step list with a connecting line and a flowing dot —
-// used identically on Home's "AI Engineering" section and the AI Agent
-// page's "How it works" section. One component, two call sites.
+// Horizontal, wrapping chip flow — reads as an actual left-to-right pipeline
+// instead of a vertical numbered checklist. Used identically on Home's
+// "AI Engineering" section and the AI Agent page's "How it works" section.
 const RequestFlow = ({ steps, label }) => (
-  <div className="flex flex-col gap-2.5 p-6 rounded-2xl bg-primary border border-ink/15">
+  <div className="p-6 rounded-2xl bg-primary border border-ink/15">
     {label && (
-      <span className="font-display text-[11px] font-bold tracking-[0.1em] uppercase text-muted/70 mb-1">
+      <span className="font-display text-[11px] font-bold tracking-[0.1em] uppercase text-muted/70 mb-4 block">
         {label}
       </span>
     )}
-    {steps.map((step, i) => (
-      <React.Fragment key={step}>
-        <div className="flex items-center gap-2.5">
-          <span className="font-display text-[11px] text-ink/30 w-4 flex-shrink-0">
-            {String(i + 1).padStart(2, '0')}
-          </span>
-          <div className="flex-1 px-3.5 py-2.5 rounded-lg bg-ink/[0.035] font-display text-sm font-semibold text-ink">
-            {step}
-          </div>
-        </div>
-        {i < steps.length - 1 && (
-          <div className="relative ml-[7px] w-px h-2.5 bg-ink/15">
-            <motion.span
-              className="absolute left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-electric"
-              animate={{ top: ['0%', '100%'], opacity: [0, 1, 1, 0] }}
-              transition={{ duration: 2.4, repeat: Infinity, ease: 'linear', delay: i * 0.15 }}
-            />
-          </div>
-        )}
-      </React.Fragment>
-    ))}
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-3">
+      {steps.map((step, i) => (
+        <React.Fragment key={step}>
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: i * 0.08 }}
+            className="flex items-center gap-2 pl-2 pr-3.5 py-2 rounded-full bg-electric/[0.06] border border-electric/20"
+          >
+            <span className="w-5 h-5 rounded-full bg-electric text-primary text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+              {i + 1}
+            </span>
+            <span className="font-display text-[13px] font-semibold text-ink whitespace-nowrap">
+              {step}
+            </span>
+          </motion.div>
+          {i < steps.length - 1 && (
+            <ArrowRight size={15} className="text-electric/40 flex-shrink-0" aria-hidden="true" />
+          )}
+        </React.Fragment>
+      ))}
+    </div>
   </div>
 );
 

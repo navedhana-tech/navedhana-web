@@ -15,8 +15,9 @@ const links = [
 // Full-width on scroll — a flat solid bar with one hairline border, not a
 // floating inset pill. Secondary destinations (AI Agent, Insights, Vegetable
 // Service) live in the footer — keeping the primary nav to four links is
-// what lets the dropdown go away entirely. The active-link dot-on-a-trace
-// echoes the logo mark's circuit-stem motif rather than a plain underline.
+// what lets the dropdown go away entirely. The active link is marked by a
+// small dot below it (echoes the logo mark's circuit-stem motif) rather
+// than an underline.
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,7 +56,6 @@ const Navbar = () => {
         </Link>
 
         <div className="relative hidden lg:flex items-center gap-2 text-[14.5px] font-medium text-ink/70 whitespace-nowrap">
-          <span className="absolute left-3.5 right-3.5 bottom-0.5 h-px bg-ink/15" aria-hidden="true" />
           {links.map((link) => (
             <Link
               key={link.path}

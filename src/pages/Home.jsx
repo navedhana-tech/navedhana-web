@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Database, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { Database, CheckCircle2, Monitor } from 'lucide-react';
 import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
 import PolyMeshField from '../components/hero/PolyMeshField';
+import ProductsTeaser from '../components/home/ProductsTeaser';
 import RequestFlow from '../components/ui/RequestFlow';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -11,27 +12,6 @@ import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 
 const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
-
-// Hero proof — leads with capability (the headline), then substantiates it
-// with the actual products, rather than opening on a comparison to other
-// agencies. Client work (Robocoders) still gets its own section lower on
-// the page; the hero's one-line callout points there instead of duplicating it.
-// badgeClass is a single-use arbitrary color per product (not a theme token —
-// this is the only place three-way category color-coding is needed).
-const HERO_PRODUCTS = [
-  {
-    name: 'Lekvya', status: 'Live product', desc: 'AI platform used by practising CAs',
-    to: '/products', badgeClass: 'bg-electric', icon: <span className="font-display font-bold text-base">L</span>,
-  },
-  {
-    name: 'Data Factory', status: 'In development', desc: 'Data engineering platform',
-    to: '/products', badgeClass: 'bg-[#6D5CE7]', icon: <Database size={18} />,
-  },
-  {
-    name: 'QA Foundation', status: 'In development', desc: 'AI-powered QA infrastructure',
-    to: '/products', badgeClass: 'bg-green', icon: <CheckCircle2 size={18} />,
-  },
-];
 
 const WWD_CARDS = [
   { title: 'AI Engineering', items: ['AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'NLP', 'Computer Vision'] },
@@ -45,8 +25,8 @@ const AI_FLOW = ['User', 'AI System', 'Reasoning', 'Tools / APIs / Data', 'Busin
 const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
 
 const DEV_PRODUCTS = [
-  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release." },
-  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.' },
+  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release.", icon: <Database size={18} /> },
+  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
 ];
 
 const HOW_STEPS = [
@@ -66,41 +46,36 @@ const PILLARS = [
   { title: 'Build and learn', desc: 'We build our own products as well as software for businesses.' },
 ];
 
-const TECH_GROUPS = [
-  { label: 'AI / ML', items: 'Python, PyTorch, TensorFlow, LLMs, RAG, NLP, Computer Vision' },
-  { label: 'Frontend', items: 'React, Next.js, Flutter, HTML/CSS' },
-  { label: 'Backend', items: 'Python, FastAPI, Node.js, REST APIs' },
-  { label: 'Data', items: 'PostgreSQL, MongoDB, Firebase, Vector Databases' },
-  { label: 'Automation', items: 'Playwright, Selenium, Browser Automation' },
-];
-
 const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
 
 const Home = () => (
   <div className="bg-primary">
-    {/* Hero */}
-    <section className="relative overflow-hidden pt-[108px] pb-8 px-4 sm:px-8">
+    {/* Curtain-reveal hero: pinned to the viewport (fixed, 100vh, z-1) while
+        the ContentOverlay below scrolls up over it (z-2, offset by its own
+        height of exactly 100vh via mt-[100vh]) — the overlay's solid bg-
+        primary background is what visually "covers" the hero as the curtain
+        pulls back, rather than the hero scrolling away itself. Full-bleed
+        (top-0 left-0 right-0) rather than `inset-0`, since `inset-0` would
+        also force bottom:0 — redundant with h-screen and easy to misread as
+        depending on both; explicit top/left/right + h-screen says exactly
+        what's pinned. */}
+    <section className="fixed top-0 left-0 right-0 h-screen overflow-hidden flex items-center pt-[84px] pb-16 px-4 sm:px-8 z-[1]">
       {/* Spans the whole section — from page top (so it shows through the
-          transparent navbar) down past the product cards — rather than being
-          boxed inside the headline block, which read as a grey rectangle. */}
+          transparent navbar) down past the fold — rather than being boxed
+          inside the headline block, which read as a grey rectangle. */}
       <PolyMeshField />
       <div className="relative z-10 w-full max-w-7xl mx-auto">
-        {/* Bounded box so the decorative icon nodes frame just the headline —
-            not the whole hero, which now runs much taller once the product
-            cards and trust line are included. Kept snug so the products row
-            below stays on-screen alongside the headline, not below the fold. */}
         <div className="relative min-h-[340px] sm:min-h-[400px] flex items-center">
           <HeroCircuitBackground />
           <motion.div {...fadeUp} className="relative z-10 w-full max-w-4xl mx-auto text-center">
             <SectionKicker centered className="mb-4">Software · AI · Product Engineering</SectionKicker>
             <h1 className="font-display text-[34px] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink">
-              We turn complex ideas into
+              We build the software.
               <br />
-              <span className="text-electric">working products.</span>
+              <span className="text-electric">We build the intelligence.</span>
             </h1>
             <p className="text-[15px] sm:text-base leading-relaxed text-muted mt-4 max-w-2xl mx-auto">
-              We design and engineer software, AI systems, and business platforms — from our own products to custom
-              solutions built for companies.
+              Products we've shipped. Systems we've built for others. Same engineering standard either way.
             </p>
             <div className="flex flex-wrap justify-center gap-3.5 mt-6">
               <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_hero' })}>
@@ -112,45 +87,24 @@ const Home = () => (
             </div>
           </motion.div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-6"
-        >
-          <SectionKicker centered className="mb-4">Products &amp; Platforms We're Building</SectionKicker>
-          <div className="grid sm:grid-cols-3 gap-3 max-w-5xl mx-auto">
-            {HERO_PRODUCTS.map((p) => (
-              <Link
-                key={p.name}
-                to={p.to}
-                className="group rounded-xl border border-ink/15 bg-card shadow-sm px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:border-electric/30 transition-colors"
-              >
-                <div className="min-w-0">
-                  <span className="font-display text-[9.5px] font-bold tracking-[0.12em] uppercase text-electric">
-                    {p.status}
-                  </span>
-                  <h3 className="font-display text-[14px] font-bold text-ink mt-1 group-hover:text-electric transition-colors">
-                    {p.name}
-                  </h3>
-                  <p className="text-[11.5px] leading-snug text-muted mt-1">{p.desc}</p>
-                </div>
-                <div className={`w-11 h-11 rounded-xl ${p.badgeClass} text-primary flex items-center justify-center flex-shrink-0`}>
-                  {p.icon}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </motion.div>
-
-        <p className="flex items-center justify-center gap-1.5 text-center text-[12px] text-muted/70 mt-4">
-          <ShieldCheck size={14} className="text-electric" />
-          Also trusted for custom product development and automation.
-        </p>
       </div>
     </section>
+
+    {/* Content overlay — everything after the hero, in one wrapper so it
+        scrolls as a single solid "curtain" over the fixed hero above. The
+        hero is `fixed` (out of document flow, contributes no height), so
+        this `mt-[100vh]` is what actually creates the one-viewport-tall gap
+        the hero occupies visually before this overlay's top reaches it.
+        z-[2] (above the hero's z-[1]) + solid bg-primary is what makes the
+        hero visibly disappear under this as you scroll, rather than both
+        layers just co-existing. The negative-offset box-shadow only casts
+        upward from this container's top edge — exactly the "leading edge
+        sliding over the layer below" cue, not a shadow around all sides. */}
+    <div className="relative z-[2] bg-primary mt-[100vh] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.18)]">
+      {/* Products & Platforms teaser — its own component (components/home/
+          ProductsTeaser.jsx) and its own section, deliberately separate from
+          the hero above so the opening view is the headline alone. */}
+      <ProductsTeaser />
 
     {/* Capability strip */}
     <section className="py-5 px-4 sm:px-8 border-y border-ink/15">
@@ -169,9 +123,11 @@ const Home = () => (
       <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
         <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
         <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">
-          Technology built around real business problems
+          Four capabilities. One engineering standard.
         </h2>
-        <p className="text-[15px] text-muted mt-3.5">From intelligent AI systems to complete digital products, we engineer technology end to end.</p>
+        <p className="text-[15px] text-muted mt-3.5">
+          <Link to="/services" className="text-electric hover:underline">The full breakdown</Link>, or the short version below.
+        </p>
       </motion.div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
         {WWD_CARDS.map((card, i) => (
@@ -243,7 +199,7 @@ const Home = () => (
           <div className="p-8 flex flex-col justify-center">
             <div className="flex items-center gap-3 mb-4">
               <img src="/assets/redesign/lekvya-logo.png" alt="Lekvya" className="h-5 w-auto" />
-              <span className="px-2.5 py-1 rounded-full bg-green/10 text-green font-display text-[10.5px] font-bold tracking-wide">LIVE</span>
+              <span className="px-2.5 py-1 rounded-full bg-amber/15 text-amber-text font-display text-[10.5px] font-bold tracking-wide">LIVE</span>
             </div>
             <h3 className="font-display text-xl font-semibold text-ink mb-2.5">Lekvya</h3>
             <p className="text-[13.5px] leading-relaxed text-muted mb-4">
@@ -263,7 +219,7 @@ const Home = () => (
         <div className="grid sm:grid-cols-2 gap-5">
           {DEV_PRODUCTS.map((p, i) => (
             <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }} className="rounded-2xl overflow-hidden border border-ink/15 bg-primary">
-              <PlaceholderShot label={`Add ${p.title} screenshot`} className="w-full h-[150px]" />
+              <PlaceholderShot icon={p.icon} label="Preview coming soon" className="w-full h-[150px]" />
               <div className="p-6">
                 <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
                   IN DEVELOPMENT
@@ -288,7 +244,7 @@ const Home = () => (
         <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">Built for businesses</h2>
       </motion.div>
       <motion.div {...fadeUp} className="grid sm:grid-cols-[180px_1fr_auto] gap-6 items-center p-7 rounded-2xl border border-ink/15 bg-surface">
-        <PlaceholderShot label="Add Robocoders Desktop App screenshot" className="w-full h-[120px]" />
+        <PlaceholderShot icon={<Monitor size={18} />} label="Preview coming soon" className="w-full h-[120px]" />
         <div>
           <span className="inline-block mb-2.5 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
             CLIENT PROJECT
@@ -323,46 +279,20 @@ const Home = () => (
       </div>
     </section>
 
-    {/* Why Navedhana */}
-    <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
-        <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
-        <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">What we actually believe</h2>
-      </motion.div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
-        {PILLARS.map((p, i) => (
-          <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.06 }} className="bg-primary p-6">
-            <h4 className="font-display text-[15.5px] font-semibold text-ink mb-2">{p.title}</h4>
-            <p className="text-[13px] leading-snug text-muted">{p.desc}</p>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-
-    {/* Technology */}
-    <section className="py-20 px-4 sm:px-8 bg-surface">
-      <div className="max-w-7xl mx-auto">
-        <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
-          <SectionKicker centered className="mb-3.5">Technology</SectionKicker>
-          <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">Technology we build with</h2>
-        </motion.div>
-        <div className="max-w-3xl mx-auto flex flex-col">
-          {TECH_GROUPS.map((g) => (
-            <div key={g.label} className="grid sm:grid-cols-[150px_1fr] gap-5 py-4 border-t border-ink/15">
-              <span className="font-display text-[11.5px] font-bold tracking-wide uppercase text-royal">{g.label}</span>
-              <span className="text-[13.5px] text-ink/70">{g.items}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* About teaser */}
+    {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
+        /about, not duplicated here (was a byte-identical copy of About's
+        "What We Believe" section prior to this pass). */}
     <section className="py-20 px-4 sm:px-8 max-w-3xl mx-auto text-center">
       <motion.div {...fadeUp}>
-        <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-4">
+        <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
+        <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
           A software and AI engineering company building real products
         </h2>
+        <div className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
+          {PILLARS.slice(0, 3).map((p) => (
+            <span key={p.title} className="font-display text-[13px] font-semibold text-ink/80">{p.title}</span>
+          ))}
+        </div>
         <p className="text-[14.5px] leading-relaxed text-muted mb-5">
           We build our own technology, and we build software for businesses — with the same engineering standard either way.
         </p>
@@ -378,6 +308,7 @@ const Home = () => (
         <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_final' })}>Let's Build It →</Button>
       </motion.div>
     </section>
+    </div>
   </div>
 );
 
