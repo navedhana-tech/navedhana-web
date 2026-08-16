@@ -64,6 +64,224 @@
   }
 }
 
+/* Hero-only dark scope (Home.jsx) — redefines the text/border tokens so
+   every component already built on text-ink/text-muted/text-royal/
+   text-electric (SectionKicker, capability strip, floating icon cards)
+   re-themes for a dark backdrop automatically, no per-component dark-mode
+   props needed. --color-primary is deliberately NOT touched here: Button's
+   primary variant reads text-primary for its on-blue label color, and
+   flipping --color-primary dark would turn that into unreadable dark-on-
+   blue text. --hero-bg is a separate token instead, used only for this
+   section's own background and the capability strip's tint. */
+.hero-dark {
+  --hero-bg: #1c1d21;
+  --color-ink: #f5f4f2;
+  --color-muted: #a7a39c;
+  --color-royal: #7dabfa;
+  --color-electric: #3b82f6;
+}
+
+/* Legibility over the moving mesh: color-contrast math alone isn't enough
+   when a bright triangle can drift directly behind the text at any moment.
+   A soft dark halo keeps the kicker/headline/subhead readable regardless of
+   what the mesh is doing underneath, without needing a solid scrim. */
+.hero-text-glow {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.75);
+}
+
+/* Logo intro (src/components/intro/LogoMark.jsx) — stage-driven via a
+   data-stage attribute rather than re-rendering, so the timeline is just a
+   handful of setTimeout class flips in LogoIntro.jsx and every actual visual
+   change here is a transform/opacity/clip-path transition. */
+.logo-mark-outline {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+.logo-mark-fill {
+  opacity: 0;
+  transition: opacity var(--logo-fill-ms, 500ms) ease;
+}
+.logo-mark-energy {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--logo-energy-ms, 650ms) cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease;
+}
+[data-stage='hidden'] .logo-mark-outline,
+[data-stage='hidden'] .logo-mark-fill {
+  opacity: 0;
+}
+[data-stage='draw'] .logo-mark-fill {
+  opacity: 0;
+}
+[data-stage='energy'] .logo-mark-outline,
+[data-stage='settled'] .logo-mark-outline {
+  opacity: 0;
+}
+[data-stage='energy'] .logo-mark-fill,
+[data-stage='settled'] .logo-mark-fill {
+  opacity: 1;
+}
+[data-stage='energy'] .logo-mark-energy {
+  opacity: 0.85;
+  clip-path: inset(0% 0 0 0);
+}
+[data-pulse='1'] .logo-mark-fill {
+  animation: logo-pulse 500ms ease;
+}
+@keyframes logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.035);
+  }
+}
+
+/* Hero floating tech nodes (src/components/hero/HeroCircuitBackground.jsx) —
+   restrained per-node idle motion, transform/opacity only. */
+@keyframes node-pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes node-drift-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes node-bar-grow {
+  0%,
+  100% {
+    transform: scaleY(0.7);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.node-idle-ai {
+  animation: node-pulse-glow 3.2s ease-in-out infinite;
+}
+.node-idle-database {
+  animation: node-drift-y 4s ease-in-out infinite;
+}
+.node-idle-analytics {
+  animation: node-bar-grow 2.6s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+/* One-shot "signal" traveling along a hero connector line — a short dash
+   sweeping from the center node outward, then gone. */
+@keyframes signal-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+}
+@keyframes signal-travel {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.signal-sweep {
+  stroke-dasharray: 6 94;
+  animation: signal-fade 900ms ease-in-out, signal-travel 900ms linear;
+}
+
+/* Capability strip (Home.jsx hero) — a slow highlight sweeps through the
+   four terms one at a time rather than sitting static. Each item gets the
+   same 8s loop offset by 2s (animation-delay, set inline per index) so only
+   one is ever lit at once, continuously. Color + text-shadow only (no
+   layout-shifting transform) so the strip's height never jitters. */
+@keyframes capability-highlight {
+  0%,
+  100% {
+    color: var(--color-muted);
+    text-shadow: none;
+  }
+  8% {
+    color: var(--color-electric);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--color-electric) 55%, transparent);
+  }
+  22% {
+    color: var(--color-muted);
+    text-shadow: none;
+  }
+}
+.capability-item {
+  animation: capability-highlight 8s ease-in-out infinite;
+}
+
+/* Primary-button "signal sweep" (src/components/ui/Button.jsx, `primary`
+   variant) — a translucent bar that travels through the button once per
+   hover, via a pseudo-element so no extra DOM node is needed. Parks at the
+   far edge while hovered (no repeat), reverses on hover-leave; :active
+   covers the mobile tap/press response for free, no touch JS needed. */
+.btn-signal {
+  position: relative;
+  overflow: hidden;
+}
+.btn-signal::before {
+  content: '';
+  position: absolute;
+  inset: -20% -10%;
+  background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
+  transform: translateX(-140%);
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.btn-signal:hover::before,
+.btn-signal:focus-visible::before,
+.btn-signal:active::before {
+  transform: translateX(140%);
+}
+
+/* Navbar link (src/components/Navbar.jsx desktop links) — position:relative
+   is what the active-route underline (a motion.span, absolutely positioned)
+   anchors to. Hover gets its own separate treatment — a soft pill
+   background (Tailwind classes at the call site) — rather than growing the
+   same underline the active route already shows permanently, so hover
+   never reads as "this is also the current page". */
+.nav-link {
+  position: relative;
+}
+
+/* Same underline-grow mechanism as .nav-link, sized for unpadded inline text
+   (src/components/ui/Button.jsx `link` variant) rather than a padded nav
+   item — kept as a separate class so the inset doesn't need to compromise
+   between the two contexts. */
+.btn-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-underline:hover::after,
+.btn-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
 :root {
   /* Motion tokens (Design System) — read by CSS animations directly; components/motion.js
      mirrors these values for Framer Motion, which is JS-driven and can't read CSS vars. */

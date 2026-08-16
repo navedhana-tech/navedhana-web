@@ -2,11 +2,24 @@
 // triangulate them once, then let each point orbit its home position so the
 // mesh breathes without the triangulation ever degenerating.
 //
-// Why hand-rolled rather than a library: this runs exactly once per resize,
-// never per frame, so the classic O(n^2) Bowyer-Watson is instant at our
-// point count and saves pulling in a dependency for a single call site.
+// Canvas2D, not WebGL/three.js — a few hundred filled triangles per frame is
+// well within budget, and it skips WebGL context setup and a ~600KB+ bundle
+// for an effect that doesn't need a real 3D camera.
+//
+// Why hand-rolled triangulation rather than a library: this runs exactly
+// once per resize, never per frame, so the classic O(n^2) Bowyer-Watson is
+// instant at our point count and saves pulling in a dependency for a single
+// call site.
 // ponytail: O(n^2) triangulation, fine at n<=220; swap in delaunator if the
 // point count ever grows past a few hundred.
+
+// Fixed reference "world" size (not tied to the live canvas size) — a
+// narrow phone canvas then just shows a cropped window into the same-scale
+// design instead of the whole thing being squeezed to fit. On a canvas
+// bigger than the reference (an ultra-wide monitor), the world grows to
+// match so it still covers edge-to-edge.
+const REFERENCE_W = 1600;
+const REFERENCE_H = 850;
 
 const CIRCUM_EPSILON = 1e-12;
 
@@ -63,16 +76,23 @@ function triangulate(points) {
 }
 
 export function createPolyMesh(width, height) {
-  // Deterministic layout so the mesh looks identical every load — same LCG
-  // the retired cluster field used.
+  // Deterministic layout so the mesh looks identical every load.
   let seed = 21;
   const rand = () => {
     seed = (seed * 9301 + 49297) % 233280;
     return seed / 233280;
   };
 
-  const density = 0.000085;
-  const count = Math.max(70, Math.min(210, Math.round(width * height * density)));
+  const worldW = Math.max(REFERENCE_W, width);
+  const worldH = Math.max(REFERENCE_H, height);
+  // Centers the (possibly larger-than-canvas) world in the canvas — on a
+  // narrow phone canvas this is negative, i.e. the world is shifted left/up
+  // so the canvas window looks at its middle rather than its edge.
+  const offsetX = (width - worldW) / 2;
+  const offsetY = (height - worldH) / 2;
+
+  const density = 0.000045;
+  const count = Math.max(70, Math.min(160, Math.round(worldW * worldH * density)));
 
   // Jittered scatter, plus a margin ring so triangles run past every edge
   // instead of leaving a straight uncovered border.
@@ -80,8 +100,8 @@ export function createPolyMesh(width, height) {
   const points = [];
   for (let i = 0; i < count; i++) {
     points.push({
-      hx: (-margin + rand() * (1 + margin * 2)) * width,
-      hy: (-margin + rand() * (1 + margin * 2)) * height,
+      hx: (-margin + rand() * (1 + margin * 2)) * worldW,
+      hy: (-margin + rand() * (1 + margin * 2)) * worldH,
       amp: 6 + rand() * 16,
       speed: 0.18 + rand() * 0.32,
       phase: rand() * Math.PI * 2,
@@ -95,13 +115,23 @@ export function createPolyMesh(width, height) {
   points.forEach((p) => { p.x = p.hx; p.y = p.hy; });
 
   const tris = triangulate(points.map((p) => ({ x: p.hx, y: p.hy })));
-  // Per-triangle fill alpha, biased brighter toward the lower-right so the
-  // field reads as lit from one side rather than uniformly flat.
+
+  // Per-triangle fill alpha — a handful of random "hotspots" pull nearby
+  // triangles brighter, so the field reads as uneven patches of concentrated
+  // blue fading into a mostly-empty field, rather than one smooth gradient.
+  const hotspots = Array.from({ length: 3 }, () => ({
+    x: rand() * worldW,
+    y: rand() * worldH,
+  }));
   const shades = tris.map((t) => {
-    const cx = (points[t[0]].hx + points[t[1]].hx + points[t[2]].hx) / 3 / width;
-    const cy = (points[t[0]].hy + points[t[1]].hy + points[t[2]].hy) / 3 / height;
-    const bias = Math.min(1, Math.max(0, cx * 0.55 + cy * 0.45));
-    return 0.025 + rand() * 0.09 + bias * 0.06;
+    const cx = (points[t[0]].hx + points[t[1]].hx + points[t[2]].hx) / 3;
+    const cy = (points[t[0]].hy + points[t[1]].hy + points[t[2]].hy) / 3;
+    let glow = 0;
+    for (const h of hotspots) {
+      const d = Math.hypot(cx - h.x, cy - h.y) / worldH;
+      glow = Math.max(glow, Math.max(0, 1 - d * 4.5));
+    }
+    return 0.05 + rand() * 0.06 + glow * glow * 0.32;
   });
 
   function update(t) {
@@ -112,6 +142,9 @@ export function createPolyMesh(width, height) {
   }
 
   function draw(ctx) {
+    ctx.save();
+    ctx.translate(offsetX, offsetY);
+
     for (let i = 0; i < tris.length; i++) {
       const [a, b, c] = tris[i];
       const pa = points[a];
@@ -122,19 +155,21 @@ export function createPolyMesh(width, height) {
       ctx.lineTo(pb.x, pb.y);
       ctx.lineTo(pc.x, pc.y);
       ctx.closePath();
-      ctx.fillStyle = `rgba(37,99,235,${shades[i]})`;
+      ctx.fillStyle = `rgba(59,130,246,${shades[i]})`;
       ctx.fill();
-      ctx.strokeStyle = 'rgba(37,99,235,0.20)';
-      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = `rgba(96,165,250,${0.22 + shades[i] * 0.6})`;
+      ctx.lineWidth = 0.7;
       ctx.stroke();
     }
 
     for (const p of points) {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.accent ? p.dotSize * 1.5 : p.dotSize * 0.8, 0, Math.PI * 2);
-      ctx.fillStyle = p.accent ? 'rgba(29,78,216,0.75)' : 'rgba(37,99,235,0.28)';
+      ctx.arc(p.x, p.y, p.accent ? p.dotSize * 1.5 : p.dotSize * 0.85, 0, Math.PI * 2);
+      ctx.fillStyle = p.accent ? 'rgba(147,197,253,0.9)' : 'rgba(96,165,250,0.5)';
       ctx.fill();
     }
+
+    ctx.restore();
   }
 
   return { update, draw };

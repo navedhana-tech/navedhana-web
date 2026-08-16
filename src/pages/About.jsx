@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
@@ -52,7 +51,7 @@ const About = () => (
           <p className="text-[14.5px] leading-relaxed text-muted">
             We start with the business problem, not the technology — then move from discovery through architecture,
             iterative engineering, validation, and deployment.{' '}
-            <Link to="/" className="text-electric hover:underline">See how we work</Link>.
+            <Button to="/" variant="link" size="inline">See how we work</Button>.
           </p>
         </div>
         <div>
@@ -61,8 +60,8 @@ const About = () => (
             Lekvya, our AI-powered workflow platform for Chartered Accountants, is live and used by 2 active CA
             customers. We're also building Data Factory and a QA Foundation Platform, both currently in development,
             and we build custom software for clients like Yugminds.{' '}
-            <Link to="/products" className="text-electric hover:underline">See our products</Link> or{' '}
-            <Link to="/work" className="text-electric hover:underline">our work</Link>.
+            <Button to="/products" variant="link" size="inline">See our products</Button> or{' '}
+            <Button to="/work" variant="link" size="inline">our work</Button>.
           </p>
         </div>
       </motion.div>
@@ -75,7 +74,12 @@ const About = () => (
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
           {PILLARS.map((p, i) => (
-            <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.06 }} className="bg-primary p-6">
+            <motion.div
+              key={p.title}
+              {...fadeUp}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="bg-primary p-6 hover:bg-ink/[0.02] transition-colors duration-300"
+            >
               <h4 className="font-display text-[15.5px] font-semibold text-ink mb-2">{p.title}</h4>
               <p className="text-[13px] leading-snug text-muted">{p.desc}</p>
             </motion.div>
@@ -97,7 +101,7 @@ const About = () => (
           </div>
         ))}
         <p className="text-[13px] text-muted mt-5 text-center sm:text-left">
-          Not on this list? <Link to="/contact" className="text-electric hover:underline">Ask us about your stack</Link> —
+          Not on this list? <Button to="/contact" variant="link" size="inline">Ask us about your stack</Button> —
           this is what we reach for most, not the limit of what we work with.
         </p>
       </div>

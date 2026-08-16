@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Database, CheckCircle2, Monitor } from 'lucide-react';
+import { Database, CheckCircle2 } from 'lucide-react';
 import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
 import PolyMeshField from '../components/hero/PolyMeshField';
+import { useIntroDone } from '../lib/introContext';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import RequestFlow from '../components/ui/RequestFlow';
 import SectionKicker from '../components/ui/SectionKicker';
@@ -48,75 +49,113 @@ const PILLARS = [
 
 const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
 
-const Home = () => (
+// Hero content stagger — gated on the logo intro finishing (src/lib/
+// introContext.js) instead of firing on mount, so eyebrow -> headline ->
+// subhead -> CTAs reveal in sequence right after the intro settles into the
+// navbar, per the intro spec's staged hero reveal.
+const heroContainer = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } } };
+const heroItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
+
+const Home = () => {
+  const introDone = useIntroDone();
+  const reducedMotion = useReducedMotion();
+
+  return (
   <div className="bg-primary">
-    {/* Curtain-reveal hero: pinned to the viewport (fixed, 100vh, z-1) while
-        the ContentOverlay below scrolls up over it (z-2, offset by its own
-        height of exactly 100vh via mt-[100vh]) — the overlay's solid bg-
-        primary background is what visually "covers" the hero as the curtain
-        pulls back, rather than the hero scrolling away itself. Full-bleed
-        (top-0 left-0 right-0) rather than `inset-0`, since `inset-0` would
-        also force bottom:0 — redundant with h-screen and easy to misread as
-        depending on both; explicit top/left/right + h-screen says exactly
-        what's pinned. */}
-    <section className="fixed top-0 left-0 right-0 h-screen overflow-hidden flex items-center pt-[84px] pb-16 px-4 sm:px-8 z-[1]">
+    {/* Full-height hero — normal document flow, scrolls away like any other
+        section. min-h-dvh (not h-screen/100vh) so it still fills the actual
+        visible viewport on mobile Safari/Chrome, where plain 100vh includes
+        the area the address bar covers. */}
+    <section className="hero-dark relative overflow-hidden flex flex-col min-h-dvh bg-[var(--hero-bg)]">
       {/* Spans the whole section — from page top (so it shows through the
           transparent navbar) down past the fold — rather than being boxed
           inside the headline block, which read as a grey rectangle. */}
       <PolyMeshField />
-      <div className="relative z-10 w-full max-w-7xl mx-auto">
-        <div className="relative min-h-[340px] sm:min-h-[400px] flex items-center">
-          <HeroCircuitBackground />
-          <motion.div {...fadeUp} className="relative z-10 w-full max-w-4xl mx-auto text-center">
-            <SectionKicker centered className="mb-4">Software · AI · Product Engineering</SectionKicker>
-            <h1 className="font-display text-[34px] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink">
-              We build the software.
-              <br />
-              <span className="text-electric">We build the intelligence.</span>
-            </h1>
-            <p className="text-[15px] sm:text-base leading-relaxed text-muted mt-4 max-w-2xl mx-auto">
-              Products we've shipped. Systems we've built for others. Same engineering standard either way.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3.5 mt-6">
-              <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_hero' })}>
-                Discuss Your Project →
-              </Button>
-              <Button to="/work" variant="outline">
-                See What We've Built
-              </Button>
-            </div>
-          </motion.div>
+      {/* flex-1 + min-h-0: the capability strip below is a normal flow
+          sibling (not absolutely positioned over this), so it always
+          reserves its own real height and this area only gets what's left.
+          No height-based content hiding here on purpose: this section is
+          normal document flow now, not the old fixed/pinned curtain-reveal
+          hero, so on a short real-device viewport (address bar expanded,
+          on-screen nav buttons, etc.) the content is simply allowed to be
+          slightly taller than one screen — the page grows and the strip
+          gets pushed down, never clipped or overlapped. A prior version
+          hid the subhead and shrank things below max-height:640px to dodge
+          overlap under the *old* fixed hero; kept post-revert, it instead
+          started hiding real copy on ordinary phones with browser chrome
+          on-screen, which is worse than a few extra px of scroll. */}
+      <div className="relative z-10 flex-1 min-h-0 flex items-center pt-[84px] px-4 sm:px-8">
+        <div className="relative w-full max-w-7xl mx-auto">
+          {/* min-h only from md: up — that's also where the floating node
+              cards (HeroCircuitBackground) start showing, so mobile/sm never
+              reserves dead vertical space for decoration it isn't drawing. */}
+          <div className="relative md:min-h-[340px] lg:min-h-[400px] flex items-center">
+            <HeroCircuitBackground />
+            <motion.div
+              variants={heroContainer}
+              initial={reducedMotion ? false : 'hidden'}
+              animate={introDone ? 'show' : 'hidden'}
+              className="relative z-10 w-full max-w-4xl mx-auto text-center"
+            >
+              <motion.div variants={heroItem}>
+                <SectionKicker centered className="mb-4 hero-text-glow">Software · AI · Product Engineering</SectionKicker>
+              </motion.div>
+              <motion.h1
+                variants={heroItem}
+                className="font-display text-[34px] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink hero-text-glow"
+              >
+                We build the software.
+                <br />
+                <span className="text-electric">We build the intelligence.</span>
+              </motion.h1>
+              {/* Hidden below sm: the kicker + two-line headline already
+                  carry the message on a phone screen; this line is a nice-
+                  to-have on room to spare, not essential copy — a width
+                  check, not the height-based hiding removed above, since
+                  width doesn't jitter with browser chrome. */}
+              <motion.p variants={heroItem} className="hidden sm:block text-base leading-relaxed text-muted mt-4 max-w-2xl mx-auto hero-text-glow">
+                Products we've shipped. Systems we've built for others. Same engineering standard either way.
+              </motion.p>
+              <motion.div variants={heroItem} className="flex flex-wrap justify-center gap-3.5 mt-6">
+                <Button
+                  to="/contact"
+                  size="sm"
+                  hoverEffects={false}
+                  onClick={() => trackEvent('cta_click', { location: 'home_hero' })}
+                >
+                  Discuss Your Project →
+                </Button>
+                <Button to="/work" variant="outline" size="sm" hoverEffects={false}>
+                  See What We've Built
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Capability strip — the hero's closing line, sitting in normal flow
+          at the bottom of the section. */}
+      <div className="relative z-20 shrink-0 py-5 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-3.5 font-display text-[11.5px] font-bold tracking-[0.12em] uppercase text-muted">
+          {CAPABILITY_STRIP.map((c, i) => (
+            <React.Fragment key={c}>
+              <span className="capability-item" style={{ animationDelay: `${i * 2}s` }}>{c}</span>
+              {i < CAPABILITY_STRIP.length - 1 && <span className="text-ink/20">•</span>}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </section>
 
-    {/* Content overlay — everything after the hero, in one wrapper so it
-        scrolls as a single solid "curtain" over the fixed hero above. The
-        hero is `fixed` (out of document flow, contributes no height), so
-        this `mt-[100vh]` is what actually creates the one-viewport-tall gap
-        the hero occupies visually before this overlay's top reaches it.
-        z-[2] (above the hero's z-[1]) + solid bg-primary is what makes the
-        hero visibly disappear under this as you scroll, rather than both
-        layers just co-existing. The negative-offset box-shadow only casts
-        upward from this container's top edge — exactly the "leading edge
-        sliding over the layer below" cue, not a shadow around all sides. */}
-    <div className="relative z-[2] bg-primary mt-[100vh] shadow-[0_-24px_48px_-24px_rgba(0,0,0,0.18)]">
+    <div>
       {/* Products & Platforms teaser — its own component (components/home/
           ProductsTeaser.jsx) and its own section, deliberately separate from
           the hero above so the opening view is the headline alone. */}
       <ProductsTeaser />
-
-    {/* Capability strip */}
-    <section className="py-5 px-4 sm:px-8 border-y border-ink/15">
-      <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-3.5 font-display text-[11.5px] font-bold tracking-[0.12em] uppercase text-muted">
-        {CAPABILITY_STRIP.map((c, i) => (
-          <React.Fragment key={c}>
-            <span>{c}</span>
-            {i < CAPABILITY_STRIP.length - 1 && <span className="text-ink/20">•</span>}
-          </React.Fragment>
-        ))}
-      </div>
-    </section>
 
     {/* What We Do */}
     <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
@@ -126,7 +165,7 @@ const Home = () => (
           Four capabilities. One engineering standard.
         </h2>
         <p className="text-[15px] text-muted mt-3.5">
-          <Link to="/services" className="text-electric hover:underline">The full breakdown</Link>, or the short version below.
+          <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
         </p>
       </motion.div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
@@ -232,30 +271,9 @@ const Home = () => (
         </div>
 
         <div className="text-center mt-7">
-          <Link to="/products" className="text-[13.5px] font-semibold text-electric hover:underline">See all products →</Link>
+          <Button to="/products" variant="link" size="inline">See all products →</Button>
         </div>
       </div>
-    </section>
-
-    {/* Client Work */}
-    <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto mb-10 text-center">
-        <SectionKicker centered className="mb-3.5">Client Work</SectionKicker>
-        <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">Built for businesses</h2>
-      </motion.div>
-      <motion.div {...fadeUp} className="grid sm:grid-cols-[180px_1fr_auto] gap-6 items-center p-7 rounded-2xl border border-ink/15 bg-surface">
-        <PlaceholderShot icon={<Monitor size={18} />} label="Preview coming soon" className="w-full h-[120px]" />
-        <div>
-          <span className="inline-block mb-2.5 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
-            CLIENT PROJECT
-          </span>
-          <h3 className="font-display text-lg font-semibold text-ink mb-2">Yugminds — Robocoders Desktop App</h3>
-          <p className="text-[13.5px] leading-relaxed text-muted">
-            A custom desktop application built for Yugminds, in a category similar to OpenBlocks — engineered end to end as a client project.
-          </p>
-        </div>
-        <Link to="/work" className="whitespace-nowrap text-[13.5px] font-semibold text-electric hover:underline">See more →</Link>
-      </motion.div>
     </section>
 
     {/* How We Work */}
@@ -296,7 +314,7 @@ const Home = () => (
         <p className="text-[14.5px] leading-relaxed text-muted mb-5">
           We build our own technology, and we build software for businesses — with the same engineering standard either way.
         </p>
-        <Link to="/about" className="text-[14px] font-semibold text-electric hover:underline">More About Navedhana →</Link>
+        <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
       </motion.div>
     </section>
 
@@ -310,6 +328,7 @@ const Home = () => (
     </section>
     </div>
   </div>
-);
+  );
+};
 
 export default Home;

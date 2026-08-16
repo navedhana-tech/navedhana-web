@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import SectionKicker from '../components/ui/SectionKicker';
+import Button from '../components/ui/Button';
 
 const inputClasses =
   'w-full px-4 py-3.5 rounded-xl bg-ink/[0.035] border border-ink/15 text-ink placeholder:text-muted/50 text-[14.5px] focus:ring-2 focus:ring-electric focus:border-transparent transition-all outline-none';
@@ -146,13 +147,9 @@ const Contact = () => {
                     onChange={handleChange}
                     className={`${inputClasses} resize-y rounded-xl`}
                   />
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="self-start mt-1 px-7 py-3.5 rounded-xl bg-electric text-primary font-bold text-[15px] shadow-lg shadow-electric/25 disabled:opacity-50 transition-transform"
-                  >
+                  <Button type="submit" disabled={isSubmitting} className="self-start mt-1 disabled:opacity-50">
                     {isSubmitting ? 'Sending…' : 'Submit ↗'}
-                  </button>
+                  </Button>
                 </motion.form>
               )}
             </AnimatePresence>

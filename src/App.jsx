@@ -1,8 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, LayoutGroup } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import GradientBlobs from './components/background/GradientBlobs';
+import LogoIntro from './components/intro/LogoIntro';
+import { IntroContext } from './lib/introContext';
 import Home from './pages/Home';
 import Vegetables from './pages/Vegetables';
 import Services from './pages/Services';
@@ -18,28 +21,59 @@ import ScrollToTop from './components/ScrollToTop';
 
 function AppContent() {
   useScrollDepth();
+  const location = useLocation();
+
+  // Decided once, at first mount, from the URL actually loaded — the intro
+  // is a site-entrance sequence, not a per-navigation loader, so it's never
+  // recomputed on route changes.
+  const [shouldRunIntro] = useState(() => {
+    if (typeof window === 'undefined' || location.pathname !== '/') return false;
+    try {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+      return sessionStorage.getItem('navedhana_intro_seen') !== '1';
+    } catch {
+      return false;
+    }
+  });
+  const [introDone, setIntroDone] = useState(!shouldRunIntro);
+
+  const handleIntroComplete = () => {
+    try {
+      sessionStorage.setItem('navedhana_intro_seen', '1');
+    } catch {
+      // sessionStorage unavailable (private mode etc.) — intro just replays next load
+    }
+    setIntroDone(true);
+  };
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <ScrollToTop />
-      <GradientBlobs />
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/vegetables" element={<Vegetables />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/ai-agent" element={<AiAgent />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/seasonal" element={<Navigate to="/vegetables" replace />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
+    <IntroContext.Provider value={introDone}>
+      <LayoutGroup>
+        <div className="flex flex-col min-h-screen">
+          <ScrollToTop />
+          <GradientBlobs />
+          <AnimatePresence>
+            {shouldRunIntro && !introDone && <LogoIntro key="logo-intro" onComplete={handleIntroComplete} />}
+          </AnimatePresence>
+          <Navbar introDone={introDone} />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/vegetables" element={<Vegetables />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/ai-agent" element={<AiAgent />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/insights" element={<Insights />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/seasonal" element={<Navigate to="/vegetables" replace />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </LayoutGroup>
+    </IntroContext.Provider>
   );
 }
 

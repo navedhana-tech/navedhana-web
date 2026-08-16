@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
@@ -88,7 +87,10 @@ const Work = () => (
         deeper problem/approach/engagement treatment a case study deserves,
         distinct from the in-house capability entries below. */}
     <section className="py-6 pb-10 px-4 sm:px-8 max-w-[1120px] mx-auto">
-      <motion.div {...fadeUp} className="rounded-2xl border border-ink/15 bg-card p-8 sm:p-11">
+      <motion.div
+        {...fadeUp}
+        className="rounded-2xl border border-ink/15 bg-card p-8 sm:p-11 hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
+      >
         <span className="inline-block mb-5 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
           CLIENT ENGAGEMENT
         </span>
@@ -133,7 +135,7 @@ const Work = () => (
             key={entry.name}
             {...fadeUp}
             transition={{ duration: 0.5, delay: i * 0.08 }}
-            className="grid sm:grid-cols-[56px_1fr] gap-6 py-8 border-t border-ink/15"
+            className="grid sm:grid-cols-[56px_1fr] gap-6 py-8 border-t border-ink/15 hover:bg-ink/[0.02] transition-colors duration-300"
           >
             <span className="font-display text-sm text-ink/25">{String(i + 1).padStart(2, '0')}</span>
             <div>
@@ -160,18 +162,20 @@ const Work = () => (
               {entry.proof && <p className="text-[13px] text-ink/70 mt-3.5">{entry.proof}</p>}
               {entry.link && (
                 entry.link.to ? (
-                  <Link to={entry.link.to} className="inline-block mt-3.5 text-[13px] font-semibold text-electric hover:underline">
+                  <Button to={entry.link.to} variant="link" size="inline" className="inline-block mt-3.5">
                     {entry.link.label}
-                  </Link>
+                  </Button>
                 ) : (
-                  <a
+                  <Button
                     href={entry.link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block mt-3.5 text-[13px] font-semibold text-electric hover:underline"
+                    variant="link"
+                    size="inline"
+                    className="inline-block mt-3.5"
                   >
                     {entry.link.label}
-                  </a>
+                  </Button>
                 )
               )}
             </div>
@@ -185,7 +189,7 @@ const Work = () => (
       <motion.div {...fadeUp} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Have a problem worth solving?</h2>
         <p className="text-sm text-muted mb-6">
-          <Link to="/products" className="text-electric hover:underline">See our full product lineup</Link> or tell us what you're building.
+          <Button to="/products" variant="link" size="inline">See our full product lineup</Button> or tell us what you're building.
         </p>
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'work' })}>
           Discuss Your Project →

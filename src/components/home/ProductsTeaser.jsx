@@ -42,7 +42,7 @@ const ProductsTeaser = () => (
             <Link
               key={p.name}
               to={p.to}
-              className="group rounded-xl border border-ink/15 bg-card shadow-sm px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:border-electric/30 transition-colors"
+              className="group rounded-xl border border-ink/15 bg-card shadow-sm px-4 py-3.5 flex items-center justify-between gap-3 text-left hover:border-electric/30 hover:shadow-md hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
             >
               <div className="min-w-0">
                 <span className="font-display text-[9.5px] font-bold tracking-[0.12em] uppercase text-electric">
@@ -53,7 +53,9 @@ const ProductsTeaser = () => (
                 </h3>
                 <p className="text-[11.5px] leading-snug text-muted mt-1">{p.desc}</p>
               </div>
-              <div className={`w-11 h-11 rounded-xl ${p.badgeClass} text-primary flex items-center justify-center flex-shrink-0`}>
+              <div
+                className={`w-11 h-11 rounded-xl ${p.badgeClass} text-primary flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105`}
+              >
                 {p.icon}
               </div>
             </Link>

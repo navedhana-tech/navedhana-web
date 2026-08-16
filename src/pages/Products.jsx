@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Bot, Database, CheckCircle2 } from 'lucide-react';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -37,7 +36,7 @@ const Products = () => (
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.7 }}
-        className="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-ink/15 bg-card shadow-sm"
+        className="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-ink/15 bg-card shadow-sm hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
       >
         <div className="p-2 flex items-center">
           <img src="/assets/redesign/lekvya-screenshot.png" alt="Lekvya product screenshot" className="w-full h-auto rounded-xl" />
@@ -53,14 +52,9 @@ const Products = () => (
             firms — built around scheduling, client management, and document handling. Currently used by 2 active CA
             customers.
           </p>
-          <a
-            href="https://ca.navedhana.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-electric text-primary font-bold text-sm w-fit"
-          >
+          <Button href="https://ca.navedhana.com/" target="_blank" rel="noopener noreferrer" size="sm" className="w-fit">
             Explore Lekvya →
-          </a>
+          </Button>
         </div>
       </motion.div>
     </section>
@@ -68,7 +62,12 @@ const Products = () => (
     <section className="py-6 pb-16 px-4 sm:px-8 max-w-[1120px] mx-auto">
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {DEV_PRODUCTS.map((p, i) => (
-          <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.1 }} className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-col">
+          <motion.div
+            key={p.title}
+            {...fadeUp}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-col hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
+          >
             <PlaceholderShot icon={p.icon} label="Preview coming soon" className="w-full h-[170px]" />
             <div className="p-6">
               <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
@@ -77,9 +76,9 @@ const Products = () => (
               <h3 className="font-display text-[18px] font-semibold text-ink mb-2.5">{p.title}</h3>
               <p className="text-[13.5px] leading-relaxed text-muted">{p.desc}</p>
               {p.to && (
-                <Link to={p.to} className="inline-block mt-4 text-[13px] font-semibold text-electric hover:underline">
+                <Button to={p.to} variant="link" size="inline" className="inline-block mt-4">
                   Read more →
-                </Link>
+                </Button>
               )}
             </div>
           </motion.div>
@@ -91,7 +90,7 @@ const Products = () => (
       <motion.div {...fadeUp} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Building something similar?</h2>
         <p className="text-sm text-muted mb-6">
-          We also build custom software for other businesses. <Link to="/work" className="text-electric hover:underline">See our client work</Link>.
+          We also build custom software for other businesses. <Button to="/work" variant="link" size="inline">See our client work</Button>.
         </p>
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'products' })}>
           Discuss Your Project →
