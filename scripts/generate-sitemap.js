@@ -12,7 +12,6 @@ const routes = [
   { path: '/services', priority: '0.9', changefreq: 'weekly' },
   { path: '/ai-agent', priority: '0.7', changefreq: 'monthly' },
   { path: '/products', priority: '0.8', changefreq: 'weekly' },
-  { path: '/work', priority: '0.7', changefreq: 'monthly' },
   { path: '/insights', priority: '0.5', changefreq: 'monthly' },
   { path: '/vegetables', priority: '0.3', changefreq: 'monthly' },
   { path: '/contact', priority: '0.8', changefreq: 'monthly' },

@@ -60,8 +60,7 @@ const About = () => (
             Lekvya, our AI-powered workflow platform for Chartered Accountants, is live and used by 2 active CA
             customers. We're also building Data Factory and a QA Foundation Platform, both currently in development,
             and we build custom software for clients like Yugminds.{' '}
-            <Button to="/products" variant="link" size="inline">See our products</Button> or{' '}
-            <Button to="/work" variant="link" size="inline">our work</Button>.
+            <Button to="/products" variant="link" size="inline">See our products</Button>.
           </p>
         </div>
       </motion.div>

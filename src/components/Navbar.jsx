@@ -10,16 +10,15 @@ const links = [
   { name: 'Home', path: '/' },
   { name: 'Services', path: '/services' },
   { name: 'Products', path: '/products' },
-  { name: 'Work', path: '/work' },
   { name: 'About', path: '/about' },
+  { name: 'Contact', path: '/contact' },
 ];
 
 // Full-width on scroll — a flat solid bar with one hairline border, not a
 // floating inset pill. Secondary destinations (AI Agent, Insights, Vegetable
-// Service) live in the footer — keeping the primary nav to four links is
-// what lets the dropdown go away entirely. The active link is marked by a
-// small dot below it (echoes the logo mark's circuit-stem motif) rather
-// than an underline.
+// Service) live in the footer — keeping the primary nav to five links is
+// what lets the dropdown go away entirely. The active link is marked by an
+// underline that slides between links (shared layoutId), not a dot.
 const Navbar = ({ introDone = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,6 +32,30 @@ const Navbar = ({ introDone = true }) => {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // The mobile dropdown had no backdrop and nothing behind it was blocked —
+  // the page kept scrolling and the hero's own CTAs stayed clickable right
+  // through it, so it never read as a real overlay. This closes it on route
+  // change (in case navigation happens some way other than clicking a link
+  // in the menu itself) and on Escape, and locks body scroll while open so
+  // the page underneath can't scroll out from behind it.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
 
   // Home's hero is a fixed, full-viewport section (Home.jsx) with its own
   // large "Discuss Your Project" CTA — the navbar's copy is redundant while
@@ -123,6 +146,8 @@ const Navbar = ({ introDone = true }) => {
           onClick={() => setIsOpen((v) => !v)}
           className={`lg:hidden p-2 -mr-2 ${overDarkHero ? 'text-white' : 'text-ink'}`}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav-menu"
         >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
@@ -131,6 +156,23 @@ const Navbar = ({ introDone = true }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-sm lg:hidden"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="mobile-nav-menu"
+            role="dialog"
+            aria-modal="true"
             initial={{ opacity: 0, y: -16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.97 }}

@@ -13,7 +13,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import AiAgent from './pages/AiAgent';
 import Products from './pages/Products';
-import Work from './pages/Work';
 import Insights from './pages/Insights';
 import { useScrollDepth } from './hooks/useScrollDepth';
 
@@ -64,10 +63,10 @@ function AppContent() {
               <Route path="/services" element={<Services />} />
               <Route path="/ai-agent" element={<AiAgent />} />
               <Route path="/products" element={<Products />} />
-              <Route path="/work" element={<Work />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/seasonal" element={<Navigate to="/vegetables" replace />} />
+              <Route path="/work" element={<Navigate to="/products" replace />} />
             </Routes>
           </main>
           <Footer />

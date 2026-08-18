@@ -90,7 +90,7 @@ const Products = () => (
       <motion.div {...fadeUp} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Building something similar?</h2>
         <p className="text-sm text-muted mb-6">
-          We also build custom software for other businesses. <Button to="/work" variant="link" size="inline">See our client work</Button>.
+          We also build custom software for other businesses.
         </p>
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'products' })}>
           Discuss Your Project →

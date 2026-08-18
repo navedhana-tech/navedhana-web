@@ -6,7 +6,6 @@ import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
-import RequestFlow from '../components/ui/RequestFlow';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
 import Button from '../components/ui/Button';
@@ -21,8 +20,6 @@ const WWD_CARDS = [
   { title: 'Product Engineering', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 
-const AI_TAGS = ['AI Agents', 'RAG Systems', 'Custom AI Applications', 'Machine Learning', 'NLP', 'Computer Vision', 'Intelligent Automation'];
-const AI_FLOW = ['User', 'AI System', 'Reasoning', 'Tools / APIs / Data', 'Business Systems', 'Result'];
 const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
 
 const DEV_PRODUCTS = [
@@ -128,7 +125,7 @@ const Home = () => {
                 >
                   Discuss Your Project →
                 </Button>
-                <Button to="/work" variant="outline" size="sm" hoverEffects={false}>
+                <Button to="/products" variant="outline" size="sm" hoverEffects={false}>
                   See What We've Built
                 </Button>
               </motion.div>
@@ -177,29 +174,6 @@ const Home = () => {
             </div>
           </motion.div>
         ))}
-      </div>
-    </section>
-
-    {/* AI Engineering */}
-    <section className="py-20 px-4 sm:px-8 bg-surface">
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
-        <motion.div {...fadeUp}>
-          <SectionKicker className="mb-3.5">AI Engineering</SectionKicker>
-          <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-4">AI that works beyond the demo</h2>
-          <p className="text-[14.5px] leading-relaxed text-muted max-w-md">
-            We build practical AI systems that connect models with your data, software, workflows, and business operations — not just a chatbot in a corner.
-          </p>
-          <div className="flex flex-wrap gap-2 mt-5">
-            {AI_TAGS.map((tag) => (
-              <span key={tag} className="px-3.5 py-2 rounded-lg bg-ink/[0.045] border border-ink/15 text-[12.5px] font-display text-ink/80">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </motion.div>
-        <motion.div {...fadeUp} transition={{ duration: 0.6, delay: 0.15 }}>
-          <RequestFlow steps={AI_FLOW} label="Request flow" />
-        </motion.div>
       </div>
     </section>
 

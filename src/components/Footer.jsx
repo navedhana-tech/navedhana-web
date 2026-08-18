@@ -19,7 +19,6 @@ const PRODUCT_LINKS = [
 const COMPANY_LINKS = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
-  { name: 'Work', path: '/work' },
   { name: 'Insights', path: '/insights' },
   { name: 'Vegetable Service', path: '/vegetables' },
   { name: 'Contact', path: '/contact' },

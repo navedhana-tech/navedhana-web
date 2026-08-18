@@ -227,6 +227,37 @@
   animation: capability-highlight 8s ease-in-out infinite;
 }
 
+/* Isometric product cascade (ProductsTeaser.jsx, lg:+ only) — a fixed
+   rotateX/Y/Z tilt on `transform`, floating idle bob on the standalone
+   `translate` property (a separate CSS property from `transform` in modern
+   browsers, so it composes with the tilt instead of overwriting it — no JS
+   needed to keep both alive at once). Hover cancels the float outright
+   (`animation: none`) and re-poses via `transform` alone: flat, lifted,
+   scaled up, so the card reads as "coming toward you" out of the stack. */
+@keyframes iso-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
+.iso-card {
+  transform: rotateX(20deg) rotateY(-15deg) rotateZ(4deg);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s 500ms;
+  animation: iso-float 6s ease-in-out infinite;
+}
+.iso-card:hover,
+.iso-card:focus-visible {
+  animation: none;
+  translate: 0 0;
+  transform: translateZ(60px) scale(1.05);
+  box-shadow: 0 30px 60px -20px rgba(9, 88, 214, 0.4);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s;
+  z-index: 40 !important;
+}
+
 /* Primary-button "signal sweep" (src/components/ui/Button.jsx, `primary`
    variant) — a translucent bar that travels through the button once per
    hover, via a pseudo-element so no extra DOM node is needed. Parks at the
