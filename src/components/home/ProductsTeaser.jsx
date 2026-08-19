@@ -17,7 +17,7 @@ import Button from '../ui/Button';
 // detail lives, not a case-study or roadmap page that doesn't exist yet.
 const HERO_PRODUCTS = [
   {
-    name: 'Lekvya', live: true, desc: 'AI platform used by practising CAs',
+    name: 'Lekvya', live: true, desc: 'AI Automation Platform for Businesses',
     badgeClass: 'bg-electric', icon: <span className="font-display font-bold text-base">L</span>,
     href: 'https://ca.navedhana.com/', external: true,
   },

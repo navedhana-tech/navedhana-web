@@ -5,7 +5,7 @@ import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 
 const GROUPS = [
-  { title: 'AI Engineering', desc: 'Practical AI systems connected to your data, tools, and workflows.', items: ['AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'NLP', 'Computer Vision'] },
+  { title: 'AI Engineering', desc: 'Practical AI systems connected to your data, tools, and workflows.', items: ['Generative AI','AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'NLP', 'Computer Vision'] },
   { title: 'Custom Software', desc: 'Web, desktop, mobile, and backend systems engineered for production.', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'APIs', 'SaaS Platforms'] },
   { title: 'Intelligent Automation', desc: 'Automation that removes manual work from real business processes.', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation', 'AI-powered Workflows'] },
   { title: 'Product Engineering', desc: 'From first prototype to a production system that can grow.', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering', 'Existing Product Enhancement'] },

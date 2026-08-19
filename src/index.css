@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* Warm paper neutrals, deepened slightly from the original for more visual
-     presence (v1 traded punch for extreme safety; card is now a crisp true
-     white instead of near-white, for more contrast/lift against the base). */
-  --color-primary: #f5f1e6;
-  --color-surface: #ebe3d0;
+  /* Light-blue paper neutrals (swapped from a warm cream/tan pair — same
+     lightness relationship, cool hue instead). Card stays a crisp true
+     white for contrast/lift against the base. */
+  --color-primary: #eef3f8;
+  --color-surface: #dde9f3;
   --color-card: #ffffff;
 
   /* Brand blue, two stops — the actual logo mark is blue (not the green a
@@ -23,14 +23,14 @@
   --color-electric: #0958d6;
   --color-royal: #083f9e;
 
-  /* Warm-orange accent, badges/highlights only, never a primary. Two stops:
+  /* Light-blue accent, badges/highlights only, never a primary. Two stops:
      the fill tone (`amber`) is a background-tint colour ONLY (2.4-3.1:1 —
      fails AA as standalone text, verified) — always pair it with
      `amber-text` (5.19-6.63:1, AA-safe) for any label sitting on an
      `amber` tint, the same bg-{x}/10 text-{x} pattern the LIVE badge
      already used pre-redesign. */
-  --color-amber: #d97a34;
-  --color-amber-text: #954616;
+  --color-amber: #38bdf8;
+  --color-amber-text: #0369a1;
 
   --color-ink: #1c1a17;
   --color-muted: #635c50;
@@ -64,21 +64,66 @@
   }
 }
 
-/* Hero-only dark scope (Home.jsx) — redefines the text/border tokens so
-   every component already built on text-ink/text-muted/text-royal/
-   text-electric (SectionKicker, capability strip, floating icon cards)
-   re-themes for a dark backdrop automatically, no per-component dark-mode
-   props needed. --color-primary is deliberately NOT touched here: Button's
-   primary variant reads text-primary for its on-blue label color, and
-   flipping --color-primary dark would turn that into unreadable dark-on-
-   blue text. --hero-bg is a separate token instead, used only for this
-   section's own background and the capability strip's tint. */
-.hero-dark {
-  --hero-bg: #1c1d21;
+/* Dark section scope (Home.jsx hero + "Four capabilities" section) —
+   redefines the text/border tokens so every component already built on
+   text-ink/text-muted/text-royal/text-electric (SectionKicker, capability
+   strip, floating icon cards) re-themes for a dark backdrop automatically,
+   no per-component dark-mode props needed. Not hero-specific despite the
+   original name — any section wanting this same dark treatment reuses it.
+   --color-primary is deliberately NOT touched here: Button's primary
+   variant reads text-primary for its on-blue label color, and flipping
+   --color-primary dark would turn that into unreadable dark-on-blue text.
+   --hero-bg is a separate token instead, used only for these sections' own
+   background (and the hero's capability strip tint). */
+.dark-scope {
+  --hero-bg: #10192e;
   --color-ink: #f5f4f2;
   --color-muted: #a7a39c;
   --color-royal: #7dabfa;
   --color-electric: #3b82f6;
+}
+
+/* "What We Do" glass cards (Home.jsx WWD_CARDS) — frosted panels that sit
+   directly on .dark-scope's dark background (no light-scope reset needed
+   here: these read text-ink/text-muted as .dark-scope's own light values,
+   which is exactly what a glass card over a dark bg wants). --accent is set
+   inline per card; --mx/--my are updated on mousemove (JS, gated on
+   useReducedMotion — CSS alone can't read pointer position) to drive a
+   spotlight that follows the cursor. The 3D tilt itself is also applied via
+   inline transform in that same mousemove handler, not here. */
+.wwd-card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  transition: box-shadow 350ms ease, border-color 350ms ease, transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.wwd-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.wwd-card:hover::before {
+  opacity: 1;
+}
+.wwd-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.5), 0 0 40px -10px color-mix(in srgb, var(--accent) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+.wwd-card li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.8;
+  flex: none;
+  box-shadow: 0 0 8px var(--accent);
 }
 
 /* Legibility over the moving mesh: color-contrast math alone isn't enough

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Database, CheckCircle2 } from 'lucide-react';
+import { Database, CheckCircle2, Cpu, Layers, Workflow, Box } from 'lucide-react';
 import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
 import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
@@ -13,11 +13,17 @@ import { trackEvent } from '../lib/analytics';
 
 const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
 
+// accent is a per-card decorative color (glass-card spotlight + icon ring +
+// list-item dot) — same "one-off arbitrary color for category coding"
+// pattern ProductsTeaser's badgeClass already uses, not a new theme token.
+// Reuses --color-electric/--color-amber where the category already has a
+// brand color and the existing ProductsTeaser purple for the fourth, rather
+// than inventing four new one-off hexes.
 const WWD_CARDS = [
-  { title: 'AI Engineering', items: ['AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'NLP', 'Computer Vision'] },
-  { title: 'Custom Software', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'APIs / SaaS'] },
-  { title: 'Intelligent Automation', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
-  { title: 'Product Engineering', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
+  { title: 'AI Engineering', icon: Cpu, accent: 'var(--color-electric)', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
+  { title: 'Custom Software', icon: Layers, accent: '#3FE1C9', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
+  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-amber)', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 
 const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
@@ -28,12 +34,12 @@ const DEV_PRODUCTS = [
 ];
 
 const HOW_STEPS = [
-  { title: 'Discover', desc: 'Understand the business problem, users, requirements and constraints.' },
-  { title: 'Design', desc: 'Define product experience, architecture and technical approach.' },
-  { title: 'Build', desc: 'Engineer the software / AI system iteratively.' },
-  { title: 'Validate', desc: 'Test functionality, reliability, performance and integration.' },
-  { title: 'Deploy', desc: 'Move the solution into production.' },
-  { title: 'Evolve', desc: 'Improve and expand the product over time.' },
+  { title: 'Understand', desc: 'Understand the problem, users, and business goals.' },
+  { title: 'Architect', desc: 'Design scalable systems and the right technology stack.' },
+  { title: 'Build', desc: 'Turn the architecture into clean, maintainable software.' },
+  { title: 'Intelligence', desc: 'Integrate AI, automation, data, and intelligent workflows.' },
+  { title: 'Validate', desc: 'Test, refine, and verify the system before release.' },
+  { title: 'Deploy', desc: 'Ship reliable software and evolve it in production.' },
 ];
 
 const PILLARS = [
@@ -45,6 +51,33 @@ const PILLARS = [
 ];
 
 const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
+
+// WWD_CARDS items can carry a parenthetical spell-out ("SaaS [Software as a
+// Service]") — splits that into the short label plus a dim inline note
+// instead of every item needing to be pre-split into a {label, note} shape.
+const ITEM_NOTE_RE = /^(.+?)\s*\[(.+)\]$/;
+
+// HOW_STEPS timeline — one shared stagger container holds BOTH the step
+// nodes and the connector segments between them as alternating direct
+// children (node, line, node, line, ...), so staggerChildren fires them in
+// that literal sequence: node 1 pops in, then the line to node 2 grows,
+// then node 2 pops in, and so on — a genuine step-by-step chain rather than
+// all six nodes fading in together.
+const stepTrackVariants = { hidden: {}, show: { transition: { staggerChildren: 0.18, delayChildren: 0.1 } } };
+const stepNodeVariants = {
+  hidden: { opacity: 0, y: 14, scale: 0.8 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+};
+const stepLineVariants = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.35, ease: 'easeInOut' } },
+};
+// Same growth, vertical axis — the mobile step list runs top-to-bottom, so
+// its connectors grow in height instead of width.
+const stepLineVerticalVariants = {
+  hidden: { scaleY: 0 },
+  show: { scaleY: 1, transition: { duration: 0.35, ease: 'easeInOut' } },
+};
 
 // Hero content stagger — gated on the logo intro finishing (src/lib/
 // introContext.js) instead of firing on mount, so eyebrow -> headline ->
@@ -66,7 +99,7 @@ const Home = () => {
         section. min-h-dvh (not h-screen/100vh) so it still fills the actual
         visible viewport on mobile Safari/Chrome, where plain 100vh includes
         the area the address bar covers. */}
-    <section className="hero-dark relative overflow-hidden flex flex-col min-h-dvh bg-[var(--hero-bg)]">
+    <section className="dark-scope relative overflow-hidden flex flex-col min-h-dvh bg-[var(--hero-bg)]">
       {/* Spans the whole section — from page top (so it shows through the
           transparent navbar) down past the fold — rather than being boxed
           inside the headline block, which read as a grey rectangle. */}
@@ -154,120 +187,148 @@ const Home = () => {
           the hero above so the opening view is the headline alone. */}
       <ProductsTeaser />
 
-    {/* What We Do */}
-    <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
-        <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
-        <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">
-          Four capabilities. One engineering standard.
-        </h2>
-        <p className="text-[15px] text-muted mt-3.5">
-          <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
-        </p>
-      </motion.div>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
-        {WWD_CARDS.map((card, i) => (
-          <motion.div key={card.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.06 }} className="bg-primary p-6">
-            <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2.5">{card.title}</h3>
-            <div className="flex flex-col gap-1.5 text-[12.5px] text-muted">
-              {card.items.map((it) => <span key={it}>{it}</span>)}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-
-    {/* Custom Software */}
-    <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div className="grid lg:grid-cols-2 gap-14 items-center">
-        <motion.div {...fadeUp} className="flex flex-wrap gap-2 order-2 lg:order-1">
-          {SW_TAGS.map((tag) => (
-            <span key={tag} className="px-3.5 py-2.5 rounded-lg bg-surface border border-ink/15 text-[12.5px] font-display text-ink/80">
-              {tag}
-            </span>
-          ))}
-        </motion.div>
-        <motion.div {...fadeUp} className="order-1 lg:order-2">
-          <SectionKicker className="mb-3.5">Custom Software</SectionKicker>
-          <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-4">From architecture to production</h2>
-          <p className="text-[14.5px] leading-relaxed text-muted max-w-md">
-            Web, mobile, desktop, and backend systems — engineered with the same care whether it's a client project or one of our own products.
-          </p>
-        </motion.div>
-      </div>
-    </section>
-
-    {/* Our Products */}
-    <section className="py-20 px-4 sm:px-8 bg-surface">
+    {/* What We Do — dark-scope reused from the hero (see index.css): the
+        section bg + kicker/heading/link re-theme for the dark background
+        automatically via the same CSS-variable cascade. The cards are now
+        frosted glass panels (`.wwd-card`, index.css) that sit right on that
+        dark background — no light-scope reset needed, since text-ink/
+        text-muted already read as light text via dark-scope. */}
+    <section className="dark-scope bg-[var(--hero-bg)] py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
-          <SectionKicker centered className="mb-3.5">Our Products</SectionKicker>
-          <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">We build our own technology</h2>
+          <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
+          <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">
+            Four capabilities. One engineering standard.
+          </h2>
+          <p className="text-[15px] text-muted mt-3.5">
+            <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
+          </p>
         </motion.div>
-
-        <motion.div {...fadeUp} className="grid sm:grid-cols-2 gap-0 rounded-2xl overflow-hidden border border-ink/15 bg-primary mb-6">
-          <div className="p-2 flex items-center">
-            <img src="/assets/redesign/lekvya-screenshot.png" alt="Lekvya product screenshot" className="w-full h-auto rounded-xl" />
-          </div>
-          <div className="p-8 flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-4">
-              <img src="/assets/redesign/lekvya-logo.png" alt="Lekvya" className="h-5 w-auto" />
-              <span className="px-2.5 py-1 rounded-full bg-amber/15 text-amber-text font-display text-[10.5px] font-bold tracking-wide">LIVE</span>
-            </div>
-            <h3 className="font-display text-xl font-semibold text-ink mb-2.5">Lekvya</h3>
-            <p className="text-[13.5px] leading-relaxed text-muted mb-4">
-              An AI-powered workflow and client-communication platform for Chartered Accountants and financial-service firms. Currently used by 2 active CA customers.
-            </p>
-            <a
-              href="https://ca.navedhana.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-electric text-primary font-bold text-[13.5px] w-fit"
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {WWD_CARDS.map((card, i) => (
+            <motion.div
+              key={card.title}
+              {...fadeUp}
+              transition={{ duration: 0.5, delay: i * 0.06 }}
+              className="wwd-card rounded-2xl p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
+              style={{ '--accent': card.accent }}
+              onMouseMove={reducedMotion ? undefined : (e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - r.left;
+                const y = e.clientY - r.top;
+                e.currentTarget.style.setProperty('--mx', `${x}px`);
+                e.currentTarget.style.setProperty('--my', `${y}px`);
+                const rx = ((y / r.height) - 0.5) * -8;
+                const ry = ((x / r.width) - 0.5) * 8;
+                e.currentTarget.style.transform = `translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+              }}
+              onMouseLeave={reducedMotion ? undefined : (e) => { e.currentTarget.style.transform = ''; }}
             >
-              Explore Lekvya →
-            </a>
-          </div>
-        </motion.div>
-
-        <div className="grid sm:grid-cols-2 gap-5">
-          {DEV_PRODUCTS.map((p, i) => (
-            <motion.div key={p.title} {...fadeUp} transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }} className="rounded-2xl overflow-hidden border border-ink/15 bg-primary">
-              <PlaceholderShot icon={p.icon} label="Preview coming soon" className="w-full h-[150px]" />
-              <div className="p-6">
-                <span className="inline-block mb-3 px-2.5 py-1 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
-                  IN DEVELOPMENT
-                </span>
-                <h3 className="font-display text-[17px] font-semibold text-ink mb-2">{p.title}</h3>
-                <p className="text-[13px] leading-relaxed text-muted">{p.desc}</p>
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 border"
+                style={{
+                  background: `linear-gradient(160deg, color-mix(in srgb, ${card.accent} 30%, transparent), transparent)`,
+                  borderColor: `color-mix(in srgb, ${card.accent} 45%, transparent)`,
+                  color: card.accent,
+                }}
+              >
+                <card.icon size={20} />
               </div>
+              <h3 className="font-display text-[16.5px] font-semibold text-ink mb-3">{card.title}</h3>
+              <ul className="flex flex-col text-[12.5px] text-muted">
+                {card.items.map((it) => {
+                  const note = it.match(ITEM_NOTE_RE);
+                  return (
+                    <li key={it} className="flex items-center gap-2 py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
+                      {note ? (
+                        <span>
+                          {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
+                        </span>
+                      ) : it}
+                    </li>
+                  );
+                })}
+              </ul>
             </motion.div>
           ))}
-        </div>
-
-        <div className="text-center mt-7">
-          <Button to="/products" variant="link" size="inline">See all products →</Button>
         </div>
       </div>
     </section>
 
-    {/* How We Work */}
-    <section className="py-20 px-4 sm:px-8 bg-surface">
+    {/* How We Work — plain centered kicker/h2/paragraph, same as every other
+        section, then a step-by-step chain below: two renderings of the same
+        HOW_STEPS again (see WWD_CARDS/ProductsTeaser precedent) — a
+        horizontal node-and-growing-line track at lg:+, a vertical one below
+        it, since a 6-wide horizontal chain has no room to breathe under
+        ~1024px. Both share one stagger container (stepTrackVariants) whose
+        direct children alternate node/line/node/line/…, so staggerChildren
+        fires them in that literal order — each node pops in, THEN the line
+        to the next one grows, THEN the next node — a real step-by-step
+        reveal instead of all six nodes fading in at once. */}
+    <section className="py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div {...fadeUp} className="max-w-xl mx-auto mb-2 text-center">
-          <SectionKicker centered className="mb-3.5">How We Work</SectionKicker>
-          <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">From problem to production</h2>
+        <motion.div {...fadeUp} className="max-w-3xl mx-auto mb-16 text-center">
+          <SectionKicker centered className="mb-5">Our Engineering Approach</SectionKicker>
+          <h2 className="font-display text-[32px] sm:text-[44px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
+            Think deeply.
+            <br />
+            <span className="text-electric">Build intelligently.</span>
+          </h2>
+          <p className="text-[15px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
+            We don't start with technology. We start with understanding. Every solution is shaped by the problem,
+            engineered for reliability, and built to evolve.
+          </p>
         </motion.div>
-        <div className="max-w-3xl mx-auto mt-9 border-t border-ink/15">
-          {HOW_STEPS.map((s, i) => (
-            <motion.div key={s.title} {...fadeUp} transition={{ duration: 0.5, delay: i * 0.06 }} className="grid grid-cols-[56px_1fr] gap-5 py-5 border-b border-ink/15">
-              <span className="font-display text-[13px] text-ink/30">{String(i + 1).padStart(2, '0')}</span>
-              <div>
-                <h4 className="font-display text-base font-semibold text-ink mb-1">{s.title}</h4>
-                <p className="text-[13.5px] leading-relaxed text-muted">{s.desc}</p>
-              </div>
-            </motion.div>
+
+        {/* lg:+ horizontal chain */}
+        <motion.div
+          variants={stepTrackVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          className="hidden lg:flex items-start"
+        >
+          {HOW_STEPS.map((step, i) => (
+            <React.Fragment key={step.title}>
+              <motion.div variants={stepNodeVariants} className="flex flex-col items-center text-center w-[152px] flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[13px] font-bold text-electric mb-4">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <h4 className="font-display text-[12px] font-bold uppercase tracking-wide text-ink mb-2">{step.title}</h4>
+                <p className="text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
+              </motion.div>
+              {i < HOW_STEPS.length - 1 && (
+                <motion.div variants={stepLineVariants} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
+              )}
+            </React.Fragment>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Below lg: vertical chain */}
+        <motion.div
+          variants={stepTrackVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="lg:hidden flex flex-col max-w-md mx-auto"
+        >
+          {HOW_STEPS.map((step, i) => (
+            <React.Fragment key={step.title}>
+              <motion.div variants={stepNodeVariants} className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[12.5px] font-bold text-electric flex-shrink-0">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <div className="pt-1.5 pb-1">
+                  <h4 className="font-display text-[14px] font-bold uppercase tracking-wide text-ink mb-1">{step.title}</h4>
+                  <p className="text-[13px] leading-relaxed text-muted">{step.desc}</p>
+                </div>
+              </motion.div>
+              {i < HOW_STEPS.length - 1 && (
+                <motion.div variants={stepLineVerticalVariants} style={{ transformOrigin: 'top' }} className="w-px h-7 bg-ink/15 ml-[22px]" />
+              )}
+            </React.Fragment>
+          ))}
+        </motion.div>
       </div>
     </section>
 

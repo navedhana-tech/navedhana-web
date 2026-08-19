@@ -64,7 +64,7 @@ const Navbar = ({ introDone = true }) => {
   // Every other page has no equivalent hero CTA, so it just stays visible.
   const showNavCta = !isHome || isScrolled;
 
-  // The home hero (Home.jsx `.hero-dark`) is a dark background; the navbar
+  // The home hero (Home.jsx `.dark-scope`) is a dark background; the navbar
   // is a DOM sibling of it, not a descendant, so it can't pick up that
   // scope's light-text token overrides via CSS cascade — it needs its own
   // light-text state for exactly the window where it's transparent over

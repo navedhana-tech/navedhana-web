@@ -24,14 +24,17 @@ const COMPANY_LINKS = [
   { name: 'Contact', path: '/contact' },
 ];
 
+// dark-scope reused from Home.jsx (see index.css) — same CSS-variable
+// cascade re-themes text-ink/text-muted for this dark background across
+// every page, since the footer is global, not Home-only.
 const Footer = () => (
-  <footer className="relative z-10 pt-14 pb-7 px-4 sm:px-8 border-t border-ink/15 bg-surface">
+  <footer className="dark-scope relative z-10 pt-14 pb-7 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]">
     <div className="max-w-7xl mx-auto">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-11">
         <div className="col-span-2 md:col-span-1">
           <Link to="/" className="flex items-center gap-2.5 mb-4">
-            <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-6 w-auto" />
-            <span className="font-display font-semibold text-lg text-ink">Navedhana</span>
+            <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-9 w-auto" />
+            <span className="font-display font-semibold text-xl text-ink">Navedhana</span>
           </Link>
           <p className="text-[13.5px] leading-relaxed text-muted/80 max-w-[280px] mb-5">
             Software + AI engineering for real-world problems.
