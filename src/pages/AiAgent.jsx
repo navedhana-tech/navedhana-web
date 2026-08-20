@@ -4,6 +4,7 @@ import SectionKicker from '../components/ui/SectionKicker';
 import RequestFlow from '../components/ui/RequestFlow';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
+import { rise, tiltIn, scaleIn } from '../lib/motion';
 
 const FLOW = [
   'User request',
@@ -16,12 +17,11 @@ const FLOW = [
 
 const CAPABILITIES = ['Task planning', 'Tool use', 'API integration', 'Memory / context', 'Human-in-the-loop review', 'Workflow triggers'];
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
-
-const AiAgent = () => (
+const AiAgent = () => {
+  return (
   <div className="bg-primary">
     <section className="pt-[104px] sm:pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">
-      <motion.div {...fadeUp} className="max-w-2xl mx-auto">
+      <motion.div {...rise} className="max-w-2xl mx-auto">
         <SectionKicker centered className="mb-3.5">AI Agent</SectionKicker>
         <h1 className="font-display text-[28px] sm:text-[44px] font-semibold tracking-tight text-ink leading-tight mb-3.5">
           An agent built to act, not just answer
@@ -33,7 +33,7 @@ const AiAgent = () => (
     </section>
 
     <section className="py-6 px-4 sm:px-8 max-w-2xl mx-auto">
-      <motion.div {...fadeUp} className="flex flex-col gap-7">
+      <motion.div {...tiltIn} className="flex flex-col gap-7">
         <div>
           <h3 className="font-display text-[17px] font-semibold text-ink mb-2">What it is</h3>
           <p className="text-[14.5px] leading-relaxed text-muted">
@@ -73,7 +73,7 @@ const AiAgent = () => (
     </section>
 
     <section className="py-10 sm:py-16 mt-6 px-4 sm:px-8 text-center bg-surface">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto">
+      <motion.div {...scaleIn} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Have an agent use case in mind?</h2>
         <p className="text-sm text-muted mb-6">We build practical AI agents and automation for real workflows, today.</p>
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'ai_agent' })}>
@@ -82,6 +82,7 @@ const AiAgent = () => (
       </motion.div>
     </section>
   </div>
-);
+  );
+};
 
 export default AiAgent;

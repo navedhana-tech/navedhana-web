@@ -5,6 +5,7 @@ import PageHero from '../components/ui/PageHero';
 import AccentIcon from '../components/ui/AccentIcon';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
+import { slideLeft, blurIn } from '../lib/motion';
 
 // Same four capabilities Home's "What We Do" cards show, in the same order —
 // icon and accent mirror that section so the two pages read as one system,
@@ -17,9 +18,8 @@ const GROUPS = [
   { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', desc: 'From first prototype to a production system that can grow.', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering', 'Existing Product Enhancement'] },
 ];
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
-
-const Services = () => (
+const Services = () => {
+  return (
   <div className="bg-primary">
     <PageHero
       kicker="What We Do"
@@ -32,7 +32,7 @@ const Services = () => (
         {GROUPS.map((grp, i) => (
           <motion.div
             key={grp.title}
-            {...fadeUp}
+            {...slideLeft}
             transition={{ duration: 0.5, delay: i * 0.09 }}
             className="grid sm:grid-cols-[64px_1fr] gap-4 sm:gap-6 py-6 sm:py-8 border-t border-ink/15"
           >
@@ -73,13 +73,14 @@ const Services = () => (
         ))}
         <div className="border-t border-ink/15" />
       </div>
-      <motion.div {...fadeUp} className="text-center mt-11">
+      <motion.div {...blurIn} className="text-center mt-11">
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'services' })}>
           Discuss your project →
         </Button>
       </motion.div>
     </section>
   </div>
-);
+  );
+};
 
 export default Services;

@@ -5,6 +5,7 @@ import PageHero from '../components/ui/PageHero';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
+import { scaleIn, rise } from '../lib/motion';
 
 // `image` is decorative abstract art, not a screenshot — see PlaceholderShot.
 const DEV_PRODUCTS = [
@@ -13,9 +14,8 @@ const DEV_PRODUCTS = [
   { title: 'QA Foundation Platform', accent: '#0d9488', image: '/assets/photos/product-qa-foundation.jpg', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
 ];
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
-
-const Products = () => (
+const Products = () => {
+  return (
   <div className="bg-primary">
     {/* Product-first: the header stays compact and left-aligned rather than the
         tall centered one the other pages use, so the Lekvya screenshot below is
@@ -68,7 +68,7 @@ const Products = () => (
         {DEV_PRODUCTS.map((p, i) => (
           <motion.div
             key={p.title}
-            {...fadeUp}
+            {...scaleIn}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-col hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
             style={{ borderTopColor: p.accent, borderTopWidth: '3px' }}
@@ -99,7 +99,7 @@ const Products = () => (
     </section>
 
     <section className="py-9 sm:py-14 px-4 sm:px-8 text-center bg-surface">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto">
+      <motion.div {...rise} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Building something similar?</h2>
         <p className="text-sm text-muted mb-6">
           We also build custom software for other businesses.
@@ -110,6 +110,7 @@ const Products = () => (
       </motion.div>
     </section>
   </div>
-);
+  );
+};
 
 export default Products;

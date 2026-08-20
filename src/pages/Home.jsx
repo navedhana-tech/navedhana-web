@@ -6,6 +6,7 @@ import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { canHover } from '../lib/canHover';
+import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY } from '../lib/motion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -55,8 +56,6 @@ const PILLARS = [
   { title: 'Build and learn', desc: 'We build our own products as well as software for businesses.' },
 ];
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
-
 // WWD_CARDS items can carry a parenthetical spell-out ("SaaS [Software as a
 // Service]") — splits that into the short label plus a dim inline note
 // instead of every item needing to be pre-split into a {label, note} shape.
@@ -72,16 +71,6 @@ const stepTrackVariants = { hidden: {}, show: { transition: { staggerChildren: 0
 const stepNodeVariants = {
   hidden: { opacity: 0, y: 14, scale: 0.8 },
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
-};
-const stepLineVariants = {
-  hidden: { scaleX: 0 },
-  show: { scaleX: 1, transition: { duration: 0.35, ease: 'easeInOut' } },
-};
-// Same growth, vertical axis — the mobile step list runs top-to-bottom, so
-// its connectors grow in height instead of width.
-const stepLineVerticalVariants = {
-  hidden: { scaleY: 0 },
-  show: { scaleY: 1, transition: { duration: 0.35, ease: 'easeInOut' } },
 };
 
 // Hero content stagger — gated on the logo intro finishing (src/lib/
@@ -207,7 +196,7 @@ const Home = () => {
         text-muted already read as light text via dark-scope. */}
     <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
+        <motion.div {...tiltIn} className="max-w-xl mx-auto mb-11 text-center">
           <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
           <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">
             Four capabilities. One engineering standard.
@@ -220,8 +209,8 @@ const Home = () => {
           {WWD_CARDS.map((card, i) => (
             <motion.div
               key={card.title}
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: i * 0.06 }}
+              {...scaleIn}
+              transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
               className="wwd-card rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
               style={{ '--accent': card.accent }}
               onMouseMove={pointerFx ? (e) => {
@@ -263,20 +252,20 @@ const Home = () => {
                 <card.icon size={20} />
               </div>
               <h3 className="relative z-10 font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
-              <ul className="relative z-10 flex flex-col text-[13px] sm:text-[12.5px] text-muted">
+              <motion.ul {...staggerParent(0.05, 0.12)} className="relative z-10 flex flex-col text-[13px] sm:text-[12.5px] text-muted">
                 {card.items.map((it) => {
                   const note = it.match(ITEM_NOTE_RE);
                   return (
-                    <li key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
+                    <motion.li variants={riseChild} key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
                       {note ? (
                         <span>
                           {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
                         </span>
                       ) : it}
-                    </li>
+                    </motion.li>
                   );
                 })}
-              </ul>
+              </motion.ul>
             </motion.div>
           ))}
         </div>
@@ -295,7 +284,7 @@ const Home = () => {
         reveal instead of all six nodes fading in at once. */}
     <section className="py-12 sm:py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div {...fadeUp} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
+        <motion.div {...blurIn} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
           <SectionKicker centered className="mb-4 sm:mb-5">Our Engineering Approach</SectionKicker>
           <h2 className="font-display text-[32px] sm:text-[44px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
             Think deeply.
@@ -313,7 +302,10 @@ const Home = () => {
           variants={stepTrackVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
+          // Low threshold on purpose: this track is six nodes wide, and with
+          // `once: true` a fast flick-scroll past a high `amount` can leave the
+          // whole chain stuck invisible with no second chance to fire.
+          viewport={{ once: true, amount: 0.15 }}
           className="hidden lg:flex items-start"
         >
           {HOW_STEPS.map((step, i) => (
@@ -326,7 +318,7 @@ const Home = () => {
                 <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
               </motion.div>
               {i < HOW_STEPS.length - 1 && (
-                <motion.div variants={stepLineVariants} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
+                <motion.div variants={growX} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
               )}
             </React.Fragment>
           ))}
@@ -352,7 +344,7 @@ const Home = () => {
                 </div>
               </motion.div>
               {i < HOW_STEPS.length - 1 && (
-                <motion.div variants={stepLineVerticalVariants} style={{ transformOrigin: 'top' }} className="w-px h-4 sm:h-7 bg-ink/15 ml-[22px]" />
+                <motion.div variants={growY} style={{ transformOrigin: 'top' }} className="w-px h-4 sm:h-7 bg-ink/15 ml-[22px]" />
               )}
             </React.Fragment>
           ))}
@@ -364,16 +356,18 @@ const Home = () => {
         /about, not duplicated here (was a byte-identical copy of About's
         "What We Believe" section prior to this pass). */}
     <section className="py-12 sm:py-20 px-4 sm:px-8 max-w-3xl mx-auto text-center">
-      <motion.div {...fadeUp}>
+      <motion.div {...rise}>
         <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
         <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
           A software and AI engineering company building real products
         </h2>
-        <div className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
+        <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
           {PILLARS.slice(0, 3).map((p) => (
-            <span key={p.title} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">{p.title}</span>
+            <motion.span key={p.title} variants={riseChild} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">
+              {p.title}
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
         <p className="text-[14.5px] leading-relaxed text-muted mb-5">
           We build our own technology, and we build software for businesses — with the same engineering standard either way.
         </p>
@@ -383,7 +377,7 @@ const Home = () => {
 
     {/* Final CTA */}
     <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
-      <motion.div {...fadeUp} className="max-w-xl mx-auto">
+      <motion.div {...scaleIn} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
         <p className="text-[14.5px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>
         <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_final' })}>Let's Build It →</Button>

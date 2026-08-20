@@ -8,6 +8,7 @@ import Button from '../components/ui/Button';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { canHover } from '../lib/canHover';
 import { trackEvent } from '../lib/analytics';
+import { slideLeft, scaleIn, tiltIn, staggerParent, riseChild, clipChild } from '../lib/motion';
 
 // The four accents used sitewide for category coding (same order/hues as
 // Services and Home), deepened for light backgrounds.
@@ -44,21 +45,10 @@ const VALUES = [
   { title: 'Engineering-led', icon: Wrench, desc: 'We care about architecture, reliability and maintainability.' },
 ];
 
-const fadeUp = { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true }, transition: { duration: 0.6 } };
-
-// Shared stagger shapes. `revealItem` is the clip-reveal (translateY inside an
-// overflow-hidden wrapper) already used by ProductsTeaser for the one line
-// meant to carry a section — reused here for the stat figures, which read far
-// better sliding up from a mask than counting from zero at these magnitudes.
-const listVariants = { hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } } };
-const fadeItem = {
-  hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
-};
-const revealItem = {
-  hidden: { y: '110%' },
-  show: { y: '0%', transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-};
+// The hero stats fire on mount rather than on scroll (they sit above the
+// fold), so they need a plain orchestrator rather than staggerParent's
+// whileInView wiring. Child variants come from lib/motion.
+const statList = { hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } } };
 const STORY = [
   {
     title: 'What we build',
@@ -76,7 +66,6 @@ const STORY = [
       <>
         We start with the business problem, not the technology — then move from discovery through architecture,
         iterative engineering, validation, and deployment.{' '}
-        <Button to="/" variant="link" size="inline">See how we work</Button>.
       </>
     ),
   },
@@ -121,7 +110,7 @@ const About = () => {
         subtitle="Navedhana bridges traditional values and modern technology. Founded in 2023, still small — we'd rather ship one thing well than announce ten things we haven't built yet."
       >
         <motion.dl
-          variants={listVariants}
+          variants={statList}
           initial="hidden"
           animate="show"
           className="grid grid-cols-2 gap-x-4 sm:gap-x-6 w-full sm:max-w-sm mx-auto pt-2 sm:pt-4"
@@ -130,7 +119,7 @@ const About = () => {
             <div key={s.label} className="text-center">
               <div className="overflow-hidden">
                 <motion.dd
-                  variants={revealItem}
+                  variants={clipChild}
                   className="font-display text-[30px] sm:text-[36px] font-bold tracking-tight leading-none"
                   style={{ color: ACCENTS[i] }}
                 >
@@ -138,7 +127,7 @@ const About = () => {
                 </motion.dd>
               </div>
               <motion.dt
-                variants={fadeItem}
+                variants={riseChild}
                 className="font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-[0.12em] uppercase text-muted mt-2.5"
               >
                 {s.label}
@@ -189,7 +178,7 @@ const About = () => {
 
       <section className="py-10 sm:py-16 px-4 sm:px-8 bg-surface">
         <div className="max-w-5xl mx-auto">
-          <motion.div {...fadeUp} className="max-w-xl mx-auto mb-10 text-center">
+          <motion.div {...tiltIn} className="max-w-xl mx-auto mb-10 text-center">
             <SectionKicker centered className="mb-3.5">Purpose</SectionKicker>
             <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">Why we do this</h2>
           </motion.div>
@@ -218,22 +207,19 @@ const About = () => {
 
       <section className="py-10 sm:py-16 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeUp} className="max-w-xl mx-auto mb-10 text-center">
+          <motion.div {...slideLeft} className="max-w-xl mx-auto mb-10 text-center">
             <SectionKicker centered className="mb-3.5">What We Believe</SectionKicker>
             <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">Our core values</h2>
             <p className="text-[14.5px] text-muted mt-3.5">The principles that guide every decision we make.</p>
           </motion.div>
           <motion.div
-            variants={listVariants}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.2 }}
+            {...staggerParent(0.07)}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden"
           >
             {VALUES.map((p, i) => (
               <motion.div
                 key={p.title}
-                variants={fadeItem}
+                variants={riseChild}
                 className="value-cell bg-primary p-5 sm:p-7 hover:bg-card"
                 style={{ '--accent': ACCENTS[i % ACCENTS.length] }}
               >
@@ -249,7 +235,7 @@ const About = () => {
       </section>
 
       <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
-        <motion.div {...fadeUp} className="max-w-xl mx-auto">
+        <motion.div {...scaleIn} className="max-w-xl mx-auto">
           <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink mb-3">Want to talk through a project?</h2>
           <Button to="/contact" className="mt-1" onClick={() => trackEvent('cta_click', { location: 'about' })}>
             Discuss Your Project →

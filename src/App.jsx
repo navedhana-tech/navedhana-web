@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence, LayoutGroup } from 'framer-motion';
+import { AnimatePresence, LayoutGroup, MotionConfig } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import GradientBlobs from './components/background/GradientBlobs';
@@ -49,6 +49,12 @@ function AppContent() {
 
   return (
     <IntroContext.Provider value={introDone}>
+      {/* reducedMotion="user" makes Framer honour the OS setting for every
+          motion component below: transform and layout animations are dropped,
+          opacity still fades. The global rule in index.css only covers CSS
+          animations, so without this the whole JS-driven reveal system ignored
+          the preference. */}
+      <MotionConfig reducedMotion="user">
       <LayoutGroup>
         <div className="flex flex-col min-h-screen">
           <ScrollToTop />
@@ -76,6 +82,7 @@ function AppContent() {
           <Footer />
         </div>
       </LayoutGroup>
+      </MotionConfig>
     </IntroContext.Provider>
   );
 }
