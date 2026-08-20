@@ -28,7 +28,7 @@ const HERO_PRODUCTS = [
   },
   {
     name: 'QA Foundation', live: false, desc: 'AI-powered QA infrastructure',
-    badgeClass: 'bg-amber', icon: <CheckCircle2 size={18} />,
+    badgeClass: 'bg-sky', icon: <CheckCircle2 size={18} />,
     to: '/products',
   },
 ];

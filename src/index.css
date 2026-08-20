@@ -24,13 +24,13 @@
   --color-royal: #083f9e;
 
   /* Light-blue accent, badges/highlights only, never a primary. Two stops:
-     the fill tone (`amber`) is a background-tint colour ONLY (2.4-3.1:1 —
+     the fill tone (`sky`) is a background-tint colour ONLY (2.4-3.1:1 —
      fails AA as standalone text, verified) — always pair it with
-     `amber-text` (5.19-6.63:1, AA-safe) for any label sitting on an
-     `amber` tint, the same bg-{x}/10 text-{x} pattern the LIVE badge
+     `sky-text` (5.19-6.63:1, AA-safe) for any label sitting on an
+     `sky` tint, the same bg-{x}/10 text-{x} pattern the LIVE badge
      already used pre-redesign. */
-  --color-amber: #38bdf8;
-  --color-amber-text: #0369a1;
+  --color-sky: #38bdf8;
+  --color-sky-text: #0369a1;
 
   --color-ink: #1c1a17;
   --color-muted: #635c50;

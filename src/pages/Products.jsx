@@ -46,10 +46,10 @@ const Products = () => (
             className="w-full h-auto rounded-xl"
           />
         </div>
-        <div className="p-5 sm:p-6 sm:p-9 flex flex-col justify-center">
+        <div className="p-5 sm:p-9 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-4">
             <img src="/assets/redesign/lekvya-logo.png" alt="Lekvya" className="h-6 w-auto" />
-            <span className="px-2.5 py-1 rounded-full bg-amber/15 text-amber-text font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-wide">LIVE</span>
+            <span className="px-2.5 py-1 rounded-full bg-sky/15 text-sky-text font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-wide">LIVE</span>
           </div>
           <h2 className="font-display text-xl font-semibold text-ink mb-3">Lekvya</h2>
           <p className="text-[14px] leading-relaxed text-muted mb-5">

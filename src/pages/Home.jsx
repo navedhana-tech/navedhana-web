@@ -17,13 +17,13 @@ const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Auto
 // accent is a per-card decorative color (glass-card spotlight + icon ring +
 // list-item dot) — same "one-off arbitrary color for category coding"
 // pattern ProductsTeaser's badgeClass already uses, not a new theme token.
-// Reuses --color-electric/--color-amber where the category already has a
+// Reuses --color-electric/--color-sky where the category already has a
 // brand color and the existing ProductsTeaser purple for the fourth, rather
 // than inventing four new one-off hexes.
 const WWD_CARDS = [
   { title: 'AI Engineering', icon: Cpu, accent: 'var(--color-electric)', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
   { title: 'Custom Software', icon: Layers, accent: '#3FE1C9', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
-  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-amber)', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-sky)', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
   { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 

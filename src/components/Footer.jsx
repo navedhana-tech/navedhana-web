@@ -109,8 +109,8 @@ const Footer = () => (
       <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 pt-5 sm:pt-6 border-t border-ink/15 text-[13px] sm:text-[12.5px] text-muted/60">
         <span className="order-2 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
         <div className="order-1 sm:order-2 flex gap-2">
-          <a href="#" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</a>
-          <a href="#" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</a>
+          <Link to="/terms" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</Link>
+          <Link to="/privacy" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</Link>
         </div>
       </div>
     </div>
