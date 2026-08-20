@@ -4,7 +4,7 @@ import Button from '../components/ui/Button';
 
 const Vegetables = () => (
   <div className="bg-primary min-h-[60vh]">
-    <section className="pt-[168px] pb-20 px-4 sm:px-8 max-w-xl mx-auto">
+    <section className="pt-[104px] sm:pt-[168px] pb-20 px-4 sm:px-8 max-w-xl mx-auto">
       <SectionKicker className="mb-3.5">Other Ventures</SectionKicker>
       <h1 className="font-display text-[26px] sm:text-[34px] font-semibold tracking-tight text-ink mb-4">Vegetable Service</h1>
       <p className="text-[14.5px] leading-relaxed text-muted mb-4">

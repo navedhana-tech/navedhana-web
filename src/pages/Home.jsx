@@ -5,6 +5,7 @@ import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
 import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { canHover } from '../lib/canHover';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -92,6 +93,10 @@ const heroItem = {
 const Home = () => {
   const introDone = useIntroDone();
   const reducedMotion = useReducedMotion();
+  // The wwd-card tilt + spotlight need a real pointer; on touch the CSS behind
+  // them is disabled (`@media (hover: hover)` in index.css), so running the
+  // handlers there would be work with nothing to show for it.
+  const pointerFx = !reducedMotion && canHover();
 
   return (
   <div className="bg-primary">
@@ -168,13 +173,16 @@ const Home = () => {
       </div>
 
       {/* Capability strip — the hero's closing line, sitting in normal flow
-          at the bottom of the section. */}
-      <div className="relative z-20 shrink-0 py-5 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-3.5 font-display text-[11.5px] font-bold tracking-[0.12em] uppercase text-muted">
+          at the bottom of the section. Below sm: it becomes a 2x2 grid with no
+          separators: four long uppercase terms plus bullets wrapped into a
+          ragged three-line block at 375px, which read as overflow rather than
+          a deliberate list. */}
+      <div className="relative z-20 shrink-0 py-4 sm:py-5 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-y-2.5 gap-x-3 text-center sm:flex sm:flex-wrap sm:justify-center sm:gap-3.5 font-display text-[12px] sm:text-[11.5px] font-bold tracking-[0.08em] sm:tracking-[0.12em] uppercase text-muted">
           {CAPABILITY_STRIP.map((c, i) => (
             <React.Fragment key={c}>
               <span className="capability-item" style={{ animationDelay: `${i * 2}s` }}>{c}</span>
-              {i < CAPABILITY_STRIP.length - 1 && <span className="text-ink/20">•</span>}
+              {i < CAPABILITY_STRIP.length - 1 && <span className="hidden sm:inline text-ink/20">•</span>}
             </React.Fragment>
           ))}
         </div>
@@ -193,7 +201,7 @@ const Home = () => {
         frosted glass panels (`.wwd-card`, index.css) that sit right on that
         dark background — no light-scope reset needed, since text-ink/
         text-muted already read as light text via dark-scope. */}
-    <section className="dark-scope bg-[var(--hero-bg)] py-20 px-4 sm:px-8">
+    <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
         <motion.div {...fadeUp} className="max-w-xl mx-auto mb-11 text-center">
           <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
@@ -210,9 +218,9 @@ const Home = () => {
               key={card.title}
               {...fadeUp}
               transition={{ duration: 0.5, delay: i * 0.06 }}
-              className="wwd-card rounded-2xl p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
+              className="wwd-card rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
               style={{ '--accent': card.accent }}
-              onMouseMove={reducedMotion ? undefined : (e) => {
+              onMouseMove={pointerFx ? (e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - r.left;
                 const y = e.clientY - r.top;
@@ -221,11 +229,11 @@ const Home = () => {
                 const rx = ((y / r.height) - 0.5) * -8;
                 const ry = ((x / r.width) - 0.5) * 8;
                 e.currentTarget.style.transform = `translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-              }}
-              onMouseLeave={reducedMotion ? undefined : (e) => { e.currentTarget.style.transform = ''; }}
+              } : undefined}
+              onMouseLeave={pointerFx ? (e) => { e.currentTarget.style.transform = ''; } : undefined}
             >
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 border"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border"
                 style={{
                   background: `linear-gradient(160deg, color-mix(in srgb, ${card.accent} 30%, transparent), transparent)`,
                   borderColor: `color-mix(in srgb, ${card.accent} 45%, transparent)`,
@@ -234,12 +242,12 @@ const Home = () => {
               >
                 <card.icon size={20} />
               </div>
-              <h3 className="font-display text-[16.5px] font-semibold text-ink mb-3">{card.title}</h3>
-              <ul className="flex flex-col text-[12.5px] text-muted">
+              <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
+              <ul className="flex flex-col text-[13px] sm:text-[12.5px] text-muted">
                 {card.items.map((it) => {
                   const note = it.match(ITEM_NOTE_RE);
                   return (
-                    <li key={it} className="flex items-center gap-2 py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
+                    <li key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
                       {note ? (
                         <span>
                           {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
@@ -265,10 +273,10 @@ const Home = () => {
         fires them in that literal order — each node pops in, THEN the line
         to the next one grows, THEN the next node — a real step-by-step
         reveal instead of all six nodes fading in at once. */}
-    <section className="py-20 px-4 sm:px-8">
+    <section className="py-12 sm:py-20 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div {...fadeUp} className="max-w-3xl mx-auto mb-16 text-center">
-          <SectionKicker centered className="mb-5">Our Engineering Approach</SectionKicker>
+        <motion.div {...fadeUp} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
+          <SectionKicker centered className="mb-4 sm:mb-5">Our Engineering Approach</SectionKicker>
           <h2 className="font-display text-[32px] sm:text-[44px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
             Think deeply.
             <br />
@@ -291,11 +299,11 @@ const Home = () => {
           {HOW_STEPS.map((step, i) => (
             <React.Fragment key={step.title}>
               <motion.div variants={stepNodeVariants} className="flex flex-col items-center text-center w-[152px] flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[13px] font-bold text-electric mb-4">
+                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[14px] sm:text-[13px] font-bold text-electric mb-4">
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <h4 className="font-display text-[12px] font-bold uppercase tracking-wide text-ink mb-2">{step.title}</h4>
-                <p className="text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
+                <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
               </motion.div>
               {i < HOW_STEPS.length - 1 && (
                 <motion.div variants={stepLineVariants} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
@@ -315,16 +323,16 @@ const Home = () => {
           {HOW_STEPS.map((step, i) => (
             <React.Fragment key={step.title}>
               <motion.div variants={stepNodeVariants} className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[12.5px] font-bold text-electric flex-shrink-0">
+                <div className="w-11 h-11 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[13.5px] sm:text-[12.5px] font-bold text-electric flex-shrink-0">
                   {String(i + 1).padStart(2, '0')}
                 </div>
                 <div className="pt-1.5 pb-1">
                   <h4 className="font-display text-[14px] font-bold uppercase tracking-wide text-ink mb-1">{step.title}</h4>
-                  <p className="text-[13px] leading-relaxed text-muted">{step.desc}</p>
+                  <p className="text-[14px] sm:text-[13px] leading-relaxed text-muted">{step.desc}</p>
                 </div>
               </motion.div>
               {i < HOW_STEPS.length - 1 && (
-                <motion.div variants={stepLineVerticalVariants} style={{ transformOrigin: 'top' }} className="w-px h-7 bg-ink/15 ml-[22px]" />
+                <motion.div variants={stepLineVerticalVariants} style={{ transformOrigin: 'top' }} className="w-px h-4 sm:h-7 bg-ink/15 ml-[22px]" />
               )}
             </React.Fragment>
           ))}
@@ -335,7 +343,7 @@ const Home = () => {
     {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
         /about, not duplicated here (was a byte-identical copy of About's
         "What We Believe" section prior to this pass). */}
-    <section className="py-20 px-4 sm:px-8 max-w-3xl mx-auto text-center">
+    <section className="py-12 sm:py-20 px-4 sm:px-8 max-w-3xl mx-auto text-center">
       <motion.div {...fadeUp}>
         <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
         <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
@@ -343,7 +351,7 @@ const Home = () => {
         </h2>
         <div className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
           {PILLARS.slice(0, 3).map((p) => (
-            <span key={p.title} className="font-display text-[13px] font-semibold text-ink/80">{p.title}</span>
+            <span key={p.title} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">{p.title}</span>
           ))}
         </div>
         <p className="text-[14.5px] leading-relaxed text-muted mb-5">
@@ -354,7 +362,7 @@ const Home = () => {
     </section>
 
     {/* Final CTA */}
-    <section className="py-16 px-4 sm:px-8 text-center">
+    <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
       <motion.div {...fadeUp} className="max-w-xl mx-auto">
         <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
         <p className="text-[14.5px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>

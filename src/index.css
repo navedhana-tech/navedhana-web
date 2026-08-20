@@ -108,12 +108,17 @@
   transition: opacity 300ms ease;
   pointer-events: none;
 }
-.wwd-card:hover::before {
-  opacity: 1;
-}
-.wwd-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.5), 0 0 40px -10px color-mix(in srgb, var(--accent) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+/* Hover states are gated on a real pointer throughout this file: on touch,
+   :hover latches after a tap and stays stuck until you tap elsewhere, so a
+   card keeps its lifted/glowing state long after you've scrolled past. */
+@media (hover: hover) {
+  .wwd-card:hover::before {
+    opacity: 1;
+  }
+  .wwd-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.5), 0 0 40px -10px color-mix(in srgb, var(--accent) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  }
 }
 .wwd-card li::before {
   content: '';
@@ -124,6 +129,66 @@
   opacity: 0.8;
   flex: none;
   box-shadow: 0 0 8px var(--accent);
+}
+
+/* Light-background counterpart to .wwd-card (About's Mission/Vision panels):
+   an accent wash that follows the cursor. Tuned far weaker than the dark
+   version — a bright radial over a pale background reads as a smudge, not a
+   glow. --accent is set inline per card; --mx/--my are updated on mousemove
+   (JS, gated on useReducedMotion — CSS alone can't read pointer position). */
+.glow-card {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 350ms ease, border-color 350ms ease, transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(340px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.glow-card:focus-within::before {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+  .glow-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 24px 48px -26px color-mix(in srgb, var(--accent) 65%, transparent);
+  }
+}
+
+/* Core-value cells (About). The grid draws its own dividers via a gap-px
+   background, so a hover border would shift layout — the accent is carried by
+   a left rule that wipes in on hover instead. */
+.value-cell {
+  position: relative;
+  transition: background-color 300ms ease;
+}
+.value-cell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) {
+  .value-cell:hover::after {
+    transform: scaleY(1);
+  }
 }
 
 /* Legibility over the moving mesh: color-contrast math alone isn't enough
@@ -293,7 +358,6 @@
   transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s 500ms;
   animation: iso-float 6s ease-in-out infinite;
 }
-.iso-card:hover,
 .iso-card:focus-visible {
   animation: none;
   translate: 0 0;
@@ -301,6 +365,16 @@
   box-shadow: 0 30px 60px -20px rgba(9, 88, 214, 0.4);
   transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s;
   z-index: 40 !important;
+}
+@media (hover: hover) {
+  .iso-card:hover {
+    animation: none;
+    translate: 0 0;
+    transform: translateZ(60px) scale(1.05);
+    box-shadow: 0 30px 60px -20px rgba(9, 88, 214, 0.4);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s;
+    z-index: 40 !important;
+  }
 }
 
 /* Primary-button "signal sweep" (src/components/ui/Button.jsx, `primary`
@@ -321,10 +395,16 @@
   transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
-.btn-signal:hover::before,
+/* :active is deliberately ungated — it is the tap response on touch, where
+   :hover would latch instead of firing once. */
 .btn-signal:focus-visible::before,
 .btn-signal:active::before {
   transform: translateX(140%);
+}
+@media (hover: hover) {
+  .btn-signal:hover::before {
+    transform: translateX(140%);
+  }
 }
 
 /* Navbar link (src/components/Navbar.jsx desktop links) — position:relative
@@ -353,9 +433,13 @@
   transform-origin: left;
   transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.btn-underline:hover::after,
 .btn-underline:focus-visible::after {
   transform: scaleX(1);
+}
+@media (hover: hover) {
+  .btn-underline:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 :root {

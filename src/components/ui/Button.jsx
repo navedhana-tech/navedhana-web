@@ -16,10 +16,14 @@ const STATIC_VARIANTS = {
  link: 'text-electric font-semibold',
 };
 
+// `inline` sits inside running prose, so it can't take real padding without
+// wrecking line-height — instead it gets a 44px min-height on touch-sized
+// screens only (a tappable target), collapsing back to normal inline flow at
+// sm:+ where a mouse is doing the pointing.
 const SIZES = {
- sm: 'px-5 py-2.5 text-sm',
- lg: 'px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg',
- inline: 'text-[13px]',
+ sm: 'px-5 py-3 sm:py-2.5 text-[14.5px] sm:text-sm',
+ lg: 'px-6 sm:px-8 py-3.5 sm:py-4 text-[15.5px] sm:text-lg',
+ inline: 'text-[14px] sm:text-[13px] min-h-[44px] sm:min-h-0 align-middle',
 };
 
 // A label ending in an arrow glyph gets that glyph split into its own span

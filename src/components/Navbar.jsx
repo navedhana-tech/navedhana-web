@@ -80,7 +80,7 @@ const Navbar = ({ introDone = true }) => {
             : 'top-0 left-0 right-0 max-w-none w-full h-[84px] px-4 sm:px-8 rounded-none bg-transparent border-transparent shadow-none'
         }`}
       >
-        <Link to="/" className="group relative flex items-center gap-2.5 flex-shrink-0">
+        <Link to="/" className="group relative flex items-center gap-2.5 flex-shrink-0 min-h-[44px]">
           <span
             className="absolute -left-2 -top-2 w-11 h-11 rounded-full bg-electric/0 group-hover:bg-electric/10 blur-md transition-colors duration-base"
             aria-hidden="true"
@@ -144,7 +144,7 @@ const Navbar = ({ introDone = true }) => {
 
         <button
           onClick={() => setIsOpen((v) => !v)}
-          className={`lg:hidden p-2 -mr-2 ${overDarkHero ? 'text-white' : 'text-ink'}`}
+          className={`lg:hidden -mr-2 flex items-center justify-center min-w-[44px] min-h-[44px] ${overDarkHero ? 'text-white' : 'text-ink'}`}
           aria-label={isOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isOpen}
           aria-controls="mobile-nav-menu"
@@ -184,7 +184,7 @@ const Navbar = ({ introDone = true }) => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-[15px] font-medium transition-colors ${
+                className={`flex items-center min-h-[48px] px-4 rounded-xl text-[16px] font-medium transition-colors ${
                   isActive(link.path) ? 'bg-ink/[0.06] text-ink' : 'text-ink/70 hover:bg-ink/[0.06]'
                 }`}
               >
@@ -194,7 +194,7 @@ const Navbar = ({ introDone = true }) => {
             <Link
               to="/contact"
               onClick={() => setIsOpen(false)}
-              className="block mt-2 px-4 py-3 rounded-xl bg-electric text-primary font-bold text-center"
+              className="flex items-center justify-center min-h-[52px] mt-2 px-4 rounded-xl bg-electric text-primary font-bold text-[16px]"
             >
               Discuss Your Project →
             </Link>

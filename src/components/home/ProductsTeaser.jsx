@@ -134,13 +134,13 @@ const ProductsTeaser = () => (
                 className="group rounded-2xl border border-ink/15 bg-card shadow-sm p-5 flex items-center justify-between gap-4 hover:border-electric/30 hover:shadow-md hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
               >
                 <div className="min-w-0">
-                  <span className="font-display text-[10.5px] font-bold tracking-[0.14em] uppercase text-electric">
+                  <span className="font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-[0.14em] uppercase text-electric">
                     {p.live ? 'Live Product' : 'In Development'}
                   </span>
                   <h3 className="font-display text-[17px] font-bold text-ink mt-1 group-hover:text-electric transition-colors">
                     {p.name}
                   </h3>
-                  <p className="text-[13px] leading-relaxed text-muted mt-1">{p.desc}</p>
+                  <p className="text-[14px] sm:text-[13px] leading-relaxed text-muted mt-1">{p.desc}</p>
                 </div>
                 <div
                   className={`w-11 h-11 rounded-xl ${p.badgeClass} text-primary flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105`}
@@ -179,7 +179,7 @@ const ProductsTeaser = () => (
                     {p.icon}
                   </div>
                   <span
-                    className={`px-2.5 py-1 rounded-full font-display text-[10px] font-bold tracking-wide ${
+                    className={`px-2.5 py-1 rounded-full font-display text-[11px] sm:text-[10px] font-bold tracking-wide ${
                       p.live ? 'bg-electric/10 text-electric' : 'bg-ink/[0.06] text-muted'
                     }`}
                   >
@@ -187,7 +187,7 @@ const ProductsTeaser = () => (
                   </span>
                 </div>
                 <h3 className="font-display text-[16px] font-bold text-ink mb-1">{p.name}</h3>
-                <p className="text-[12.5px] leading-relaxed text-muted">{p.desc}</p>
+                <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{p.desc}</p>
               </ProductCardLink>
             ))}
           </div>

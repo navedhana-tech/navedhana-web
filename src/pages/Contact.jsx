@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
+import { canHover } from '../lib/canHover';
 
 const inputClasses =
   'w-full px-4 py-3.5 rounded-xl bg-ink/[0.035] border border-ink/15 text-ink placeholder:text-muted/50 text-[14.5px] focus:ring-2 focus:ring-electric focus:border-transparent transition-all outline-none';
@@ -26,7 +27,9 @@ function useScrollProgress(ref) {
 function useCursorGlow(ref) {
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return undefined;
+    // Bail on touch too: the glow follows a cursor that doesn't exist there,
+    // and the rAF loop below would otherwise run forever for nothing.
+    if (reduced || !canHover()) return undefined;
     const target = { x: -9999, y: -9999 };
     const current = { x: -9999, y: -9999 };
     const onMove = (e) => { target.x = e.clientX; target.y = e.clientY; };
@@ -99,7 +102,7 @@ const Contact = () => {
         style={{ background: 'radial-gradient(circle, oklch(55% 0.19 232 / 0.16), transparent 70%)', filter: 'blur(10px)' }}
       />
 
-      <section className="pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">
+      <section className="pt-[104px] sm:pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">
         <SectionKicker centered className="mb-3.5">Contact Us</SectionKicker>
         <h1 className="font-display text-[28px] sm:text-[44px] font-bold tracking-tight text-ink">Tell us your goals</h1>
       </section>
@@ -128,7 +131,7 @@ const Contact = () => {
                   key="sent"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="p-8 rounded-2xl bg-ink/[0.04] border border-ink/15 text-center"
+                  className="p-5 sm:p-8 rounded-2xl bg-ink/[0.04] border border-ink/15 text-center"
                 >
                   <div className="font-display text-xl font-semibold text-ink mb-2">Thanks — message received.</div>
                   <p className="text-sm text-muted">We'll get back to you shortly at the email you provided.</p>
