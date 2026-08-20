@@ -20,11 +20,15 @@ const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Auto
 // Reuses --color-electric/--color-sky where the category already has a
 // brand color and the existing ProductsTeaser purple for the fourth, rather
 // than inventing four new one-off hexes.
+// `image` is a topical photograph per capability (circuit board, code, server
+// room, 3D printer), rendered as a darkened background inside each card. Kept
+// well under the text via low opacity plus an accent-tinted scrim, since these
+// cards carry a heading and a six-item list that has to stay readable.
 const WWD_CARDS = [
-  { title: 'AI Engineering', icon: Cpu, accent: 'var(--color-electric)', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
-  { title: 'Custom Software', icon: Layers, accent: '#3FE1C9', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
-  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-sky)', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
-  { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
+  { title: 'AI Engineering', icon: Cpu, accent: 'var(--color-electric)', image: '/assets/photos/service-ai.jpg', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
+  { title: 'Custom Software', icon: Layers, accent: '#3FE1C9', image: '/assets/photos/service-software.jpg', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
+  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-sky)', image: '/assets/photos/service-automation.jpg', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', image: '/assets/photos/service-product.jpg', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 
 const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
@@ -232,8 +236,24 @@ const Home = () => {
               } : undefined}
               onMouseLeave={pointerFx ? (e) => { e.currentTarget.style.transform = ''; } : undefined}
             >
+              <img
+                src={card.image}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover opacity-[0.7] brightness-[0.75]"
+              />
+              {/* Accent-tinted scrim: unifies four photographs shot under very
+                  different lighting into one set, and keeps the list legible
+                  over whatever detail sits behind it. */}
               <div
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border"
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(180deg, color-mix(in srgb, ${card.accent} 22%, transparent) 0%, rgba(16,25,46,0.30) 26%, rgba(16,25,46,0.80) 58%, rgba(16,25,46,0.90) 100%)`,
+                }}
+                aria-hidden="true"
+              />
+              <div
+                className="relative z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border"
                 style={{
                   background: `linear-gradient(160deg, color-mix(in srgb, ${card.accent} 30%, transparent), transparent)`,
                   borderColor: `color-mix(in srgb, ${card.accent} 45%, transparent)`,
@@ -242,8 +262,8 @@ const Home = () => {
               >
                 <card.icon size={20} />
               </div>
-              <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
-              <ul className="flex flex-col text-[13px] sm:text-[12.5px] text-muted">
+              <h3 className="relative z-10 font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
+              <ul className="relative z-10 flex flex-col text-[13px] sm:text-[12.5px] text-muted">
                 {card.items.map((it) => {
                   const note = it.match(ITEM_NOTE_RE);
                   return (
