@@ -105,7 +105,7 @@ const ProductsTeaser = () => (
           <div className="overflow-hidden mb-6">
             <motion.h2
               variants={revealItem}
-              className="font-display text-[38px] sm:text-[48px] lg:text-[54px] font-bold tracking-tight leading-[1.05] text-ink"
+              className="font-display text-[42px] sm:text-[52px] lg:text-[58px] font-bold tracking-tight leading-[1.05] text-ink"
             >
               Products &amp; Platforms We're Building
             </motion.h2>

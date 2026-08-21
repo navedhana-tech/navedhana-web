@@ -196,7 +196,7 @@ const Home = () => {
       <div className="max-w-7xl mx-auto">
         <motion.div {...tiltIn} className="max-w-xl mx-auto mb-11 text-center">
           <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
-          <h2 className="font-display text-[26px] sm:text-4xl font-bold tracking-tight text-ink">
+          <h2 className="font-display text-[30px] sm:text-[42px] font-bold tracking-tight text-ink">
             Four capabilities. One engineering standard.
           </h2>
           <p className="text-[15px] text-muted mt-3.5">
@@ -281,7 +281,7 @@ const Home = () => {
       <div className="max-w-7xl mx-auto">
         <motion.div {...blurIn} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
           <SectionKicker centered className="mb-4 sm:mb-5">Our Engineering Approach</SectionKicker>
-          <h2 className="font-display text-[32px] sm:text-[44px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
+          <h2 className="font-display text-[36px] sm:text-[50px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
             Think deeply.
             <br />
             <span className="text-electric">Build intelligently.</span>
@@ -359,7 +359,7 @@ const Home = () => {
       <div className="max-w-3xl mx-auto text-center">
         <motion.div {...rise}>
           <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
-          <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
+          <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-5">
             A software and AI engineering company building real products
           </h2>
           <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
@@ -380,7 +380,7 @@ const Home = () => {
     {/* Final CTA */}
     <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
       <motion.div {...scaleIn} className="max-w-xl mx-auto">
-        <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
+        <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
         <p className="text-[14.5px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>
         <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_final' })}>Let's Build It →</Button>
       </motion.div>
