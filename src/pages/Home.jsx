@@ -6,7 +6,7 @@ import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { canHover } from '../lib/canHover';
-import { scaleIn, tiltIn, blurIn, slideLeft, staggerParent, riseChild, slideChild, growX, growY } from '../lib/motion';
+import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY } from '../lib/motion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -203,20 +203,18 @@ const Home = () => {
             <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
           </p>
         </motion.div>
-        {/* items-start lets each card size to its own content instead of the
-            grid stretching all four to match the tallest — the two four-item
-            cards were carrying a block of dead space at the bottom. The
-            alternating lg:mt-12 then turns those uneven heights into a
-            deliberate zigzag rather than a ragged edge. */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
+        {/* Default `stretch` alignment: all four cards match the tallest, so
+            the row reads as one straight band. `flex flex-col` on the card and
+            `flex-1` on the body then push each card's own background down to
+            fill its share, rather than leaving a transparent gap under the
+            shorter lists. */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {WWD_CARDS.map((card, i) => (
             <motion.div
               key={card.title}
               {...scaleIn}
               transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className={`wwd-card rounded-2xl bg-card border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)] ${
-                i % 2 === 1 ? 'lg:mt-12' : ''
-              }`}
+              className="wwd-card flex flex-col rounded-2xl bg-card border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)]"
               onMouseMove={pointerFx ? (e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - r.left;
@@ -234,14 +232,14 @@ const Home = () => {
                   keep a photograph readable underneath body copy without
                   turning it to mud — giving it its own strip keeps the image
                   at full strength AND the list on clean white. */}
-              <div className="relative h-[100px] sm:h-[112px] overflow-hidden">
+              <div className="relative h-[100px] sm:h-[112px] shrink-0 overflow-hidden">
                 <img src={card.image} alt="" aria-hidden="true" className="w-full h-full object-cover" />
                 <div
                   className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_20%,transparent),rgba(16,25,46,0.35))]"
                   aria-hidden="true"
                 />
               </div>
-              <div className="relative z-10 p-5 sm:p-6">
+              <div className="relative z-10 flex-1 p-5 sm:p-6">
                 {/* Pulled up so the tile straddles the photo edge — the one
                     element tying the two halves of the card together. */}
                 <div className="-mt-[38px] mb-3 w-11 h-11 rounded-xl flex items-center justify-center border bg-card text-electric border-ink/10 shadow-sm">
@@ -352,43 +350,30 @@ const Home = () => {
     {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
         /about, not duplicated here (was a byte-identical copy of About's
         "What We Believe" section prior to this pass). */}
-    {/* Why Navedhana — dark-scope, so the page alternates dark/light/dark
-        rather than running four pale sections together. Split two-up at lg:
-        the argument on the left, the evidence on the right. The pillars used
-        to be three bare words in a centered row; PILLARS has carried a `desc`
-        for each one all along that nothing rendered. */}
-    <section className="dark-scope bg-[var(--hero-bg)] py-14 sm:py-20 px-4 sm:px-8">
-      <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-16 lg:items-center">
-        <motion.div {...slideLeft} className="text-center lg:text-left">
-          <SectionKicker centered={false} className="mb-3.5 justify-center lg:justify-start">Why Navedhana</SectionKicker>
-          <h2 className="font-display text-[26px] sm:text-[34px] font-bold tracking-tight leading-[1.15] text-ink mb-4">
-            A software and AI engineering company building{' '}
-            <span className="text-electric">real products</span>
+    {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
+        /about, not duplicated here. dark-scope only: the max-w-3xl moved from
+        the section to an inner wrapper so the dark background spans the full
+        width instead of stopping at the text column. Content and layout are
+        otherwise unchanged. */}
+    <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
+      <div className="max-w-3xl mx-auto text-center">
+        <motion.div {...rise}>
+          <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
+          <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
+            A software and AI engineering company building real products
           </h2>
-          <p className="text-[14.5px] leading-relaxed text-muted mb-6 max-w-md mx-auto lg:mx-0">
-            We build our own technology, and we build software for businesses — with the same engineering standard
-            either way.
+          <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
+            {PILLARS.slice(0, 3).map((p) => (
+              <motion.span key={p.title} variants={riseChild} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">
+                {p.title}
+              </motion.span>
+            ))}
+          </motion.div>
+          <p className="text-[14.5px] leading-relaxed text-muted mb-5">
+            We build our own technology, and we build software for businesses — with the same engineering standard either way.
           </p>
           <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
         </motion.div>
-
-        <motion.ul {...staggerParent(0.12)} className="flex flex-col">
-          {PILLARS.slice(0, 3).map((p, i) => (
-            <motion.li
-              key={p.title}
-              variants={slideChild}
-              className="group flex gap-4 sm:gap-5 py-5 border-t border-ink/15 last:border-b"
-            >
-              <span className="font-display text-[12.5px] font-bold text-electric pt-0.5 tabular-nums">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div>
-                <h3 className="font-display text-[15.5px] font-semibold text-ink mb-1">{p.title}</h3>
-                <p className="text-[13.5px] leading-relaxed text-muted">{p.desc}</p>
-              </div>
-            </motion.li>
-          ))}
-        </motion.ul>
       </div>
     </section>
 
