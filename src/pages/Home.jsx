@@ -6,7 +6,7 @@ import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { canHover } from '../lib/canHover';
-import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY } from '../lib/motion';
+import { scaleIn, tiltIn, blurIn, slideLeft, staggerParent, riseChild, slideChild, growX, growY } from '../lib/motion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -352,24 +352,44 @@ const Home = () => {
     {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
         /about, not duplicated here (was a byte-identical copy of About's
         "What We Believe" section prior to this pass). */}
-    <section className="py-12 sm:py-20 px-4 sm:px-8 max-w-3xl mx-auto text-center">
-      <motion.div {...rise}>
-        <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
-        <h2 className="font-display text-2xl sm:text-[32px] font-bold tracking-tight text-ink mb-5">
-          A software and AI engineering company building real products
-        </h2>
-        <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
-          {PILLARS.slice(0, 3).map((p) => (
-            <motion.span key={p.title} variants={riseChild} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">
-              {p.title}
-            </motion.span>
-          ))}
+    {/* Why Navedhana — dark-scope, so the page alternates dark/light/dark
+        rather than running four pale sections together. Split two-up at lg:
+        the argument on the left, the evidence on the right. The pillars used
+        to be three bare words in a centered row; PILLARS has carried a `desc`
+        for each one all along that nothing rendered. */}
+    <section className="dark-scope bg-[var(--hero-bg)] py-14 sm:py-20 px-4 sm:px-8">
+      <div className="max-w-6xl mx-auto grid lg:grid-cols-[1fr_1.05fr] gap-10 lg:gap-16 lg:items-center">
+        <motion.div {...slideLeft} className="text-center lg:text-left">
+          <SectionKicker centered={false} className="mb-3.5 justify-center lg:justify-start">Why Navedhana</SectionKicker>
+          <h2 className="font-display text-[26px] sm:text-[34px] font-bold tracking-tight leading-[1.15] text-ink mb-4">
+            A software and AI engineering company building{' '}
+            <span className="text-electric">real products</span>
+          </h2>
+          <p className="text-[14.5px] leading-relaxed text-muted mb-6 max-w-md mx-auto lg:mx-0">
+            We build our own technology, and we build software for businesses — with the same engineering standard
+            either way.
+          </p>
+          <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
         </motion.div>
-        <p className="text-[14.5px] leading-relaxed text-muted mb-5">
-          We build our own technology, and we build software for businesses — with the same engineering standard either way.
-        </p>
-        <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
-      </motion.div>
+
+        <motion.ul {...staggerParent(0.12)} className="flex flex-col">
+          {PILLARS.slice(0, 3).map((p, i) => (
+            <motion.li
+              key={p.title}
+              variants={slideChild}
+              className="group flex gap-4 sm:gap-5 py-5 border-t border-ink/15 last:border-b"
+            >
+              <span className="font-display text-[12.5px] font-bold text-electric pt-0.5 tabular-nums">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 className="font-display text-[15.5px] font-semibold text-ink mb-1">{p.title}</h3>
+                <p className="text-[13.5px] leading-relaxed text-muted">{p.desc}</p>
+              </div>
+            </motion.li>
+          ))}
+        </motion.ul>
+      </div>
     </section>
 
     {/* Final CTA */}
