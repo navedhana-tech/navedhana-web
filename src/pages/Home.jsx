@@ -214,7 +214,7 @@ const Home = () => {
               key={card.title}
               {...scaleIn}
               transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className={`wwd-card rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)] ${
+              className={`wwd-card rounded-2xl bg-card border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)] ${
                 i % 2 === 1 ? 'lg:mt-12' : ''
               }`}
               onMouseMove={pointerFx ? (e) => {
@@ -229,29 +229,30 @@ const Home = () => {
               } : undefined}
               onMouseLeave={pointerFx ? (e) => { e.currentTarget.style.transform = ''; } : undefined}
             >
-              <img
-                src={card.image}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover opacity-[0.7] brightness-[0.75]"
-              />
-              {/* Scrim: unifies four photographs shot under very different
-                  lighting into one set, and keeps the list legible over
-                  whatever detail sits behind it. --accent comes from
-                  .wwd-card in index.css, so all four share the theme blue. */}
-              <div
-                className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_22%,transparent)_0%,rgba(16,25,46,0.30)_26%,rgba(16,25,46,0.80)_58%,rgba(16,25,46,0.90)_100%)]"
-                aria-hidden="true"
-              />
-              <div className="relative z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border text-[var(--accent)] border-[color-mix(in_srgb,var(--accent)_45%,transparent)] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--accent)_30%,transparent),transparent)]">
-                <card.icon size={20} />
+              {/* The photo is now a band at the top rather than a wash behind
+                  the text. On a white card there is no scrim strong enough to
+                  keep a photograph readable underneath body copy without
+                  turning it to mud — giving it its own strip keeps the image
+                  at full strength AND the list on clean white. */}
+              <div className="relative h-[100px] sm:h-[112px] overflow-hidden">
+                <img src={card.image} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+                <div
+                  className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_20%,transparent),rgba(16,25,46,0.35))]"
+                  aria-hidden="true"
+                />
               </div>
-              <h3 className="relative z-10 font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
-              <motion.ul {...staggerParent(0.05, 0.12)} className="relative z-10 flex flex-col text-[13px] sm:text-[12.5px] text-muted">
+              <div className="relative z-10 p-5 sm:p-6">
+                {/* Pulled up so the tile straddles the photo edge — the one
+                    element tying the two halves of the card together. */}
+                <div className="-mt-[38px] mb-3 w-11 h-11 rounded-xl flex items-center justify-center border bg-card text-electric border-ink/10 shadow-sm">
+                  <card.icon size={20} />
+                </div>
+                <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
+                <motion.ul {...staggerParent(0.05, 0.12)} className="flex flex-col text-[13px] sm:text-[12.5px] text-muted">
                 {card.items.map((it) => {
                   const note = it.match(ITEM_NOTE_RE);
                   return (
-                    <motion.li variants={riseChild} key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-white/[0.07] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
+                    <motion.li variants={riseChild} key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-ink/[0.08] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
                       {note ? (
                         <span>
                           {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
@@ -260,7 +261,8 @@ const Home = () => {
                     </motion.li>
                   );
                 })}
-              </motion.ul>
+                </motion.ul>
+              </div>
             </motion.div>
           ))}
         </div>

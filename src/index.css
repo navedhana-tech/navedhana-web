@@ -83,19 +83,30 @@
   --color-electric: #3b82f6;
 }
 
-/* "What We Do" glass cards (Home.jsx WWD_CARDS) — frosted panels that sit
-   directly on .dark-scope's dark background (no light-scope reset needed
-   here: these read text-ink/text-muted as .dark-scope's own light values,
-   which is exactly what a glass card over a dark bg wants). --accent is set
-   inline per card; --mx/--my are updated on mousemove (JS, gated on
-   useReducedMotion — CSS alone can't read pointer position) to drive a
-   spotlight that follows the cursor. The 3D tilt itself is also applied via
-   inline transform in that same mousemove handler, not here. */
+/* "What We Do" cards (Home.jsx WWD_CARDS) — light cards sitting on
+   .dark-scope's dark section, so they read as panels lifted off the
+   background rather than frosted glass cut into it.
+
+   That inversion is why the token block below exists: .dark-scope sets
+   --color-ink light and --color-muted pale for text sitting ON the dark
+   background. Inside a white card those values are almost invisible, so each
+   card restores the light-theme values locally — the mirror of .dark-scope.
+   Every child built on text-ink/text-muted/text-electric then re-themes
+   automatically, with no per-element overrides.
+
+   --mx/--my are updated on mousemove (JS, gated on canHover + reduced motion
+   — CSS alone can't read pointer position) to drive a spotlight that follows
+   the cursor. The 3D tilt is applied via inline transform in that same
+   handler, not here. */
 .wwd-card {
-  /* One accent for all four cards — the brand blue, resolved through
-     .dark-scope's override. These used to carry four different per-card hues
-     set inline from JS; the photographs already tell the cards apart, so the
-     extra colours were competing with the theme rather than coding anything. */
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
+  --color-electric: #0958d6;
+  --color-royal: #083f9e;
+
+  /* One accent for all four cards — the brand blue. These used to carry four
+     different per-card hues set inline from JS; the photographs already tell
+     the cards apart, so the extra colours only fought the palette. */
   --accent: var(--color-electric);
   --mx: 50%;
   --my: 50%;
@@ -109,7 +120,9 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%);
+  /* Far weaker than the dark-card version it replaces: a 30% radial that read
+     as a glow on navy reads as a dirty smudge on white. */
+  background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
   opacity: 0;
   z-index: 1;
   transition: opacity 300ms ease;
@@ -123,8 +136,8 @@
     opacity: 1;
   }
   .wwd-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.5), 0 0 40px -10px color-mix(in srgb, var(--accent) 45%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
   }
 }
 .wwd-card li::before {
@@ -133,9 +146,9 @@
   height: 5px;
   border-radius: 50%;
   background: var(--accent);
-  opacity: 0.8;
+  opacity: 0.85;
   flex: none;
-  box-shadow: 0 0 8px var(--accent);
+  /* No glow here — a box-shadow halo only reads as light on a dark card. */
 }
 
 /* Light-background counterpart to .wwd-card (About's Mission/Vision panels):
