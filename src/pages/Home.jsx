@@ -15,21 +15,19 @@ import { trackEvent } from '../lib/analytics';
 
 const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
 
-// accent is a per-card decorative color (glass-card spotlight + icon ring +
-// list-item dot) — same "one-off arbitrary color for category coding"
-// pattern ProductsTeaser's badgeClass already uses, not a new theme token.
-// Reuses --color-electric/--color-sky where the category already has a
-// brand color and the existing ProductsTeaser purple for the fourth, rather
-// than inventing four new one-off hexes.
 // `image` is a topical photograph per capability (circuit board, code, server
 // room, 3D printer), rendered as a darkened background inside each card. Kept
-// well under the text via low opacity plus an accent-tinted scrim, since these
-// cards carry a heading and a six-item list that has to stay readable.
+// well under the text via low opacity plus a scrim, since these cards carry a
+// heading and a six-item list that has to stay readable.
+//
+// There is no per-card accent colour: all four take the theme blue from
+// `--accent` on .wwd-card (index.css). The photographs already distinguish
+// the cards, so four separate hues only fought the palette.
 const WWD_CARDS = [
-  { title: 'AI Engineering', icon: Cpu, accent: 'var(--color-electric)', image: '/assets/photos/service-ai.jpg', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
-  { title: 'Custom Software', icon: Layers, accent: '#3FE1C9', image: '/assets/photos/service-software.jpg', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
-  { title: 'Intelligent Automation', icon: Workflow, accent: 'var(--color-sky)', image: '/assets/photos/service-automation.jpg', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
-  { title: 'Product Engineering', icon: Box, accent: '#6D5CE7', image: '/assets/photos/service-product.jpg', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
+  { title: 'AI Engineering', icon: Cpu, image: '/assets/photos/service-ai.jpg', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
+  { title: 'Custom Software', icon: Layers, image: '/assets/photos/service-software.jpg', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
+  { title: 'Intelligent Automation', icon: Workflow, image: '/assets/photos/service-automation.jpg', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Product Engineering', icon: Box, image: '/assets/photos/service-product.jpg', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 
 const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
@@ -205,14 +203,20 @@ const Home = () => {
             <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
           </p>
         </motion.div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* items-start lets each card size to its own content instead of the
+            grid stretching all four to match the tallest — the two four-item
+            cards were carrying a block of dead space at the bottom. The
+            alternating lg:mt-12 then turns those uneven heights into a
+            deliberate zigzag rather than a ragged edge. */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
           {WWD_CARDS.map((card, i) => (
             <motion.div
               key={card.title}
               {...scaleIn}
               transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="wwd-card rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)]"
-              style={{ '--accent': card.accent }}
+              className={`wwd-card rounded-2xl p-5 sm:p-6 bg-gradient-to-br from-white/[0.09] to-white/[0.03] border border-white/[0.14] backdrop-blur-xl shadow-[0_20px_50px_-25px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.12)] ${
+                i % 2 === 1 ? 'lg:mt-12' : ''
+              }`}
               onMouseMove={pointerFx ? (e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - r.left;
@@ -231,24 +235,15 @@ const Home = () => {
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover opacity-[0.7] brightness-[0.75]"
               />
-              {/* Accent-tinted scrim: unifies four photographs shot under very
-                  different lighting into one set, and keeps the list legible
-                  over whatever detail sits behind it. */}
+              {/* Scrim: unifies four photographs shot under very different
+                  lighting into one set, and keeps the list legible over
+                  whatever detail sits behind it. --accent comes from
+                  .wwd-card in index.css, so all four share the theme blue. */}
               <div
-                className="absolute inset-0"
-                style={{
-                  background: `linear-gradient(180deg, color-mix(in srgb, ${card.accent} 22%, transparent) 0%, rgba(16,25,46,0.30) 26%, rgba(16,25,46,0.80) 58%, rgba(16,25,46,0.90) 100%)`,
-                }}
+                className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_22%,transparent)_0%,rgba(16,25,46,0.30)_26%,rgba(16,25,46,0.80)_58%,rgba(16,25,46,0.90)_100%)]"
                 aria-hidden="true"
               />
-              <div
-                className="relative z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border"
-                style={{
-                  background: `linear-gradient(160deg, color-mix(in srgb, ${card.accent} 30%, transparent), transparent)`,
-                  borderColor: `color-mix(in srgb, ${card.accent} 45%, transparent)`,
-                  color: card.accent,
-                }}
-              >
+              <div className="relative z-10 w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center mb-3 sm:mb-4 border text-[var(--accent)] border-[color-mix(in_srgb,var(--accent)_45%,transparent)] bg-[linear-gradient(160deg,color-mix(in_srgb,var(--accent)_30%,transparent),transparent)]">
                 <card.icon size={20} />
               </div>
               <h3 className="relative z-10 font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>

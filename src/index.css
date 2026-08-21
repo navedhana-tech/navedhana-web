@@ -92,6 +92,11 @@
    spotlight that follows the cursor. The 3D tilt itself is also applied via
    inline transform in that same mousemove handler, not here. */
 .wwd-card {
+  /* One accent for all four cards — the brand blue, resolved through
+     .dark-scope's override. These used to carry four different per-card hues
+     set inline from JS; the photographs already tell the cards apart, so the
+     extra colours were competing with the theme rather than coding anything. */
+  --accent: var(--color-electric);
   --mx: 50%;
   --my: 50%;
   position: relative;
