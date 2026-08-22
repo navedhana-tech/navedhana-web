@@ -3,6 +3,7 @@ import { motion, useScroll } from 'framer-motion';
 import { Target, Eye, ShieldCheck, Lightbulb, Gem, HeartHandshake, Compass, Wrench } from 'lucide-react';
 import SectionKicker from '../components/ui/SectionKicker';
 import PageHero from '../components/ui/PageHero';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import AccentIcon from '../components/ui/AccentIcon';
 import Button from '../components/ui/Button';
 import { useReducedMotion } from '../hooks/useReducedMotion';
@@ -83,6 +84,12 @@ const STORY = [
 ];
 
 const About = () => {
+  useDocumentMeta({
+    title: 'About Navedhana — Software & AI Engineering Team',
+    description:
+      "Navedhana bridges traditional values and modern technology. Founded in 2023, we're a software development and AI engineering company focused on shipping fewer things, well.",
+  });
+
   const reducedMotion = useReducedMotion();
   const storyRef = useRef(null);
   // Progress line for the story timeline — bound to the section's own scroll

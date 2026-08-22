@@ -1,5 +1,6 @@
 import React from 'react';
 import LegalPage from '../components/ui/LegalPage';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 const CONTACT_EMAIL = 'contact@navedhana.com';
 
@@ -135,14 +136,21 @@ const SECTIONS = [
   },
 ];
 
-const Privacy = () => (
-  <LegalPage
-    kicker="Legal"
-    title="Privacy Policy"
-    updated="20 August 2026"
-    intro="What this website collects, why, and what you can ask us to do about it."
-    sections={SECTIONS}
-  />
-);
+const Privacy = () => {
+  useDocumentMeta({
+    title: 'Privacy Policy — Navedhana',
+    description: 'What this website collects, why, and what you can ask us to do about it.',
+  });
+
+  return (
+    <LegalPage
+      kicker="Legal"
+      title="Privacy Policy"
+      updated="20 August 2026"
+      intro="What this website collects, why, and what you can ask us to do about it."
+      sections={SECTIONS}
+    />
+  );
+};
 
 export default Privacy;

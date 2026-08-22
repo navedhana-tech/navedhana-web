@@ -6,6 +6,7 @@ import PlaceholderShot from '../components/ui/PlaceholderShot';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 import { scaleIn, rise } from '../lib/motion';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 // `image` is decorative abstract art, not a screenshot — see PlaceholderShot.
 const DEV_PRODUCTS = [
@@ -15,6 +16,12 @@ const DEV_PRODUCTS = [
 ];
 
 const Products = () => {
+  useDocumentMeta({
+    title: 'Products — Navedhana Software & AI Products',
+    description:
+      'Real products from Navedhana, built to solve problems we understand firsthand: Lekvya (live), and an AI Agent and QA platform in development.',
+  });
+
   return (
   <div className="bg-primary">
     {/* Product-first: the header stays compact rather than the tall one other

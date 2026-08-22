@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Palette, Sparkles, PartyPopper } from 'lucide-react';
 import { rise, scaleIn } from '../lib/motion';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 // Fanned card stack for the hero — an original recreation of the "colorful
 // festival cards" idea (not a copy of any source image/asset): three flat
@@ -31,7 +32,14 @@ const FEATURES = [
   { icon: PartyPopper, title: 'Festive Joy', desc: 'Celebrate with happiness' },
 ];
 
-const Seasonal = () => (
+const Seasonal = () => {
+  useDocumentMeta({
+    title: 'Seasonal Products — Navedhana',
+    description: 'Authentic seasonal festival products — holi colors, festival kites, and diwali decor — from Navedhana, a separate venture from our software and AI work.',
+    noindex: true,
+  });
+
+  return (
   <div className="bg-[#fff8f0]">
     <section className="relative overflow-hidden pt-[104px] sm:pt-[148px] pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -128,6 +136,7 @@ const Seasonal = () => (
       </Link>
     </section>
   </div>
-);
+  );
+};
 
 export default Seasonal;

@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Routes to prerender
-const routes = ['/', '/about', '/services', '/ai-agent', '/products', '/insights', '/vegetables', '/seasonal', '/solar', '/contact', '/privacy'];
+const routes = ['/', '/about', '/services', '/ai-agent', '/products', '/insights', '/vegetables', '/seasonal', '/solar', '/contact', '/privacy', '/terms'];
 
 const distDir = path.join(__dirname, '..', 'dist');
 const indexPath = path.join(distDir, 'index.html');

@@ -10,6 +10,7 @@ import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY }
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 
@@ -82,6 +83,12 @@ const heroItem = {
 };
 
 const Home = () => {
+  useDocumentMeta({
+    title: 'Navedhana — Software Development & AI Engineering Company',
+    description:
+      'Navedhana is a software development and AI engineering company building web, mobile, and AI-powered products — custom software, AI agents, RAG systems, and intelligent automation for startups and enterprises.',
+  });
+
   const introDone = useIntroDone();
   const reducedMotion = useReducedMotion();
   // The wwd-card tilt + spotlight need a real pointer; on touch the CSS behind

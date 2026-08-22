@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Leaf, Clock, ShieldCheck, BadgeCheck, Carrot, Salad, Apple, Sprout } from 'lucide-react';
 import { rise, scaleIn, staggerParent, riseChild } from '../lib/motion';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 // This page intentionally breaks from the site's blue design system —
 // content and the green "farm to table" palette both follow the live
@@ -27,7 +28,14 @@ const CATEGORIES = [
 // illustration instead, so this doesn't depend on any external image asset.
 const CRATE_ICONS = [Carrot, Salad, Apple, Sprout, Leaf, Carrot];
 
-const Vegetables = () => (
+const Vegetables = () => {
+  useDocumentMeta({
+    title: 'Organic Vegetables — Navedhana',
+    description: 'Farm-fresh, 100% organic vegetables delivered to your doorstep — a separate venture from Navedhana, our primary business remains software and AI engineering.',
+    noindex: true,
+  });
+
+  return (
   <div className="bg-[#f2faf5]">
     <section className="relative overflow-hidden pt-[104px] sm:pt-[148px] pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
@@ -124,6 +132,7 @@ const Vegetables = () => (
       </Link>
     </section>
   </div>
-);
+  );
+};
 
 export default Vegetables;

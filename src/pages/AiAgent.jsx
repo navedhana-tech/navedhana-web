@@ -5,6 +5,7 @@ import RequestFlow from '../components/ui/RequestFlow';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 import { rise, tiltIn, scaleIn } from '../lib/motion';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 const FLOW = [
   'User request',
@@ -18,6 +19,12 @@ const FLOW = [
 const CAPABILITIES = ['Task planning', 'Tool use', 'API integration', 'Memory / context', 'Human-in-the-loop review', 'Workflow triggers'];
 
 const AiAgent = () => {
+  useDocumentMeta({
+    title: 'AI Agent — Navedhana AI Engineering',
+    description:
+      'An AI agent built to act, not just answer: it reasons over a request, uses tools and data, and returns a completed result. Built by Navedhana, an AI development company.',
+  });
+
   return (
   <div className="bg-primary">
     <section className="pt-[104px] sm:pt-[168px] pb-6 px-4 sm:px-8 max-w-7xl mx-auto text-center">

@@ -17,6 +17,7 @@ import AiAgent from './pages/AiAgent';
 import Products from './pages/Products';
 import Insights from './pages/Insights';
 import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 import { useScrollDepth } from './hooks/useScrollDepth';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -77,6 +78,7 @@ function AppContent() {
               <Route path="/insights" element={<Insights />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="/work" element={<Navigate to="/products" replace />} />
             </Routes>
           </main>

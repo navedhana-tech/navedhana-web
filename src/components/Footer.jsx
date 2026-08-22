@@ -135,6 +135,7 @@ const Footer = () => (
         <span className="order-2 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
         <div className="order-1 sm:order-2 flex gap-2">
           <Link to="/privacy" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</Link>
+          <Link to="/terms" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</Link>
         </div>
       </div>
     </div>

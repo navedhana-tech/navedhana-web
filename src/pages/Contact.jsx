@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 import { Phone, Mail, Clock } from 'lucide-react';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 // Replaces the old decorative leaf-art image — real contact info instead of
 // empty decoration, and it absorbs the separate phone/email/availability
@@ -38,6 +39,12 @@ function useScrollProgress(ref) {
 }
 
 const Contact = () => {
+  useDocumentMeta({
+    title: 'Contact Navedhana — Software Development & AI Consulting',
+    description:
+      "Tell us the problem — you don't need to know whether you need AI, automation, or custom software. Get in touch with Navedhana's software and AI engineering team.",
+  });
+
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);

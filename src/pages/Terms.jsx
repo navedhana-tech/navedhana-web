@@ -1,5 +1,6 @@
 import React from 'react';
 import LegalPage from '../components/ui/LegalPage';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 
 const CONTACT_EMAIL = 'contact@navedhana.com';
 
@@ -125,14 +126,21 @@ const SECTIONS = [
   },
 ];
 
-const Terms = () => (
-  <LegalPage
-    kicker="Legal"
-    title="Terms of Service"
-    updated="20 August 2026"
-    intro="The terms that apply when you use this website."
-    sections={SECTIONS}
-  />
-);
+const Terms = () => {
+  useDocumentMeta({
+    title: 'Terms of Service — Navedhana',
+    description: 'The terms that apply when you use this website.',
+  });
+
+  return (
+    <LegalPage
+      kicker="Legal"
+      title="Terms of Service"
+      updated="20 August 2026"
+      intro="The terms that apply when you use this website."
+      sections={SECTIONS}
+    />
+  );
+};
 
 export default Terms;
