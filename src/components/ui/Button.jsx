@@ -1,92 +1,81 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { ChevronRight } from 'lucide-react';
 
+// text-surface (not text-primary/white) for primary's label+icon — a cooler,
+// slightly greyer theme tone ("silver") instead of stark white on the blue
+// fill, while staying an existing @theme token rather than a one-off color.
 const VARIANTS = {
- primary: 'bg-electric text-primary shadow-lg shadow-electric/25 hover:shadow-xl hover:shadow-electric/30 btn-signal',
- outline: 'border border-ink/15 text-ink bg-ink/[0.03] hover:bg-ink/[0.08] hover:border-electric/30 hover:translate-x-[1px]',
+ primary: 'bg-electric text-surface shadow-sm hover:bg-royal hover:shadow-md',
+ outline: 'border border-ink/15 text-ink bg-ink/[0.03] hover:bg-ink/[0.08] hover:border-electric/30',
  link: 'relative text-electric font-semibold hover:text-royal btn-underline',
 };
 
 // Static fallback for the variants above — same resting look, no hover
 // treatment at all (used by `hoverEffects={false}` call sites).
 const STATIC_VARIANTS = {
- primary: 'bg-electric text-primary shadow-lg shadow-electric/25',
+ primary: 'bg-electric text-surface shadow-sm',
  outline: 'border border-ink/15 text-ink bg-ink/[0.03]',
  link: 'text-electric font-semibold',
 };
 
-// `inline` sits inside running prose, so it can't take real padding without
+// Pill shape, label padded on the left only — the right side is closed off
+// by the icon chip itself (see CHIP_SIZE), not by matching right padding.
+// `inline` sits inside running prose so it can't take real padding without
 // wrecking line-height — instead it gets a 44px min-height on touch-sized
 // screens only (a tappable target), collapsing back to normal inline flow at
 // sm:+ where a mouse is doing the pointing.
 const SIZES = {
- sm: 'px-5 py-3 sm:py-2.5 text-[14.5px] sm:text-sm',
- lg: 'px-6 sm:px-8 py-3.5 sm:py-4 text-[15.5px] sm:text-lg',
+ sm: 'pl-5 pr-1.5 py-1.5 text-[13.5px] sm:text-[13px]',
+ lg: 'pl-6 sm:pl-7 pr-2 py-2 text-[15px] sm:text-base',
  inline: 'text-[14px] sm:text-[13px] min-h-[44px] sm:min-h-0 align-middle',
 };
 
-// A label ending in an arrow glyph gets that glyph split into its own span
-// so it can shift independently on hover — every existing `<Button>Label
-// →</Button>` call site picks this up automatically, no call-site changes.
+const CHIP_SIZE = { sm: 'w-7 h-7', lg: 'w-9 h-9' };
+const CHIP_ICON_SIZE = { sm: 14, lg: 16 };
+// White chip reads on the blue primary fill; the outline variant is nearly
+// white itself, so its chip needs a dark tint instead to stay visible.
+const CHIP_BG = { primary: 'bg-white/15', outline: 'bg-ink/10' };
+
+// A label ending in an arrow glyph has that glyph stripped — every existing
+// `<Button>Label →</Button>` call site renders it as a ChevronRight instead,
+// no call-site changes needed.
 const ARROW_RE = /\s*(→|↗)\s*$/;
 const splitArrow = (children) => {
- if (typeof children !== 'string') return { label: children, arrow: null };
+ if (typeof children !== 'string') return { label: children, hasArrow: false };
  const match = children.match(ARROW_RE);
- if (!match) return { label: children, arrow: null };
- return { label: children.slice(0, match.index), arrow: match[1] };
+ if (!match) return { label: children, hasArrow: false };
+ return { label: children.slice(0, match.index), hasArrow: true };
 };
 
-// Magnetic hover: the button drifts a capped amount toward the cursor, then
-// springs back. Reused wherever a primary/outline CTA needs it — pass`to`
-// for a route Link, `href` for an anchor, or neither for a plain button.
+// Reused wherever a primary/outline/link CTA needs consistent sizing and
+// hover color/shadow treatment — pass `to` for a route Link, `href` for an
+// anchor, or neither for a plain button. No drift/translate on hover: only
+// color, shadow and underline change, the button itself stays put.
 const Button = ({ to, href, variant = 'primary', size = 'lg', hoverEffects = true, className = '', children, ...props }) => {
- const ref = useRef(null);
- const x = useMotionValue(0);
- const y = useMotionValue(0);
- const springX = useSpring(x, { stiffness: 300, damping: 20 });
- const springY = useSpring(y, { stiffness: 300, damping: 20 });
-
- const onMouseMove = (e) => {
- const rect = ref.current?.getBoundingClientRect();
- if (!rect) return;
- const relX = e.clientX - (rect.left + rect.width / 2);
- const relY = e.clientY - (rect.top + rect.height / 2);
- x.set(relX * 0.25);
- y.set(relY * 0.25);
- };
-
- const onMouseLeave = () => {
- x.set(0);
- y.set(0);
- };
-
  const variantClasses = hoverEffects ? VARIANTS[variant] : STATIC_VARIANTS[variant];
- const classes = `group inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${SIZES[size]} ${variantClasses} ${className}`;
+ // Only primary/outline get the pill + icon-chip treatment — `link` stays a
+ // plain inline text link with its underline, no chip fits inline prose.
+ const isChip = variant !== 'link';
+ const shape = isChip ? 'rounded-full' : 'rounded-xl';
+ const classes = `group inline-flex items-center justify-center gap-2 ${shape} font-semibold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${SIZES[size]} ${variantClasses} ${className}`;
 
  const Component = to ? Link : href ? 'a' : 'button';
  const linkProps = to ? { to } : href ? { href } : {};
- const { label, arrow } = splitArrow(children);
+ const { label, hasArrow } = splitArrow(children);
 
  return (
- <motion.span
- ref={ref}
- style={{ x: springX, y: springY }}
- onMouseMove={hoverEffects ? onMouseMove : undefined}
- onMouseLeave={hoverEffects ? onMouseLeave : undefined}
- className="inline-block"
- >
  <Component className={classes} {...linkProps} {...props}>
  {label}
- {arrow && (
+ {hasArrow && isChip && (
  <span
- className={hoverEffects ? 'inline-block transition-transform duration-base group-hover:translate-x-1.5' : 'inline-block'}
+ className={`inline-flex items-center justify-center shrink-0 ${CHIP_SIZE[size] || CHIP_SIZE.sm} rounded-full ${CHIP_BG[variant] || CHIP_BG.primary} transition-transform duration-base group-hover:translate-x-0.5`}
  >
- {arrow}
+ <ChevronRight size={CHIP_ICON_SIZE[size] || CHIP_ICON_SIZE.sm} strokeWidth={2.5} />
  </span>
  )}
+ {hasArrow && !isChip && <ChevronRight size={15} strokeWidth={2.5} className="inline-block" />}
  </Component>
- </motion.span>
  );
 };
 

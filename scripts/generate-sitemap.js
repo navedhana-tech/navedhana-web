@@ -14,9 +14,10 @@ const routes = [
   { path: '/products', priority: '0.8', changefreq: 'weekly' },
   { path: '/insights', priority: '0.5', changefreq: 'monthly' },
   { path: '/vegetables', priority: '0.3', changefreq: 'monthly' },
+  { path: '/seasonal', priority: '0.3', changefreq: 'monthly' },
+  { path: '/solar', priority: '0.3', changefreq: 'monthly' },
   { path: '/contact', priority: '0.8', changefreq: 'monthly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
-  { path: '/terms', priority: '0.3', changefreq: 'yearly' },
 ];
 
 // Get current date in YYYY-MM-DD format

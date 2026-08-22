@@ -214,7 +214,7 @@ const Home = () => {
               key={card.title}
               {...scaleIn}
               transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="wwd-card flex flex-col rounded-2xl bg-card border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)]"
+              className="wwd-card flex flex-col rounded-2xl bg-primary border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)]"
               onMouseMove={pointerFx ? (e) => {
                 const r = e.currentTarget.getBoundingClientRect();
                 const x = e.clientX - r.left;
@@ -351,12 +351,10 @@ const Home = () => {
         /about, not duplicated here (was a byte-identical copy of About's
         "What We Believe" section prior to this pass). */}
     {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
-        /about, not duplicated here. dark-scope only: the max-w-3xl moved from
-        the section to an inner wrapper so the dark background spans the full
-        width instead of stopping at the text column. Content and layout are
-        otherwise unchanged. */}
-    <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
-      <div className="max-w-3xl mx-auto text-center">
+        /about, not duplicated here. Dark panel is an inset rounded card, not
+        a full-bleed band, so it reads as a distinct floating block. */}
+    <section className="py-12 sm:py-20 px-4 sm:px-8">
+      <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-6 sm:px-14 py-12 sm:py-16 text-center">
         <motion.div {...rise}>
           <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
           <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-5">

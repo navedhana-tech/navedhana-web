@@ -238,7 +238,7 @@ const About = () => {
         <motion.div {...scaleIn} className="max-w-xl mx-auto">
           <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink mb-3">Want to talk through a project?</h2>
           <Button to="/contact" className="mt-1" onClick={() => trackEvent('cta_click', { location: 'about' })}>
-            Discuss Your Project →
+            Start the Conversation →
           </Button>
         </motion.div>
       </section>

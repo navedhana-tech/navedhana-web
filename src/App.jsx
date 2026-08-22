@@ -8,6 +8,8 @@ import LogoIntro from './components/intro/LogoIntro';
 import { IntroContext } from './lib/introContext';
 import Home from './pages/Home';
 import Vegetables from './pages/Vegetables';
+import Seasonal from './pages/Seasonal';
+import Solar from './pages/Solar';
 import Services from './pages/Services';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -15,7 +17,6 @@ import AiAgent from './pages/AiAgent';
 import Products from './pages/Products';
 import Insights from './pages/Insights';
 import Privacy from './pages/Privacy';
-import Terms from './pages/Terms';
 import { useScrollDepth } from './hooks/useScrollDepth';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -68,14 +69,14 @@ function AppContent() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/vegetables" element={<Vegetables />} />
+              <Route path="/seasonal" element={<Seasonal />} />
+              <Route path="/solar" element={<Solar />} />
               <Route path="/services" element={<Services />} />
               <Route path="/ai-agent" element={<AiAgent />} />
               <Route path="/products" element={<Products />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy" element={<Privacy />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/seasonal" element={<Navigate to="/vegetables" replace />} />
               <Route path="/work" element={<Navigate to="/products" replace />} />
             </Routes>
           </main>

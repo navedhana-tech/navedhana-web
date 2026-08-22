@@ -77,7 +77,7 @@ const AiAgent = () => {
         <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-2.5">Have an agent use case in mind?</h2>
         <p className="text-sm text-muted mb-6">We build practical AI agents and automation for real workflows, today.</p>
         <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'ai_agent' })}>
-          Talk to us about AI agents →
+          Talk to Us About AI Agents →
         </Button>
       </motion.div>
     </section>

@@ -407,36 +407,6 @@
   }
 }
 
-/* Primary-button "signal sweep" (src/components/ui/Button.jsx, `primary`
-   variant) — a translucent bar that travels through the button once per
-   hover, via a pseudo-element so no extra DOM node is needed. Parks at the
-   far edge while hovered (no repeat), reverses on hover-leave; :active
-   covers the mobile tap/press response for free, no touch JS needed. */
-.btn-signal {
-  position: relative;
-  overflow: hidden;
-}
-.btn-signal::before {
-  content: '';
-  position: absolute;
-  inset: -20% -10%;
-  background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.4) 50%, transparent 60%);
-  transform: translateX(-140%);
-  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-}
-/* :active is deliberately ungated — it is the tap response on touch, where
-   :hover would latch instead of firing once. */
-.btn-signal:focus-visible::before,
-.btn-signal:active::before {
-  transform: translateX(140%);
-}
-@media (hover: hover) {
-  .btn-signal:hover::before {
-    transform: translateX(140%);
-  }
-}
-
 /* Navbar link (src/components/Navbar.jsx desktop links) — position:relative
    is what the active-route underline (a motion.span, absolutely positioned)
    anchors to. Hover gets its own separate treatment — a soft pill
@@ -470,6 +440,14 @@
   .btn-underline:hover::after {
     transform: scaleX(1);
   }
+}
+
+/* Contact page's one brand detail (src/pages/Contact.jsx) — a faint dot grid
+   behind the contact-info/form columns, opacity applied at the call site so
+   this stays a plain reusable pattern rather than a single-use magic number. */
+.contact-dot-grid {
+  background-image: radial-gradient(color-mix(in srgb, var(--color-electric) 60%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
 }
 
 :root {

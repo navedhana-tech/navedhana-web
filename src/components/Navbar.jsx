@@ -77,7 +77,7 @@ const Navbar = ({ introDone = true }) => {
         className={`fixed z-50 mx-auto flex items-center justify-between gap-6 border transition-all duration-300 ease-in-out ${
           isScrolled
             ? 'top-3 sm:top-4 left-3 right-3 sm:left-6 sm:right-6 lg:left-10 lg:right-10 max-w-7xl h-[68px] px-5 sm:px-8 rounded-full bg-card/65 backdrop-blur-xl backdrop-saturate-150 border-white/40 shadow-[0_8px_30px_-8px_rgba(28,26,23,0.2),0_1px_0_0_rgba(255,255,255,0.5)_inset]'
-            : 'top-0 left-0 right-0 max-w-none w-full h-[84px] px-4 sm:px-8 rounded-none bg-transparent border-transparent shadow-none'
+            : 'top-0 left-0 right-0 max-w-none w-full h-[76px] px-4 sm:px-8 rounded-none bg-transparent border-transparent shadow-none'
         }`}
       >
         <Link to="/" className="group relative flex items-center gap-2.5 flex-shrink-0 min-h-[44px]">
@@ -177,7 +177,7 @@ const Navbar = ({ introDone = true }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -16, scale: 0.97 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-[92px] left-4 right-4 z-[2000] rounded-2xl bg-card border border-ink/15 shadow-2xl p-2 max-h-[calc(100vh-110px)] overflow-auto lg:hidden"
+            className="fixed top-[84px] left-4 right-4 z-[2000] rounded-2xl bg-card border border-ink/15 shadow-2xl p-2 max-h-[calc(100vh-100px)] overflow-auto lg:hidden"
           >
             {links.map((link) => (
               <Link

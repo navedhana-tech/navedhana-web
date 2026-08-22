@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Linkedin, Mail } from 'lucide-react';
+import { Linkedin, Instagram, Mail } from 'lucide-react';
 
 const SERVICE_LINKS = [
   'AI Engineering',
@@ -20,8 +20,16 @@ const COMPANY_LINKS = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
   { name: 'Insights', path: '/insights' },
-  { name: 'Vegetable Service', path: '/vegetables' },
   { name: 'Contact', path: '/contact' },
+];
+
+// Mirrors OTHER_VENTURES on the Services page (see Services.jsx) — Navedhana's
+// non-software ventures, kept in their own column rather than folded into
+// Company so they don't read as more software offerings.
+const VENTURE_LINKS = [
+  { name: 'Agri Tech Service', path: '/vegetables' },
+  { name: 'Seasonal Products', path: '/seasonal' },
+  { name: 'Solar Service', path: '/solar' },
 ];
 
 // Link rows carry their own vertical padding rather than the column using
@@ -46,7 +54,7 @@ const Footer = () => (
       {/* Stays 2-wide on a phone. A single column was tried and measured 1105px
           tall — thirteen 44px link rows stacked is a worse mobile experience
           than two readable columns, even though each column is narrow. */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-7 sm:gap-10 mb-9 sm:mb-11">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-7 sm:gap-10 mb-9 sm:mb-11">
         <div className="col-span-2 md:col-span-1">
           <Link to="/" className="inline-flex items-center gap-2.5 mb-3 min-h-[44px]">
             <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-9 w-auto" />
@@ -64,6 +72,15 @@ const Footer = () => (
               aria-label="LinkedIn"
             >
               <Linkedin size={18} />
+            </a>
+            <a
+              href="https://www.instagram.com/navedhana.pvt.ltd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram size={18} />
             </a>
             <a
               href="mailto:navedhanaprofitamplifier@gmail.com"
@@ -104,12 +121,19 @@ const Footer = () => (
             </Link>
           ))}
         </FooterColumn>
+
+        <FooterColumn title="Other Ventures">
+          {VENTURE_LINKS.map((link) => (
+            <Link key={link.name} to={link.path} className={FOOTER_LINK}>
+              {link.name}
+            </Link>
+          ))}
+        </FooterColumn>
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 pt-5 sm:pt-6 border-t border-ink/15 text-[13px] sm:text-[12.5px] text-muted/60">
         <span className="order-2 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
         <div className="order-1 sm:order-2 flex gap-2">
-          <Link to="/terms" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</Link>
           <Link to="/privacy" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</Link>
         </div>
       </div>

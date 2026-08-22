@@ -120,13 +120,12 @@ const ENGAGEMENT = [
 const LEKVYA_CAPABILITIES = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
 
 // Secondary by design: Navedhana runs these, but this page is for software
-// buyers and the hierarchy should say so. Both link out rather than expanding.
-// `/seasonal` exists only as a redirect to /vegetables, so both point there —
-// no seasonal-products route is invented here.
+// buyers and the hierarchy should say so. Each links out to its own minimal
+// venture page (Vegetables.jsx-style) rather than expanding inline here.
 const OTHER_VENTURES = [
   { title: 'Agri Tech Service', icon: Sprout, desc: 'Farm-fresh, organic vegetables and seasonal produce.', to: '/vegetables', status: null },
-  { title: 'Seasonal Products', icon: Gift, desc: 'Authentic seasonal and festive products.', to: '/vegetables', status: 'Launching soon' },
-  { title: 'Solar Service', icon: Sun, desc: 'Solar installation and clean energy solutions.', to: '/contact', status: 'Launching soon' },
+  { title: 'Seasonal Products', icon: Gift, desc: 'Authentic seasonal and festive products.', to: '/seasonal', status: 'Launching soon' },
+  { title: 'Solar Service', icon: Sun, desc: 'Solar installation and clean energy solutions.', to: '/solar', status: null },
 ];
 
 // The navbar is fixed, so an anchored section would otherwise land underneath
@@ -140,12 +139,15 @@ const ANCHOR_OFFSET = 'scroll-mt-[96px]';
 // text-ink/text-muted/text-royal already re-theme automatically via the
 // .dark-scope cascade, so only the fill and divider need the branch.
 const ServiceBuildGrid = ({ items, dark }) => (
-  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-px rounded-2xl overflow-hidden border ${dark ? 'bg-white/10 border-white/10' : 'bg-ink/15 border-ink/15'}`}>
+  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl overflow-hidden border ${dark ? 'bg-white/10 border-white/10' : 'bg-ink/15 border-ink/15'}`}>
     {items.map((it, i) => (
-      <div key={it.title} className={dark ? 'bg-[var(--hero-bg)] p-4' : 'bg-card p-4'}>
-        <span className="font-display text-[10.5px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-        <h4 className="font-display text-[13.5px] font-semibold text-ink mt-1.5 leading-snug">{it.title}</h4>
-        <p className="text-[12px] leading-snug text-muted mt-1">{it.desc}</p>
+      <div
+        key={it.title}
+        className={`p-3 transition-colors duration-300 ${dark ? 'bg-[var(--hero-bg)] hover:bg-white/[0.04]' : 'bg-card hover:bg-ink/[0.02]'}`}
+      >
+        <span className="font-display text-[10px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+        <h4 className="font-display text-[13px] font-semibold text-ink mt-1 leading-snug">{it.title}</h4>
+        <p className="text-[11.5px] leading-snug text-muted mt-0.5">{it.desc}</p>
       </div>
     ))}
   </div>
@@ -303,8 +305,8 @@ const Services = () => {
           page's two dark sections read as one system. Navedhana runs these
           too, but a software buyer should not meet them as peers of AI
           Engineering — compact cards, links out, clearly labelled status. */}
-      <section aria-labelledby="ventures-heading" className="dark-scope bg-[var(--hero-bg)] py-14 sm:py-20 px-4 sm:px-8">
-        <div className="max-w-6xl mx-auto">
+      <section aria-labelledby="ventures-heading" className="py-12 sm:py-20 px-4 sm:px-8">
+        <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-6 sm:px-12 py-12 sm:py-16">
           <motion.div {...rise} className="mb-8 sm:mb-10">
             <SectionKicker className="mb-3.5">Beyond the Software</SectionKicker>
             <h2 id="ventures-heading" className="font-display text-[24px] sm:text-[30px] font-bold tracking-tight text-ink mb-2">
@@ -318,26 +320,26 @@ const Services = () => {
           {/* Plain Links, not <Button>: Button splits a trailing arrow out of
               its label and applies its own padding, neither of which suits a
               two-line card — forcing it needed !important overrides. */}
-          <motion.div {...staggerParent(0.09)} className="grid sm:grid-cols-3 gap-4">
+          <motion.div {...staggerParent(0.09)} className="grid sm:grid-cols-3 gap-3">
             {OTHER_VENTURES.map((v, i) => (
               <motion.div key={v.title} variants={riseChild} className="h-full">
                 <Link
                   to={v.to}
-                  className="group h-full flex flex-col justify-between min-h-[168px] p-6 rounded-2xl border border-white/10 bg-white/[0.04] hover:border-electric/40 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--hero-bg)] transition-colors duration-300"
+                  className="group h-full flex flex-col justify-between min-h-[124px] p-4 rounded-xl border border-white/10 bg-white/[0.04] hover:border-electric/40 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--hero-bg)] transition-colors duration-300"
                 >
                   <div>
-                    <span className="block font-display text-[11px] font-bold text-electric tabular-nums mb-3">
+                    <span className="block font-display text-[10px] font-bold text-electric tabular-nums mb-1.5">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <h3 className="font-display text-[19px] font-semibold text-ink mb-1.5">{v.title}</h3>
-                    <p className="text-[13px] text-muted">{v.desc}</p>
+                    <h3 className="font-display text-[16px] font-semibold text-ink mb-1">{v.title}</h3>
+                    <p className="text-[12.5px] text-muted">{v.desc}</p>
                   </div>
                   {v.status ? (
-                    <span className="self-start mt-5 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
+                    <span className="self-start mt-3 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
                       {v.status}
                     </span>
                   ) : (
-                    <span className="self-start mt-5 flex items-center gap-1.5 text-[12.5px] font-display font-bold text-electric">
+                    <span className="self-start mt-3 flex items-center gap-1.5 text-[12px] font-display font-bold text-electric">
                       Explore
                       <ArrowUpRight
                         size={14}
@@ -363,7 +365,7 @@ const Services = () => {
             that you do not need custom software.
           </p>
           <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'services' })}>
-            Discuss your project →
+            Talk to an Engineer →
           </Button>
         </motion.div>
       </section>
