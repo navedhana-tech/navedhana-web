@@ -61,11 +61,11 @@ const Footer = () => (
             <span className="font-display font-semibold text-xl text-ink">Navedhana</span>
           </Link>
           <p className="text-[14px] sm:text-[13.5px] leading-relaxed text-muted/80 max-w-[280px] mb-5">
-            Software + AI engineering for real-world problems.
+            Innovating Solution. Growing Futures
           </p>
           <div className="flex gap-3">
             <a
-              href="https://www.linkedin.com/company/navedhana-profit-amplifier-private-limited/"
+              href="https://www.linkedin.com/company/navedhana/home/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
@@ -83,7 +83,7 @@ const Footer = () => (
               <Instagram size={18} />
             </a>
             <a
-              href="mailto:navedhanaprofitamplifier@gmail.com"
+              href="mailto:contact@navedhana.com"
               className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
               aria-label="Email"
             >

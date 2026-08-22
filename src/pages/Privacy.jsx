@@ -1,7 +1,7 @@
 import React from 'react';
 import LegalPage from '../components/ui/LegalPage';
 
-const CONTACT_EMAIL = 'navedhanaprofitamplifier@gmail.com';
+const CONTACT_EMAIL = 'contact@navedhana.com';
 
 // Content describes what this site actually does today: one EmailJS-backed
 // contact form (src/pages/Contact.jsx) and Google Analytics (src/lib/

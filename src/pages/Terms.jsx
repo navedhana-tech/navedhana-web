@@ -1,7 +1,7 @@
 import React from 'react';
 import LegalPage from '../components/ui/LegalPage';
 
-const CONTACT_EMAIL = 'navedhanaprofitamplifier@gmail.com';
+const CONTACT_EMAIL = 'contact@navedhana.com';
 
 // Terms for the WEBSITE, not for client engagements — actual project work is
 // governed by whatever contract is signed for it, and this page says so rather

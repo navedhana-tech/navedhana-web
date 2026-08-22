@@ -334,12 +334,13 @@ const Services = () => {
                     <h3 className="font-display text-[16px] font-semibold text-ink mb-1">{v.title}</h3>
                     <p className="text-[12.5px] text-muted">{v.desc}</p>
                   </div>
-                  {v.status ? (
-                    <span className="self-start mt-3 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
-                      {v.status}
-                    </span>
-                  ) : (
-                    <span className="self-start mt-3 flex items-center gap-1.5 text-[12px] font-display font-bold text-electric">
+                  <div className="self-start mt-3 flex items-center gap-2 flex-wrap">
+                    {v.status && (
+                      <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
+                        {v.status}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1.5 text-[12px] font-display font-bold text-electric">
                       Explore
                       <ArrowUpRight
                         size={14}
@@ -347,7 +348,7 @@ const Services = () => {
                         aria-hidden="true"
                       />
                     </span>
-                  )}
+                  </div>
                 </Link>
               </motion.div>
             ))}

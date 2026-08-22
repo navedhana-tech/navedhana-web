@@ -383,6 +383,23 @@
     translate: 0 -10px;
   }
 }
+/* Seasonal.jsx hero card stack — each card sets its own `transform: rotate()`
+   inline for the fan angle; this only animates `translate` (a standalone
+   property, per the same trick as iso-float above) so the two never fight
+   over the `transform` property. Kept as a separate class/keyframe from
+   iso-card since that one does a 3D tilt this flat fan doesn't want. */
+@keyframes festival-card-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+.festival-card-float {
+  animation: festival-card-float 5s ease-in-out infinite;
+}
 .iso-card {
   transform: rotateX(20deg) rotateY(-15deg) rotateZ(4deg);
   transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s 500ms;
