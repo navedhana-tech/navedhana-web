@@ -17,4 +17,5 @@ aptPkgs = [
   "libgtk-3-0",
   "libxshmfence1",
   "libglu1",
+  "unzip",
 ]
