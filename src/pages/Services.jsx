@@ -138,12 +138,16 @@ const ANCHOR_OFFSET = 'scroll-mt-[96px]';
 // block. `dark` swaps the cell fill between the two section backgrounds;
 // text-ink/text-muted/text-royal already re-theme automatically via the
 // .dark-scope cascade, so only the fill and divider need the branch.
+//
+// 2x2 on phones too, not a 4-high stack: the descriptions are short enough to
+// survive a half-width column, and stacking them cost ~130px per service for
+// no extra information.
 const ServiceBuildGrid = ({ items, dark }) => (
-  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-px rounded-xl overflow-hidden border ${dark ? 'bg-white/10 border-white/10' : 'bg-ink/15 border-ink/15'}`}>
+  <div className={`grid grid-cols-2 gap-px rounded-xl overflow-hidden border ${dark ? 'bg-white/10 border-white/10' : 'bg-ink/15 border-ink/15'}`}>
     {items.map((it, i) => (
       <div
         key={it.title}
-        className={`p-3 transition-colors duration-300 ${dark ? 'bg-[var(--hero-bg)] hover:bg-white/[0.04]' : 'bg-card hover:bg-ink/[0.02]'}`}
+        className={`p-2.5 sm:p-3 transition-colors duration-300 ${dark ? 'bg-[var(--hero-bg)] hover:bg-white/[0.04]' : 'bg-card hover:bg-ink/[0.02]'}`}
       >
         <span className="font-display text-[10px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
         <h4 className="font-display text-[13px] font-semibold text-ink mt-1 leading-snug">{it.title}</h4>
@@ -192,18 +196,21 @@ const Services = () => {
           fixed navbar costs a phone too much of its viewport. */}
       <section aria-labelledby="capabilities-heading" className="pb-10 sm:pb-14 px-4 sm:px-8 max-w-6xl mx-auto">
         <h2 id="capabilities-heading" className="sr-only">Our capabilities</h2>
-        <motion.ul {...staggerParent(0.07)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        {/* 2-up on phones. The trailing icon is dropped below sm — at half
+            width it crowded titles like "Intelligent Automation" into an
+            extra line, costing more height than the icon was worth. */}
+        <motion.ul {...staggerParent(0.07)} className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
           {GROUPS.map((grp, i) => (
             <motion.li key={grp.id} variants={riseChild}>
               <a
                 href={`#${grp.id}`}
-                className="group flex items-center gap-3 min-h-[56px] px-4 py-3 rounded-xl border border-ink/15 bg-card hover:border-electric/40 hover:bg-electric/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary transition-colors duration-300"
+                className="group flex items-center gap-2.5 sm:gap-3 min-h-[56px] px-3 sm:px-4 py-3 rounded-xl border border-ink/15 bg-card hover:border-electric/40 hover:bg-electric/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary transition-colors duration-300"
               >
                 <span className="font-display text-[12.5px] font-bold text-electric tabular-nums">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="font-display text-[14.5px] font-semibold text-ink flex-1">{grp.title}</span>
-                <grp.icon size={17} className="text-muted flex-shrink-0" aria-hidden="true" />
+                <span className="font-display text-[13.5px] sm:text-[14.5px] font-semibold text-ink flex-1 leading-snug">{grp.title}</span>
+                <grp.icon size={17} className="text-muted flex-shrink-0 hidden sm:block" aria-hidden="true" />
               </a>
             </motion.li>
           ))}
@@ -225,12 +232,18 @@ const Services = () => {
             aria-labelledby={`${grp.id}-heading`}
             className={`${ANCHOR_OFFSET} px-4 sm:px-8 ${grp.dark ? 'dark-scope bg-[var(--hero-bg)]' : ''}`}
           >
-            <div className="max-w-6xl mx-auto py-10 sm:py-16">
+            <div className="max-w-6xl mx-auto py-8 sm:py-16">
               <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                {/* Hidden below lg. The artwork is decorative (alt="",
+                    aria-hidden) and only sits beside the copy at lg+; on a
+                    phone it stacked on top and cost 200-330px per service —
+                    a third of a viewport each, ~1070px over the page, for no
+                    information. display:none also keeps Chrome from fetching
+                    these ~1800px-wide sources on mobile data. */}
                 <motion.div
                   {...(imageSecond ? slideRight : slideLeft)}
                   transition={{ duration: 0.5, delay: 0.04 }}
-                  className={`relative min-w-0 flex justify-center ${imageSecond ? 'lg:order-2' : ''}`}
+                  className={`relative min-w-0 hidden lg:flex justify-center ${imageSecond ? 'lg:order-2' : ''}`}
                 >
                   {grp.boxed ? (
                     // This source photo has an opaque background rather than
@@ -305,9 +318,9 @@ const Services = () => {
           page's two dark sections read as one system. Navedhana runs these
           too, but a software buyer should not meet them as peers of AI
           Engineering — compact cards, links out, clearly labelled status. */}
-      <section aria-labelledby="ventures-heading" className="py-12 sm:py-20 px-4 sm:px-8">
-        <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-6 sm:px-12 py-12 sm:py-16">
-          <motion.div {...rise} className="mb-8 sm:mb-10">
+      <section aria-labelledby="ventures-heading" className="py-9 sm:py-20 px-4 sm:px-8">
+        <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-5 sm:px-12 py-9 sm:py-16">
+          <motion.div {...rise} className="mb-6 sm:mb-10">
             <SectionKicker className="mb-3.5">Beyond the Software</SectionKicker>
             <h2 id="ventures-heading" className="font-display text-[24px] sm:text-[30px] font-bold tracking-tight text-ink mb-2">
               Other Navedhana ventures

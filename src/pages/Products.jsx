@@ -69,18 +69,27 @@ const Products = () => {
       </motion.div>
     </section>
 
-    <section className="py-6 pb-16 px-4 sm:px-8 max-w-[1120px] mx-auto">
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {/* Cards run horizontally on phones (art as a narrow left strip) and switch
+        to the stacked card at sm+. Stacked, the 170px art block sat above every
+        card and pushed the three of them to ~1150px; side-by-side it is ~685px
+        for the same content, with the art still carrying the product icon. */}
+    <section className="py-6 pb-12 sm:pb-16 px-4 sm:px-8 max-w-[1120px] mx-auto">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {DEV_PRODUCTS.map((p, i) => (
           <motion.div
             key={p.title}
             {...scaleIn}
             transition={{ duration: 0.5, delay: i * 0.1 }}
-            className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-col hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
+            className="rounded-2xl overflow-hidden border border-ink/15 bg-card flex flex-row sm:flex-col hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
             style={{ borderTopColor: p.accent, borderTopWidth: '3px' }}
           >
-            <PlaceholderShot icon={p.icon} image={p.image} label="Preview coming soon" className="w-full h-[170px]" />
-            <div className="p-5 sm:p-6">
+            <PlaceholderShot
+              icon={p.icon}
+              image={p.image}
+              label="Preview coming soon"
+              className="w-[104px] shrink-0 self-stretch sm:w-full sm:h-[170px] px-2 sm:px-0 text-center"
+            />
+            <div className="p-4 sm:p-6 min-w-0">
               <span
                 className="inline-block mb-3 px-2.5 py-1 rounded-full border font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-wide"
                 style={{

@@ -183,13 +183,13 @@ const About = () => {
         </div>
       </section>
 
-      <section className="dark-scope bg-[var(--hero-bg)] py-10 sm:py-16 px-4 sm:px-8">
+      <section className="dark-scope bg-[var(--hero-bg)] py-8 sm:py-16 px-4 sm:px-8">
         <div className="max-w-5xl mx-auto">
-          <motion.div {...tiltIn} className="max-w-xl mx-auto mb-10 text-center">
+          <motion.div {...tiltIn} className="max-w-xl mx-auto mb-7 sm:mb-10 text-center">
             <SectionKicker centered className="mb-3.5">Purpose</SectionKicker>
             <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">Why we do this</h2>
           </motion.div>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
             {MISSION_VISION.map((m, i) => (
               <motion.div
                 key={m.label}
@@ -198,13 +198,13 @@ const About = () => {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
                 onMouseMove={onCardMove}
-                className="glow-card rounded-2xl border border-ink/15 bg-card p-5 sm:p-8"
+                className="glow-card rounded-2xl border border-ink/15 bg-card p-4 sm:p-8"
                 style={{ '--accent': m.accent, borderTopColor: m.accent, borderTopWidth: '3px' }}
               >
-                <AccentIcon accent={m.accent} className="w-12 h-12 mb-5">
+                <AccentIcon accent={m.accent} className="w-10 h-10 mb-3.5 sm:w-12 sm:h-12 sm:mb-5">
                   <m.icon size={22} />
                 </AccentIcon>
-                <h3 className="font-display text-[20px] font-semibold text-ink mb-3">{m.label}</h3>
+                <h3 className="font-display text-[18px] sm:text-[20px] font-semibold text-ink mb-2 sm:mb-3">{m.label}</h3>
                 <p className="text-[14.5px] leading-relaxed text-muted">{m.body}</p>
               </motion.div>
             ))}
@@ -212,9 +212,9 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 px-4 sm:px-8">
+      <section className="py-8 sm:py-16 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...slideLeft} className="max-w-xl mx-auto mb-10 text-center">
+          <motion.div {...slideLeft} className="max-w-xl mx-auto mb-7 sm:mb-10 text-center">
             <SectionKicker centered className="mb-3.5">What We Believe</SectionKicker>
             <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">Our core values</h2>
             <p className="text-[14.5px] text-muted mt-3.5">The principles that guide every decision we make.</p>
@@ -227,21 +227,24 @@ const About = () => {
               <motion.div
                 key={p.title}
                 variants={riseChild}
-                className="value-cell bg-primary p-5 sm:p-7 hover:bg-card"
+                className="value-cell bg-primary p-3.5 sm:p-7 hover:bg-card flex items-center gap-3 sm:block"
                 style={{ '--accent': ACCENTS[i % ACCENTS.length] }}
               >
-                <AccentIcon accent={ACCENTS[i % ACCENTS.length]} className="w-10 h-10 mb-4">
-                  <p.icon size={19} />
+                <AccentIcon accent={ACCENTS[i % ACCENTS.length]} className="w-8 h-8 sm:w-10 sm:h-10 shrink-0 sm:mb-4">
+                  <p.icon size={16} className="sm:hidden" />
+                  <p.icon size={19} className="hidden sm:block" />
                 </AccentIcon>
-                <h4 className="font-display text-[15.5px] font-semibold text-ink mb-2">{p.title}</h4>
-                <p className="text-[14px] sm:text-[13px] leading-snug text-muted">{p.desc}</p>
+                <div className="sm:contents">
+                  <h4 className="font-display text-[14.5px] sm:text-[15.5px] font-semibold text-ink mb-0.5 sm:mb-2">{p.title}</h4>
+                  <p className="text-[12.5px] sm:text-[13px] leading-snug text-muted">{p.desc}</p>
+                </div>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
+      <section className="py-8 sm:py-16 px-4 sm:px-8 text-center">
         <motion.div {...scaleIn} className="max-w-xl mx-auto">
           <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink mb-3">Want to talk through a project?</h2>
           <Button to="/contact" className="mt-1" onClick={() => trackEvent('cta_click', { location: 'about' })}>

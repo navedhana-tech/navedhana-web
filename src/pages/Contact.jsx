@@ -109,20 +109,26 @@ const Contact = () => {
           competing with the text sitting on top of it. */}
       <section className="relative pt-8 pb-10 px-4 sm:px-8 max-w-[1180px] mx-auto">
         <div className="contact-dot-grid absolute inset-0 opacity-[0.05] pointer-events-none" aria-hidden="true" />
-        <div className="relative grid md:grid-cols-5 gap-10 lg:gap-14 items-start">
+        {/* On phones the form comes first and the intro column follows it. The
+            visitor arrived to send a message, and this column's kicker and
+            heading restate the hero directly above them ("Contact Us" / "Tell
+            us the problem") — so both are dropped below md, leaving the reply
+            promise, the differentiator, and the phone/email details as the
+            supporting block under the form. */}
+        <div className="relative grid md:grid-cols-5 gap-7 md:gap-10 lg:gap-14 items-start">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="md:col-span-2"
+            className="order-2 md:order-1 md:col-span-2"
           >
-            <SectionKicker className="mb-[18px]">Get in Touch</SectionKicker>
-            <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-3">
+            <SectionKicker className="mb-[18px] hidden md:block">Get in Touch</SectionKicker>
+            <h2 className="hidden md:block font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-3">
               Let's talk about the problem.
             </h2>
-            <p className="text-[14.5px] font-semibold text-electric mb-[18px]">We usually reply within one business day.</p>
-            <p className="text-[14.5px] leading-relaxed text-muted mb-7 max-w-md">
+            <p className="text-[14.5px] font-semibold text-electric mb-3 md:mb-[18px]">We usually reply within one business day.</p>
+            <p className="text-[14.5px] leading-relaxed text-muted mb-5 md:mb-7 max-w-md">
               Tell us what you're building, what isn't working, or what you're trying to improve. No obligation, no
               sales pitch. If custom software isn't the right answer, we'll tell you.
             </p>
@@ -146,7 +152,7 @@ const Contact = () => {
             </div>
           </motion.div>
 
-          <div className="md:col-span-3">
+          <div className="order-1 md:order-2 md:col-span-3">
             <AnimatePresence mode="wait">
               {formSent ? (
                 <motion.div
@@ -164,7 +170,7 @@ const Contact = () => {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   onSubmit={handleSubmit}
-                  className="flex flex-col gap-3.5 px-7 py-6 sm:px-9 sm:py-6 rounded-2xl bg-card border border-ink/12 shadow-sm"
+                  className="flex flex-col gap-3.5 px-5 py-5 sm:px-9 sm:py-6 rounded-2xl bg-card border border-ink/12 shadow-sm"
                 >
                   <div>
                     <label htmlFor="name" className={labelClasses}>Name</label>
@@ -218,8 +224,8 @@ const Contact = () => {
                       className={`${inputClasses} min-h-[100px] resize-y`}
                     />
                   </div>
-                  <div className="flex flex-col items-start gap-2">
-                    <Button type="submit" disabled={isSubmitting} className="disabled:opacity-50">
+                  <div className="flex flex-col items-stretch sm:items-start gap-2">
+                    <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto disabled:opacity-50">
                       {isSubmitting ? 'Sending…' : 'Start the Conversation →'}
                     </Button>
                     <p className="text-[12.5px] text-muted">

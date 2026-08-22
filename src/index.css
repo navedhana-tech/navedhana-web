@@ -367,6 +367,21 @@
   animation: capability-highlight 8s ease-in-out infinite;
 }
 
+/* Capability strip marquee (mobile only, below sm:) — track holds the term
+   list twice back-to-back; translating by exactly -50% moves one full copy
+   out of view as the other takes its place, so the loop has no visible seam. */
+@keyframes capability-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.capability-marquee-track {
+  animation: capability-marquee 16s linear infinite;
+}
+
 /* Isometric product cascade (ProductsTeaser.jsx, lg:+ only) — a fixed
    rotateX/Y/Z tilt on `transform`, floating idle bob on the standalone
    `translate` property (a separate CSS property from `transform` in modern
@@ -399,6 +414,15 @@
 }
 .festival-card-float {
   animation: festival-card-float 5s ease-in-out infinite;
+}
+
+/* Mobile product carousel (ProductsTeaser.jsx, below sm: only). */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 .iso-card {
   transform: rotateX(20deg) rotateY(-15deg) rotateZ(4deg);

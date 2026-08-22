@@ -31,6 +31,18 @@ const SIZES = {
  inline: 'text-[14px] sm:text-[13px] min-h-[44px] sm:min-h-0 align-middle',
 };
 
+// Counterpart to SIZES for a pill with no trailing arrow. The sizes above pad
+// the label on the left only and let the icon chip both close off the right
+// edge and set the button's height (28px chip + 12px padding = 40px at sm).
+// With no arrow there is no chip, so those sizes leave the label jammed against
+// the right edge and the button ~6px shorter than a chipped one beside it —
+// exactly what an outline CTA next to a primary one looks like. Symmetric
+// padding, plus a min-height standing in for the chip the row expects.
+const SIZES_NO_CHIP = {
+ sm: 'px-5 py-1.5 min-h-10 text-[13.5px] sm:text-[13px]',
+ lg: 'px-6 sm:px-7 py-2 min-h-[50px] text-[15px] sm:text-base',
+};
+
 const CHIP_SIZE = { sm: 'w-7 h-7', lg: 'w-9 h-9' };
 const CHIP_ICON_SIZE = { sm: 14, lg: 16 };
 // White chip reads on the blue primary fill; the outline variant is nearly
@@ -58,16 +70,21 @@ const Button = ({ to, href, variant = 'primary', size = 'lg', hoverEffects = tru
  // plain inline text link with its underline, no chip fits inline prose.
  const isChip = variant !== 'link';
  const shape = isChip ? 'rounded-full' : 'rounded-xl';
- const classes = `group inline-flex items-center justify-center gap-2 ${shape} font-semibold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${SIZES[size]} ${variantClasses} ${className}`;
+ const { label, hasArrow } = splitArrow(children);
+ const showChip = isChip && hasArrow;
+ // Swapped wholesale rather than appended: these are conflicting padding
+ // utilities, and which one wins would come down to Tailwind's output order,
+ // not the order they appear in the class string.
+ const sizeClasses = (isChip && !hasArrow && SIZES_NO_CHIP[size]) || SIZES[size];
+ const classes = `group inline-flex items-center justify-center gap-2 ${shape} font-semibold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${sizeClasses} ${variantClasses} ${className}`;
 
  const Component = to ? Link : href ? 'a' : 'button';
  const linkProps = to ? { to } : href ? { href } : {};
- const { label, hasArrow } = splitArrow(children);
 
  return (
  <Component className={classes} {...linkProps} {...props}>
  {label}
- {hasArrow && isChip && (
+ {showChip && (
  <span
  className={`inline-flex items-center justify-center shrink-0 ${CHIP_SIZE[size] || CHIP_SIZE.sm} rounded-full ${CHIP_BG[variant] || CHIP_BG.primary} transition-transform duration-base group-hover:translate-x-0.5`}
  >

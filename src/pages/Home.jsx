@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { Database, CheckCircle2, Cpu, Layers, Workflow, Box } from 'lucide-react';
 import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
 import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 import { canHover } from '../lib/canHover';
-import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY } from '../lib/motion';
+import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX } from '../lib/motion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
 import PlaceholderShot from '../components/ui/PlaceholderShot';
@@ -71,6 +71,137 @@ const stepNodeVariants = {
   hidden: { opacity: 0, y: 14, scale: 0.8 },
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
+
+// Mobile-only "snake" version of HOW_STEPS: steps sit in a two-column grid,
+// alternating sides, and a curved path links each node circle to the next.
+//
+// The path is MEASURED from the laid-out cells rather than computed from
+// assumed percentages — text length and viewport width both move the nodes,
+// and any hardcoded geometry drifts off them. The measured element is the
+// plain grid cell, NOT the animated inner div: a transformed element becomes
+// its descendants' offsetParent, which would report every node at the same
+// local coordinates. The circle is the cell's first child, so its centre is
+// half a node-height down from the cell's top.
+const NODE_SIZE = 48;
+
+function SnakeSteps({ steps, reducedMotion }) {
+  const gridRef = React.useRef(null);
+  const nodeRefs = React.useRef([]);
+  const [geom, setGeom] = React.useState(null);
+
+  React.useLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const measure = () => {
+      const pts = nodeRefs.current.filter(Boolean).map((el) => ({
+        x: el.offsetLeft + el.offsetWidth / 2,
+        y: el.offsetTop + NODE_SIZE / 2,
+      }));
+      if (pts.length < 2) return;
+      const d = pts.reduce((acc, p, i) => {
+        if (i === 0) return `M ${p.x} ${p.y}`;
+        const prev = pts[i - 1];
+        const midY = (prev.y + p.y) / 2;
+        return `${acc} C ${prev.x} ${midY}, ${p.x} ${midY}, ${p.x} ${p.y}`;
+      }, '');
+      setGeom((prev) =>
+        prev && prev.d === d && prev.w === grid.offsetWidth && prev.h === grid.offsetHeight
+          ? prev
+          : { d, w: grid.offsetWidth, h: grid.offsetHeight }
+      );
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(grid);
+    return () => ro.disconnect();
+  }, [steps]);
+
+  const { scrollYProgress } = useScroll({
+    target: gridRef,
+    offset: ['start 0.85', 'end 0.55'],
+  });
+  const pathLength = useSpring(scrollYProgress, { stiffness: 70, damping: 20, mass: 0.4 });
+
+  // Nodes light up as the drawn line reaches them. Node i sits at fraction
+  // i/(n-1) along the path, so the count already crossed is derived from the
+  // same spring the stroke uses — the fill stays in step with the visible
+  // line tip rather than with raw scroll. One state write per crossing, not
+  // per frame.
+  const [litCount, setLitCount] = React.useState(0);
+  React.useEffect(() => {
+    if (reducedMotion) {
+      setLitCount(steps.length);
+      return;
+    }
+    const sync = (v) => {
+      const crossed = v <= 0 ? 0 : Math.min(steps.length, Math.floor(v * (steps.length - 1)) + 1);
+      setLitCount((c) => (c === crossed ? c : crossed));
+    };
+    sync(pathLength.get());
+    return pathLength.on('change', sync);
+  }, [pathLength, steps.length, reducedMotion]);
+
+  return (
+    <div className="relative mx-auto w-full max-w-[440px]">
+      {geom && (
+        <svg
+          className="absolute left-0 top-0 pointer-events-none"
+          width={geom.w}
+          height={geom.h}
+          viewBox={`0 0 ${geom.w} ${geom.h}`}
+          fill="none"
+        >
+          {/* Tailwind preflight sets `svg { stroke: none }`, which beats a
+              stroke="..." presentation attribute — stroke must be inline style.
+              The theme vars are --color-ink / --color-electric, not --ink. */}
+          <path
+            d={geom.d}
+            strokeWidth={2}
+            strokeLinecap="round"
+            style={{ stroke: 'var(--color-ink)', strokeOpacity: 0.13 }}
+          />
+          <motion.path
+            d={geom.d}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            style={{ stroke: 'var(--color-electric)', pathLength: reducedMotion ? 1 : pathLength }}
+          />
+        </svg>
+      )}
+      <div ref={gridRef} className="relative z-10 grid grid-cols-2 gap-x-2">
+        {steps.map((step, i) => (
+          <div
+            key={step.title}
+            ref={(el) => { nodeRefs.current[i] = el; }}
+            style={{ gridColumn: (i % 2) + 1, gridRow: i + 1 }}
+            className="pb-9"
+          >
+            <motion.div
+              initial={reducedMotion ? false : { opacity: 0, scale: 0.85, y: 18 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.5 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center"
+            >
+              <div
+                style={{ width: NODE_SIZE, height: NODE_SIZE }}
+                className={`rounded-full border-2 flex items-center justify-center font-display text-[13px] font-bold shadow-sm transition-colors duration-500 ${
+                  i < litCount
+                    ? 'bg-electric border-electric text-white'
+                    : 'bg-primary border-electric/40 text-electric'
+                }`}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </div>
+              <h4 className="font-display text-[12.5px] font-bold uppercase tracking-wide text-ink mt-3 mb-1.5">{step.title}</h4>
+              <p className="text-[12.5px] leading-snug text-muted">{step.desc}</p>
+            </motion.div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // Hero content stagger — gated on the logo intro finishing (src/lib/
 // introContext.js) instead of firing on mount, so eyebrow -> headline ->
@@ -171,16 +302,36 @@ const Home = () => {
       </div>
 
       {/* Capability strip — the hero's closing line, sitting in normal flow
-          at the bottom of the section. Below sm: it becomes a 2x2 grid with no
-          separators: four long uppercase terms plus bullets wrapped into a
-          ragged three-line block at 375px, which read as overflow rather than
-          a deliberate list. */}
-      <div className="relative z-20 shrink-0 py-4 sm:py-5 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-y-2.5 gap-x-3 text-center sm:flex sm:flex-wrap sm:justify-center sm:gap-3.5 font-display text-[12px] sm:text-[11.5px] font-bold tracking-[0.08em] sm:tracking-[0.12em] uppercase text-muted">
+          at the bottom of the section. Below sm: a horizontal marquee (the
+          four terms don't fit one line at 375px, and a wrapped stack either
+          took four lines or broke alignment); sm:+ keeps the static
+          centered row since it fits fine there. */}
+      <div className="relative z-20 shrink-0 py-4 sm:py-5 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
+        <div
+          className="sm:hidden overflow-hidden"
+          style={{ maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)' }}
+        >
+          <div
+            className="flex w-max capability-marquee-track"
+            style={{ animationPlayState: reducedMotion ? 'paused' : 'running' }}
+          >
+            {[0, 1].map((copy) => (
+              <div key={copy} className="flex items-center gap-3 shrink-0 pr-3" aria-hidden={copy === 1}>
+                {CAPABILITY_STRIP.map((c) => (
+                  <React.Fragment key={c}>
+                    <span className="font-display text-[12px] font-bold tracking-[0.08em] uppercase text-muted">{c}</span>
+                    <span className="text-ink/20">•</span>
+                  </React.Fragment>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="hidden sm:flex max-w-7xl mx-auto flex-row flex-wrap justify-center gap-3.5 text-center font-display text-[11.5px] font-bold tracking-[0.12em] uppercase text-muted">
           {CAPABILITY_STRIP.map((c, i) => (
             <React.Fragment key={c}>
               <span className="capability-item" style={{ animationDelay: `${i * 2}s` }}>{c}</span>
-              {i < CAPABILITY_STRIP.length - 1 && <span className="hidden sm:inline text-ink/20">•</span>}
+              {i < CAPABILITY_STRIP.length - 1 && <span className="text-ink/20">•</span>}
             </React.Fragment>
           ))}
         </div>
@@ -326,31 +477,10 @@ const Home = () => {
           ))}
         </motion.div>
 
-        {/* Below lg: vertical chain */}
-        <motion.div
-          variants={stepTrackVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          className="lg:hidden flex flex-col max-w-md mx-auto"
-        >
-          {HOW_STEPS.map((step, i) => (
-            <React.Fragment key={step.title}>
-              <motion.div variants={stepNodeVariants} className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[13.5px] sm:text-[12.5px] font-bold text-electric flex-shrink-0">
-                  {String(i + 1).padStart(2, '0')}
-                </div>
-                <div className="pt-1.5 pb-1">
-                  <h4 className="font-display text-[14px] font-bold uppercase tracking-wide text-ink mb-1">{step.title}</h4>
-                  <p className="text-[14px] sm:text-[13px] leading-relaxed text-muted">{step.desc}</p>
-                </div>
-              </motion.div>
-              {i < HOW_STEPS.length - 1 && (
-                <motion.div variants={growY} style={{ transformOrigin: 'top' }} className="w-px h-4 sm:h-7 bg-ink/15 ml-[22px]" />
-              )}
-            </React.Fragment>
-          ))}
-        </motion.div>
+        {/* Below lg: snake chain — zigzagging nodes on a scroll-drawn path */}
+        <div className="lg:hidden">
+          <SnakeSteps steps={HOW_STEPS} reducedMotion={reducedMotion} />
+        </div>
       </div>
     </section>
 
