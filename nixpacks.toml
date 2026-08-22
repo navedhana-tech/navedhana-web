@@ -1,0 +1,20 @@
+# Nixpacks auto-detects puppeteer and adds "chromium" to aptPkgs, which on
+# Ubuntu pulls in the chromium-browser -> snapd -> systemd chain and breaks
+# the Docker build (snapd's postinst needs a real init system). Puppeteer
+# already downloads its own Chrome binary via npm install, so it only needs
+# the runtime shared libs below, not the system chromium-browser package.
+# https://github.com/railwayapp/nixpacks/blob/main/src/providers/node/mod.rs
+[phases.setup]
+aptPkgs = [
+  "libnss3",
+  "libatk1.0-0",
+  "libatk-bridge2.0-0",
+  "libcups2",
+  "libgbm1",
+  "libasound2t64",
+  "libpangocairo-1.0-0",
+  "libxss1",
+  "libgtk-3-0",
+  "libxshmfence1",
+  "libglu1",
+]
