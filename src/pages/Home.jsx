@@ -1,360 +1,398 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, BadgeCheck, Handshake, Sprout } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-const vegImage = '/assets/other/Vegetables.webp';
-const softImage = '/assets/other/Software.webp';
-const companyImage = '/assets/logo/NPA_Logo_WithoutText.png';
-const whitecompanyImage = '/assets/logo/NPA_Logo_whiteWithoutText.png';
+import { Database, CheckCircle2, Cpu, Layers, Workflow, Box } from 'lucide-react';
+import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
+import PolyMeshField from '../components/hero/PolyMeshField';
+import { useIntroDone } from '../lib/introContext';
+import { useReducedMotion } from '../hooks/useReducedMotion';
+import { canHover } from '../lib/canHover';
+import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX, growY } from '../lib/motion';
+import ProductsTeaser from '../components/home/ProductsTeaser';
+import SectionKicker from '../components/ui/SectionKicker';
+import PlaceholderShot from '../components/ui/PlaceholderShot';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
+import Button from '../components/ui/Button';
+import { trackEvent } from '../lib/analytics';
+
+const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
+
+// `image` is a topical photograph per capability (circuit board, code, server
+// room, 3D printer), rendered as a darkened background inside each card. Kept
+// well under the text via low opacity plus a scrim, since these cards carry a
+// heading and a six-item list that has to stay readable.
+//
+// There is no per-card accent colour: all four take the theme blue from
+// `--accent` on .wwd-card (index.css). The photographs already distinguish
+// the cards, so four separate hues only fought the palette.
+const WWD_CARDS = [
+  { title: 'AI Engineering', icon: Cpu, image: '/assets/photos/service-ai.jpg', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
+  { title: 'Custom Software', icon: Layers, image: '/assets/photos/service-software.jpg', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
+  { title: 'Intelligent Automation', icon: Workflow, image: '/assets/photos/service-automation.jpg', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Product Engineering', icon: Box, image: '/assets/photos/service-product.jpg', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
+];
+
+const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
+
+const DEV_PRODUCTS = [
+  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release.", icon: <Database size={18} /> },
+  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
+];
+
+const HOW_STEPS = [
+  { title: 'Understand', desc: 'Understand the problem, users, and business goals.' },
+  { title: 'Architect', desc: 'Design scalable systems and the right technology stack.' },
+  { title: 'Build', desc: 'Turn the architecture into clean, maintainable software.' },
+  { title: 'Intelligence', desc: 'Integrate AI, automation, data, and intelligent workflows.' },
+  { title: 'Validate', desc: 'Test, refine, and verify the system before release.' },
+  { title: 'Deploy', desc: 'Ship reliable software and evolve it in production.' },
+];
+
+const PILLARS = [
+  { title: 'Problem-first thinking', desc: 'We start with the business problem, not the technology.' },
+  { title: 'Engineering-led', desc: 'We care about architecture, reliability and maintainability.' },
+  { title: 'AI where it matters', desc: 'We use AI where it creates meaningful business value.' },
+  { title: 'Product mindset', desc: 'We think beyond individual features and build complete products.' },
+  { title: 'Build and learn', desc: 'We build our own products as well as software for businesses.' },
+];
+
+// WWD_CARDS items can carry a parenthetical spell-out ("SaaS [Software as a
+// Service]") — splits that into the short label plus a dim inline note
+// instead of every item needing to be pre-split into a {label, note} shape.
+const ITEM_NOTE_RE = /^(.+?)\s*\[(.+)\]$/;
+
+// HOW_STEPS timeline — one shared stagger container holds BOTH the step
+// nodes and the connector segments between them as alternating direct
+// children (node, line, node, line, ...), so staggerChildren fires them in
+// that literal sequence: node 1 pops in, then the line to node 2 grows,
+// then node 2 pops in, and so on — a genuine step-by-step chain rather than
+// all six nodes fading in together.
+const stepTrackVariants = { hidden: {}, show: { transition: { staggerChildren: 0.18, delayChildren: 0.1 } } };
+const stepNodeVariants = {
+  hidden: { opacity: 0, y: 14, scale: 0.8 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+};
+
+// Hero content stagger — gated on the logo intro finishing (src/lib/
+// introContext.js) instead of firing on mount, so eyebrow -> headline ->
+// subhead -> CTAs reveal in sequence right after the intro settles into the
+// navbar, per the intro spec's staged hero reveal.
+const heroContainer = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } } };
+const heroItem = {
+  hidden: { opacity: 0, y: 16 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+};
 
 const Home = () => {
-    const location = useLocation();
+  useDocumentMeta({
+    title: 'Navedhana — Software Development & AI Engineering Company',
+    description:
+      'Navedhana is a software development and AI engineering company building web, mobile, and AI-powered products — custom software, AI agents, RAG systems, and intelligent automation for startups and enterprises.',
+  });
 
-    // Handle hash navigation to services section
-    useEffect(() => {
-        if (location.hash === '#services') {
-            // Small delay to ensure page is rendered
-            setTimeout(() => {
-                const servicesSection = document.getElementById('services');
-                if (servicesSection) {
-                    servicesSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 100);
-        }
-    }, [location.hash]);
+  const introDone = useIntroDone();
+  const reducedMotion = useReducedMotion();
+  // The wwd-card tilt + spotlight need a real pointer; on touch the CSS behind
+  // them is disabled (`@media (hover: hover)` in index.css), so running the
+  // handlers there would be work with nothing to show for it.
+  const pointerFx = !reducedMotion && canHover();
 
-    const services = [
-        {
-            title: "Vegetables Supply",
-            description: "Farm-fresh, organic vegetables delivered with love and care to your doorstep.",
-            gradient: "from-lime-500 to-lime-600",
-            bgGradient: "from-lime-50 to-lime-100",
-            link: "/vegetables",
-            features: ["100% Organic", "Farm Fresh", "Growing"],
-            image: vegImage
-        },
-        {
-            title: "Software Solutions",
-            description: "Innovative digital solutions and AI agents that transform businesses and drive growth.",
-            gradient: "from-blue-500 to-cyan-600",
-            bgGradient: "from-blue-50 to-cyan-50",
-            link: "/software",
-            features: ["AI Solutions", "Innovative", "Scalable"],
-            image: softImage
-        },
-        {
-            title: "Seasonal Products",
-            description: "Coming soon! Celebrate every festival with authentic, vibrant seasonal products.",
-            gradient: "from-orange-500 to-amber-600",
-            bgGradient: "from-orange-50 to-amber-50",
-            link: "/seasonal",
-            features: ["Launching Soon", "Premium Quality", "Authentic"],
-            image: companyImage
-        }
-    ];
-
-    return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-lime-50">
-            {/* Hero Section - CloudFuze Inspired with Original Content */}
-            <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-lime-50 via-white to-blue-50">
-                {/* Organic Green Shape Background */}
-                <div className="absolute top-0 right-0 w-full lg:w-3/5 h-full">
-                    <svg
-                        viewBox="0 0 800 600"
-                        className="absolute top-0 right-0 w-full h-full"
-                        preserveAspectRatio="xMaxYMid slice"
-                    >
-                        <defs>
-                            <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#84BD00" />
-                                <stop offset="100%" stopColor="#a3d900" />
-                            </linearGradient>
-                        </defs>
-                        <path
-                            d="M 400,0 
-                               C 200,50 150,150 200,300
-                               C 250,450 350,500 500,550
-                               C 650,600 750,550 800,400
-                               L 800,0 Z"
-                            fill="url(#greenGradient)"
-                            opacity="0.95"
-                        />
-                    </svg>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 items-center">
-                        {/* Left Column - Text Content */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8 }}
-                            className="text-left"
-                        >
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="inline-block mb-6"
-                            >
-                                <span className="px-4 py-2 bg-lime-100 text-lime-700 rounded-full text-sm font-semibold tracking-wide uppercase">
-                                    Starting Our Journey in 2023
-                                </span>
-                            </motion.div>
-
-                            <motion.h1
-                                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3, duration: 0.6 }}
-                            >
-                                <span className="block mb-2 sm:mb-3 text-gray-900">Welcome to</span>
-                                <span className="block text-white lg:text-transparent lg:bg-gradient-to-r lg:from-lime-600 lg:via-lime-500 lg:to-lime-600 lg:bg-clip-text">
-                                    Navedhana
-                                </span>
-                            </motion.h1>
-
-                            <motion.p
-                                className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 leading-relaxed max-w-xl"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4, duration: 0.6 }}
-                            >
-                                <span className="text-white lg:text-gray-600">Building the Future of </span>
-                                <span className="font-semibold text-white lg:text-lime-600">Fresh Produce</span>
-                                <span className="text-white lg:text-gray-600">, </span>
-                                <span className="font-semibold text-white lg:text-blue-700">Digital Solutions</span>
-                                <span className="text-white lg:text-gray-600">,<br /> and </span>
-                                <span className="font-semibold text-white lg:text-orange-700">Festive Joy</span>
-                                <span className="text-white lg:text-gray-600">.</span>
-                            </motion.p>
-
-                            <motion.div
-                                className="mb-8 sm:mb-12"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.6 }}
-                            >
-                                <a
-                                    href="#services"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-                                    }}
-                                    className="group relative inline-block px-6 sm:px-8 py-3 sm:py-4 bg-white lg:bg-gradient-to-r lg:from-lime-600 lg:to-lime-500 text-lime-700 lg:text-white rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all border-2 border-white lg:border-0"
-                                >
-                                    <span className="relative z-10 flex items-center justify-center gap-2">
-                                        Explore Services
-                                        <ArrowRight className="group-hover:translate-x-1 transition-transform" size={18} />
-                                    </span>
-                                </a>
-                            </motion.div>
-
-                            {/* Stats Row */}
-                            <motion.div
-                                className="flex flex-wrap gap-4 sm:gap-6 md:gap-8 items-center justify-center sm:justify-start bg-white rounded-3xl px-5 py-4 shadow-xl sm:bg-transparent sm:rounded-none sm:px-0 sm:py-0 sm:shadow-none"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6, duration: 0.6 }}
-                            >
-                                {[
-                                    { value: "200+", label: "Happy Customers" },
-                                    { value: "3", label: "Services" },
-                                    { value: "2023", label: "Founded" }
-                                ].map((stat, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        className="text-center min-w-[80px]"
-                                        whileHover={{ scale: 1.05, y: -5 }}
-                                        transition={{ type: "spring", stiffness: 300 }}
-                                    >
-                                        <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-lime-600 via-lime-500 to-lime-500 bg-clip-text mb-1 sm:mb-2">
-                                            {stat.value}
-                                        </div>
-                                        <div className="text-xs sm:text-sm md:text-base text-lime-700 font-medium">
-                                            {stat.label}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </motion.div>
-                        </motion.div>
-
-                        {/* Right Column - Illustration/Visual */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.8, delay: 0.3 }}
-                            className="relative hidden lg:block"
-                        >
-                            <div className="relative w-full h-[500px] flex items-center justify-center">
-                                <div className="relative w-full h-full flex items-center justify-center">
-                                    <img
-                                        src={whitecompanyImage}
-                                        alt="Navedhana Services"
-                                        className="w-3/4 h-auto object-contain drop-shadow-2xl"
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Services Section */}
-            <section id="services" className="py-16 md:py-24 relative">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <motion.div
-                        className="text-center mb-12 md:mb-16"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                            Our <span className="bg-gradient-to-r from-lime-600 to-lime-500 bg-clip-text text-transparent">Services</span>
-                        </h2>
-                        <p className="text-lg md:text-xl text-gray-600">Diverse solutions for modern needs</p>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-                        {services.map((service, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1, duration: 0.5 }}
-                                whileHover={{ y: -8, scale: 1.02 }}
-                                className="group relative overflow-hidden rounded-3xl h-[400px] md:h-[450px]"
-                            >
-                                {/* Background Image */}
-                                <div className="absolute inset-0 bg-gray-900">
-                                    <img
-                                        src={service.image}
-                                        alt={service.title}
-                                        className="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-110"
-                                    />
-                                    {/* Gradient Overlay */}
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-60 group-hover:opacity-40 transition-opacity duration-500`}></div>
-                                    {/* Dark gradient at bottom for text readability */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                                </div>
-
-                                <div className="relative p-6 md:p-8 h-full flex flex-col border border-white/10 rounded-3xl">
-                                    <div className="w-14 h-14 md:w-16 md:h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                                        <div className="w-7 h-7 md:w-8 md:h-8 bg-white/40 rounded-lg"></div>
-                                    </div>
-
-                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">{service.title}</h3>
-                                    <p className="text-gray-100 mb-6 leading-relaxed text-sm md:text-base line-clamp-3">
-                                        {service.description}
-                                    </p>
-
-                                    <div className="space-y-2 mb-6 mt-auto">
-                                        {service.features.map((feature, idx) => (
-                                            <div key={idx} className="flex items-center gap-2 text-sm text-gray-100">
-                                                <div className="w-1.5 h-1.5 bg-lime-400 rounded-full shadow-[0_0_8px_rgba(163,217,0,0.8)]"></div>
-                                                <span className="font-medium">{feature}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <Link
-                                        to={service.link}
-                                        className="inline-flex items-center font-bold text-white group-hover:gap-3 transition-all text-sm md:text-base"
-                                    >
-                                        Discover More
-                                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                    </Link>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Why Choose Us Section */}
-            <section className="py-16 md:py-24 bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iIzIyMiIgc3Ryb2tlLXdpZHRoPSIuNSIgb3BhY2l0eT0iLjEiLz48L2c+PC9zdmc+')] opacity-10"></div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                        >
-                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-                                Why Choose <span className="bg-gradient-to-r from-lime-400 to-lime-500 bg-clip-text text-transparent">Navedhana</span>?
-                            </h2>
-                            <p className="text-base md:text-lg text-gray-300 mb-8 leading-relaxed">
-                                As a passionate startup launching in 2023, we're committed to excellence in everything we do.
-                                From the freshness of our vegetables to the reliability of our software solutions,
-                                we're building trust one customer at a time.
-                            </p>
-
-                            <div className="space-y-4">
-                                {[
-                                    { text: 'Customer-First Approach', desc: 'Building relationships from day one', icon: Handshake },
-                                    { text: 'Quality Assurance', desc: 'Premium standards in every delivery', icon: BadgeCheck },
-                                    { text: 'Growing Together', desc: 'Your success is our success', icon: Sprout }
-                                ].map((item, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.1 }}
-                                        className="flex items-start gap-4 p-4 rounded-xl bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors border border-white/5"
-                                    >
-                                        <div className="w-12 h-12 bg-gradient-to-br from-lime-500 to-lime-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-lime-900/20">
-                                            <item.icon className="w-6 h-6 text-white" aria-hidden="true" />
-                                        </div>
-                                        <div>
-                                            <h4 className="font-semibold text-lg mb-1 text-white">{item.text}</h4>
-                                            <p className="text-gray-400 text-sm">{item.desc}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8 }}
-                            className="relative mt-8 lg:mt-0"
-                        >
-                            <div className="grid grid-cols-2 gap-4 md:gap-6">
-                                {[
-                                    { label: 'Quality Service', value: '100%' },
-                                    { label: 'Customers', value: '200+' },
-                                    { label: 'Services', value: '3' },
-                                    { label: 'Founded', value: '2023' }
-                                ].map((stat, i) => (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        whileInView={{ opacity: 1, scale: 1 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: i * 0.1 }}
-                                        whileHover={{ scale: 1.05 }}
-                                        className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/15 transition-all border border-white/5 shadow-xl"
-                                    >
-                                        <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-lime-400 to-lime-500 bg-clip-text text-transparent mb-2">
-                                            {stat.value}
-                                        </div>
-                                        <div className="text-sm text-gray-300 font-medium">{stat.label}</div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
+  return (
+  <div className="bg-primary">
+    {/* Full-height hero — normal document flow, scrolls away like any other
+        section. min-h-dvh (not h-screen/100vh) so it still fills the actual
+        visible viewport on mobile Safari/Chrome, where plain 100vh includes
+        the area the address bar covers. */}
+    <section className="dark-scope relative overflow-hidden flex flex-col min-h-dvh bg-[var(--hero-bg)]">
+      {/* Spans the whole section — from page top (so it shows through the
+          transparent navbar) down past the fold — rather than being boxed
+          inside the headline block, which read as a grey rectangle. */}
+      <PolyMeshField />
+      {/* flex-1 + min-h-0: the capability strip below is a normal flow
+          sibling (not absolutely positioned over this), so it always
+          reserves its own real height and this area only gets what's left.
+          No height-based content hiding here on purpose: this section is
+          normal document flow now, not the old fixed/pinned curtain-reveal
+          hero, so on a short real-device viewport (address bar expanded,
+          on-screen nav buttons, etc.) the content is simply allowed to be
+          slightly taller than one screen — the page grows and the strip
+          gets pushed down, never clipped or overlapped. A prior version
+          hid the subhead and shrank things below max-height:640px to dodge
+          overlap under the *old* fixed hero; kept post-revert, it instead
+          started hiding real copy on ordinary phones with browser chrome
+          on-screen, which is worse than a few extra px of scroll. */}
+      <div className="relative z-10 flex-1 min-h-0 flex items-center pt-[84px] px-4 sm:px-8">
+        <div className="relative w-full max-w-7xl mx-auto">
+          {/* min-h only from md: up — that's also where the floating node
+              cards (HeroCircuitBackground) start showing, so mobile/sm never
+              reserves dead vertical space for decoration it isn't drawing. */}
+          <div className="relative md:min-h-[340px] lg:min-h-[400px] flex items-center">
+            <HeroCircuitBackground />
+            <motion.div
+              variants={heroContainer}
+              initial={reducedMotion ? false : 'hidden'}
+              animate={introDone ? 'show' : 'hidden'}
+              className="relative z-10 w-full max-w-4xl mx-auto text-center"
+            >
+              <motion.div variants={heroItem}>
+                <SectionKicker centered className="mb-4 hero-text-glow">Software · AI · Product Engineering</SectionKicker>
+              </motion.div>
+              <motion.h1
+                variants={heroItem}
+                className="font-display text-[34px] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink hero-text-glow"
+              >
+                We build the software.
+                <br />
+                <span className="text-electric">We build the intelligence.</span>
+              </motion.h1>
+              {/* Hidden below sm: the kicker + two-line headline already
+                  carry the message on a phone screen; this line is a nice-
+                  to-have on room to spare, not essential copy — a width
+                  check, not the height-based hiding removed above, since
+                  width doesn't jitter with browser chrome. */}
+              <motion.p variants={heroItem} className="hidden sm:block text-base leading-relaxed text-muted mt-4 max-w-2xl mx-auto hero-text-glow">
+                Products we've shipped. Systems we've built for others. Same engineering standard either way.
+              </motion.p>
+              <motion.div variants={heroItem} className="flex flex-wrap justify-center gap-3.5 mt-6">
+                <Button
+                  to="/contact"
+                  size="sm"
+                  hoverEffects={false}
+                  onClick={() => trackEvent('cta_click', { location: 'home_hero' })}
+                >
+                  Discuss Your Project →
+                </Button>
+                <Button to="/products" variant="outline" size="sm" hoverEffects={false}>
+                  See What We've Built
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
-    );
+      </div>
+
+      {/* Capability strip — the hero's closing line, sitting in normal flow
+          at the bottom of the section. Below sm: it becomes a 2x2 grid with no
+          separators: four long uppercase terms plus bullets wrapped into a
+          ragged three-line block at 375px, which read as overflow rather than
+          a deliberate list. */}
+      <div className="relative z-20 shrink-0 py-4 sm:py-5 px-4 sm:px-8 border-t border-ink/15 bg-[var(--hero-bg)]/70 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-y-2.5 gap-x-3 text-center sm:flex sm:flex-wrap sm:justify-center sm:gap-3.5 font-display text-[12px] sm:text-[11.5px] font-bold tracking-[0.08em] sm:tracking-[0.12em] uppercase text-muted">
+          {CAPABILITY_STRIP.map((c, i) => (
+            <React.Fragment key={c}>
+              <span className="capability-item" style={{ animationDelay: `${i * 2}s` }}>{c}</span>
+              {i < CAPABILITY_STRIP.length - 1 && <span className="hidden sm:inline text-ink/20">•</span>}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div>
+      {/* Products & Platforms teaser — its own component (components/home/
+          ProductsTeaser.jsx) and its own section, deliberately separate from
+          the hero above so the opening view is the headline alone. */}
+      <ProductsTeaser />
+
+    {/* What We Do — dark-scope reused from the hero (see index.css): the
+        section bg + kicker/heading/link re-theme for the dark background
+        automatically via the same CSS-variable cascade. The cards are now
+        frosted glass panels (`.wwd-card`, index.css) that sit right on that
+        dark background — no light-scope reset needed, since text-ink/
+        text-muted already read as light text via dark-scope. */}
+    <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.div {...tiltIn} className="max-w-xl mx-auto mb-11 text-center">
+          <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
+          <h2 className="font-display text-[30px] sm:text-[42px] font-bold tracking-tight text-ink">
+            Four capabilities. One engineering standard.
+          </h2>
+          <p className="text-[15px] text-muted mt-3.5">
+            <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
+          </p>
+        </motion.div>
+        {/* Default `stretch` alignment: all four cards match the tallest, so
+            the row reads as one straight band. `flex flex-col` on the card and
+            `flex-1` on the body then push each card's own background down to
+            fill its share, rather than leaving a transparent gap under the
+            shorter lists. */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {WWD_CARDS.map((card, i) => (
+            <motion.div
+              key={card.title}
+              {...scaleIn}
+              transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+              className="wwd-card flex flex-col rounded-2xl bg-primary border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)]"
+              onMouseMove={pointerFx ? (e) => {
+                const r = e.currentTarget.getBoundingClientRect();
+                const x = e.clientX - r.left;
+                const y = e.clientY - r.top;
+                e.currentTarget.style.setProperty('--mx', `${x}px`);
+                e.currentTarget.style.setProperty('--my', `${y}px`);
+                const rx = ((y / r.height) - 0.5) * -8;
+                const ry = ((x / r.width) - 0.5) * 8;
+                e.currentTarget.style.transform = `translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+              } : undefined}
+              onMouseLeave={pointerFx ? (e) => { e.currentTarget.style.transform = ''; } : undefined}
+            >
+              {/* The photo is now a band at the top rather than a wash behind
+                  the text. On a white card there is no scrim strong enough to
+                  keep a photograph readable underneath body copy without
+                  turning it to mud — giving it its own strip keeps the image
+                  at full strength AND the list on clean white. */}
+              <div className="relative h-[100px] sm:h-[112px] shrink-0 overflow-hidden">
+                <img src={card.image} alt="" aria-hidden="true" className="w-full h-full object-cover" />
+                <div
+                  className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_20%,transparent),rgba(16,25,46,0.35))]"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="relative z-10 flex-1 p-5 sm:p-6">
+                {/* Pulled up so the tile straddles the photo edge — the one
+                    element tying the two halves of the card together. */}
+                <div className="-mt-[38px] mb-3 w-11 h-11 rounded-xl flex items-center justify-center border bg-card text-electric border-ink/10 shadow-sm">
+                  <card.icon size={20} />
+                </div>
+                <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
+                <motion.ul {...staggerParent(0.05, 0.12)} className="flex flex-col text-[13px] sm:text-[12.5px] text-muted">
+                {card.items.map((it) => {
+                  const note = it.match(ITEM_NOTE_RE);
+                  return (
+                    <motion.li variants={riseChild} key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-ink/[0.08] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
+                      {note ? (
+                        <span>
+                          {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
+                        </span>
+                      ) : it}
+                    </motion.li>
+                  );
+                })}
+                </motion.ul>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* How We Work — plain centered kicker/h2/paragraph, same as every other
+        section, then a step-by-step chain below: two renderings of the same
+        HOW_STEPS again (see WWD_CARDS/ProductsTeaser precedent) — a
+        horizontal node-and-growing-line track at lg:+, a vertical one below
+        it, since a 6-wide horizontal chain has no room to breathe under
+        ~1024px. Both share one stagger container (stepTrackVariants) whose
+        direct children alternate node/line/node/line/…, so staggerChildren
+        fires them in that literal order — each node pops in, THEN the line
+        to the next one grows, THEN the next node — a real step-by-step
+        reveal instead of all six nodes fading in at once. */}
+    <section className="py-12 sm:py-20 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.div {...blurIn} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
+          <SectionKicker centered className="mb-4 sm:mb-5">Our Engineering Approach</SectionKicker>
+          <h2 className="font-display text-[36px] sm:text-[50px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
+            Think deeply.
+            <br />
+            <span className="text-electric">Build intelligently.</span>
+          </h2>
+          <p className="text-[15px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
+            We don't start with technology. We start with understanding. Every solution is shaped by the problem,
+            engineered for reliability, and built to evolve.
+          </p>
+        </motion.div>
+
+        {/* lg:+ horizontal chain */}
+        <motion.div
+          variants={stepTrackVariants}
+          initial="hidden"
+          whileInView="show"
+          // Low threshold on purpose: this track is six nodes wide, and with
+          // `once: true` a fast flick-scroll past a high `amount` can leave the
+          // whole chain stuck invisible with no second chance to fire.
+          viewport={{ once: true, amount: 0.15 }}
+          className="hidden lg:flex items-start"
+        >
+          {HOW_STEPS.map((step, i) => (
+            <React.Fragment key={step.title}>
+              <motion.div variants={stepNodeVariants} className="flex flex-col items-center text-center w-[152px] flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[14px] sm:text-[13px] font-bold text-electric mb-4">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <h4 className="font-display text-[12px] font-bold uppercase tracking-wide text-ink mb-2">{step.title}</h4>
+                <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
+              </motion.div>
+              {i < HOW_STEPS.length - 1 && (
+                <motion.div variants={growX} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
+              )}
+            </React.Fragment>
+          ))}
+        </motion.div>
+
+        {/* Below lg: vertical chain */}
+        <motion.div
+          variants={stepTrackVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="lg:hidden flex flex-col max-w-md mx-auto"
+        >
+          {HOW_STEPS.map((step, i) => (
+            <React.Fragment key={step.title}>
+              <motion.div variants={stepNodeVariants} className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[13.5px] sm:text-[12.5px] font-bold text-electric flex-shrink-0">
+                  {String(i + 1).padStart(2, '0')}
+                </div>
+                <div className="pt-1.5 pb-1">
+                  <h4 className="font-display text-[14px] font-bold uppercase tracking-wide text-ink mb-1">{step.title}</h4>
+                  <p className="text-[14px] sm:text-[13px] leading-relaxed text-muted">{step.desc}</p>
+                </div>
+              </motion.div>
+              {i < HOW_STEPS.length - 1 && (
+                <motion.div variants={growY} style={{ transformOrigin: 'top' }} className="w-px h-4 sm:h-7 bg-ink/15 ml-[22px]" />
+              )}
+            </React.Fragment>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+
+    {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
+        /about, not duplicated here (was a byte-identical copy of About's
+        "What We Believe" section prior to this pass). */}
+    {/* Why Navedhana — condensed teaser; full pillars + reasoning live on
+        /about, not duplicated here. Dark panel is an inset rounded card, not
+        a full-bleed band, so it reads as a distinct floating block. */}
+    <section className="py-12 sm:py-20 px-4 sm:px-8">
+      <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-6 sm:px-14 py-12 sm:py-16 text-center">
+        <motion.div {...rise}>
+          <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
+          <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-5">
+            A software and AI engineering company building real products
+          </h2>
+          <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
+            {PILLARS.slice(0, 3).map((p) => (
+              <motion.span key={p.title} variants={riseChild} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">
+                {p.title}
+              </motion.span>
+            ))}
+          </motion.div>
+          <p className="text-[14.5px] leading-relaxed text-muted mb-5">
+            We build our own technology, and we build software for businesses — with the same engineering standard either way.
+          </p>
+          <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
+        </motion.div>
+      </div>
+    </section>
+
+    {/* Final CTA */}
+    <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
+      <motion.div {...scaleIn} className="max-w-xl mx-auto">
+        <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
+        <p className="text-[14.5px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>
+        <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_final' })}>Let's Build It →</Button>
+      </motion.div>
+    </section>
+    </div>
+  </div>
+  );
 };
 
 export default Home;

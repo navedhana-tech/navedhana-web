@@ -1,1 +1,503 @@
 @import "tailwindcss";
+
+@theme {
+  /* Light-blue paper neutrals (swapped from a warm cream/tan pair — same
+     lightness relationship, cool hue instead). Card stays a crisp true
+     white for contrast/lift against the base. */
+  --color-primary: #eef3f8;
+  --color-surface: #dde9f3;
+  --color-card: #ffffff;
+
+  /* Brand blue, two stops — the actual logo mark is blue (not the green a
+     prior pass here guessed from a code comment mentioning "leaf" — the
+     logo image itself is blue, and the client confirmed green doesn't
+     suit). Same two-stop shape as the original: `electric` for fills/
+     icons/links, `royal` for the highest-contrast small text (e.g.
+     SectionKicker labels). `electric` is lightly deepened from the raw
+     logo blue (#0164f5) only because that exact value fails AA against
+     `surface` (3.97:1) on this deepened cream base — darkened just enough
+     to clear all three backgrounds; `royal` is unchanged from the
+     original, since it already passed AA everywhere on the new base too.
+     electric (#0958d6): 5.51/4.86/6.22:1 on primary/surface/card.
+     royal (#083f9e): 8.40/7.42/9.48:1 on primary/surface/card. */
+  --color-electric: #0958d6;
+  --color-royal: #083f9e;
+
+  /* Light-blue accent, badges/highlights only, never a primary. Two stops:
+     the fill tone (`sky`) is a background-tint colour ONLY (2.4-3.1:1 —
+     fails AA as standalone text, verified) — always pair it with
+     `sky-text` (5.19-6.63:1, AA-safe) for any label sitting on an
+     `sky` tint, the same bg-{x}/10 text-{x} pattern the LIVE badge
+     already used pre-redesign. */
+  --color-sky: #38bdf8;
+  --color-sky-text: #0369a1;
+
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
+
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-signature: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-drift: drift 20s ease-in-out infinite;
+  --animate-grid-pan: grid-pan 40s linear infinite;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(3%, -2%) scale(1.05);
+  }
+}
+
+@keyframes grid-pan {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 64px 64px;
+  }
+}
+
+/* Dark section scope (Home.jsx hero + "Four capabilities" section) —
+   redefines the text/border tokens so every component already built on
+   text-ink/text-muted/text-royal/text-electric (SectionKicker, capability
+   strip, floating icon cards) re-themes for a dark backdrop automatically,
+   no per-component dark-mode props needed. Not hero-specific despite the
+   original name — any section wanting this same dark treatment reuses it.
+   --color-primary is deliberately NOT touched here: Button's primary
+   variant reads text-primary for its on-blue label color, and flipping
+   --color-primary dark would turn that into unreadable dark-on-blue text.
+   --hero-bg is a separate token instead, used only for these sections' own
+   background (and the hero's capability strip tint). */
+.dark-scope {
+  --hero-bg: #10192e;
+  --color-ink: #f5f4f2;
+  --color-muted: #a7a39c;
+  --color-royal: #7dabfa;
+  --color-electric: #3b82f6;
+}
+
+/* "What We Do" cards (Home.jsx WWD_CARDS) — light cards sitting on
+   .dark-scope's dark section, so they read as panels lifted off the
+   background rather than frosted glass cut into it.
+
+   That inversion is why the token block below exists: .dark-scope sets
+   --color-ink light and --color-muted pale for text sitting ON the dark
+   background. Inside a white card those values are almost invisible, so each
+   card restores the light-theme values locally — the mirror of .dark-scope.
+   Every child built on text-ink/text-muted/text-electric then re-themes
+   automatically, with no per-element overrides.
+
+   --mx/--my are updated on mousemove (JS, gated on canHover + reduced motion
+   — CSS alone can't read pointer position) to drive a spotlight that follows
+   the cursor. The 3D tilt is applied via inline transform in that same
+   handler, not here. */
+.wwd-card {
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
+  --color-electric: #0958d6;
+  --color-royal: #083f9e;
+
+  /* One accent for all four cards — the brand blue. These used to carry four
+     different per-card hues set inline from JS; the photographs already tell
+     the cards apart, so the extra colours only fought the palette. */
+  --accent: var(--color-electric);
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 350ms ease, border-color 350ms ease, transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.wwd-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* Far weaker than the dark-card version it replaces: a 30% radial that read
+     as a glow on navy reads as a dirty smudge on white. */
+  background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+/* Hover states are gated on a real pointer throughout this file: on touch,
+   :hover latches after a tap and stays stuck until you tap elsewhere, so a
+   card keeps its lifted/glowing state long after you've scrolled past. */
+@media (hover: hover) {
+  .wwd-card:hover::before {
+    opacity: 1;
+  }
+  .wwd-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+}
+.wwd-card li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.85;
+  flex: none;
+  /* No glow here — a box-shadow halo only reads as light on a dark card. */
+}
+
+/* Light-background counterpart to .wwd-card (About's Mission/Vision panels):
+   an accent wash that follows the cursor. Tuned far weaker than the dark
+   version — a bright radial over a pale background reads as a smudge, not a
+   glow. --accent is set inline per card; --mx/--my are updated on mousemove
+   (JS, gated on useReducedMotion — CSS alone can't read pointer position).
+
+   Same light-token reset as .wwd-card, for the same reason: this card keeps
+   its own bg-card (white) background no matter what section wraps it, so if
+   that section is ever a .dark-scope, text-ink/text-muted must still resolve
+   to the normal dark-on-white values, not .dark-scope's light-on-dark ones.
+   A no-op everywhere else, since these already match @theme's defaults. */
+.glow-card {
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
+  --color-electric: #0958d6;
+  --color-royal: #083f9e;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 350ms ease, border-color 350ms ease, transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glow-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(340px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.glow-card:focus-within::before {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+  .glow-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 24px 48px -26px color-mix(in srgb, var(--accent) 65%, transparent);
+  }
+}
+
+/* Core-value cells (About). The grid draws its own dividers via a gap-px
+   background, so a hover border would shift layout — the accent is carried by
+   a left rule that wipes in on hover instead. */
+.value-cell {
+  position: relative;
+  transition: background-color 300ms ease;
+}
+.value-cell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) {
+  .value-cell:hover::after {
+    transform: scaleY(1);
+  }
+}
+
+/* Legibility over the moving mesh: color-contrast math alone isn't enough
+   when a bright triangle can drift directly behind the text at any moment.
+   A soft dark halo keeps the kicker/headline/subhead readable regardless of
+   what the mesh is doing underneath, without needing a solid scrim. */
+.hero-text-glow {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.75);
+}
+
+/* Logo intro (src/components/intro/LogoMark.jsx) — stage-driven via a
+   data-stage attribute rather than re-rendering, so the timeline is just a
+   handful of setTimeout class flips in LogoIntro.jsx and every actual visual
+   change here is a transform/opacity/clip-path transition. */
+.logo-mark-outline {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+.logo-mark-fill {
+  opacity: 0;
+  transition: opacity var(--logo-fill-ms, 500ms) ease;
+}
+.logo-mark-energy {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path var(--logo-energy-ms, 650ms) cubic-bezier(0.16, 1, 0.3, 1), opacity 400ms ease;
+}
+[data-stage='hidden'] .logo-mark-outline,
+[data-stage='hidden'] .logo-mark-fill {
+  opacity: 0;
+}
+[data-stage='draw'] .logo-mark-fill {
+  opacity: 0;
+}
+[data-stage='energy'] .logo-mark-outline,
+[data-stage='settled'] .logo-mark-outline {
+  opacity: 0;
+}
+[data-stage='energy'] .logo-mark-fill,
+[data-stage='settled'] .logo-mark-fill {
+  opacity: 1;
+}
+[data-stage='energy'] .logo-mark-energy {
+  opacity: 0.85;
+  clip-path: inset(0% 0 0 0);
+}
+[data-pulse='1'] .logo-mark-fill {
+  animation: logo-pulse 500ms ease;
+}
+@keyframes logo-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.035);
+  }
+}
+
+/* Hero floating tech nodes (src/components/hero/HeroCircuitBackground.jsx) —
+   restrained per-node idle motion, transform/opacity only. */
+@keyframes node-pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+@keyframes node-drift-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes node-bar-grow {
+  0%,
+  100% {
+    transform: scaleY(0.7);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+.node-idle-ai {
+  animation: node-pulse-glow 3.2s ease-in-out infinite;
+}
+.node-idle-database {
+  animation: node-drift-y 4s ease-in-out infinite;
+}
+.node-idle-analytics {
+  animation: node-bar-grow 2.6s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+/* One-shot "signal" traveling along a hero connector line — a short dash
+   sweeping from the center node outward, then gone. */
+@keyframes signal-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+}
+@keyframes signal-travel {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.signal-sweep {
+  stroke-dasharray: 6 94;
+  animation: signal-fade 900ms ease-in-out, signal-travel 900ms linear;
+}
+
+/* Capability strip (Home.jsx hero) — a slow highlight sweeps through the
+   four terms one at a time rather than sitting static. Each item gets the
+   same 8s loop offset by 2s (animation-delay, set inline per index) so only
+   one is ever lit at once, continuously. Color + text-shadow only (no
+   layout-shifting transform) so the strip's height never jitters. */
+@keyframes capability-highlight {
+  0%,
+  100% {
+    color: var(--color-muted);
+    text-shadow: none;
+  }
+  8% {
+    color: var(--color-electric);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--color-electric) 55%, transparent);
+  }
+  22% {
+    color: var(--color-muted);
+    text-shadow: none;
+  }
+}
+.capability-item {
+  animation: capability-highlight 8s ease-in-out infinite;
+}
+
+/* Isometric product cascade (ProductsTeaser.jsx, lg:+ only) — a fixed
+   rotateX/Y/Z tilt on `transform`, floating idle bob on the standalone
+   `translate` property (a separate CSS property from `transform` in modern
+   browsers, so it composes with the tilt instead of overwriting it — no JS
+   needed to keep both alive at once). Hover cancels the float outright
+   (`animation: none`) and re-poses via `transform` alone: flat, lifted,
+   scaled up, so the card reads as "coming toward you" out of the stack. */
+@keyframes iso-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
+/* Seasonal.jsx hero card stack — each card sets its own `transform: rotate()`
+   inline for the fan angle; this only animates `translate` (a standalone
+   property, per the same trick as iso-float above) so the two never fight
+   over the `transform` property. Kept as a separate class/keyframe from
+   iso-card since that one does a 3D tilt this flat fan doesn't want. */
+@keyframes festival-card-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+.festival-card-float {
+  animation: festival-card-float 5s ease-in-out infinite;
+}
+.iso-card {
+  transform: rotateX(20deg) rotateY(-15deg) rotateZ(4deg);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s 500ms;
+  animation: iso-float 6s ease-in-out infinite;
+}
+.iso-card:focus-visible {
+  animation: none;
+  translate: 0 0;
+  transform: translateZ(60px) scale(1.05);
+  box-shadow: 0 30px 60px -20px rgba(9, 88, 214, 0.4);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s;
+  z-index: 40 !important;
+}
+@media (hover: hover) {
+  .iso-card:hover {
+    animation: none;
+    translate: 0 0;
+    transform: translateZ(60px) scale(1.05);
+    box-shadow: 0 30px 60px -20px rgba(9, 88, 214, 0.4);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, z-index 0s;
+    z-index: 40 !important;
+  }
+}
+
+/* Navbar link (src/components/Navbar.jsx desktop links) — position:relative
+   is what the active-route underline (a motion.span, absolutely positioned)
+   anchors to. Hover gets its own separate treatment — a soft pill
+   background (Tailwind classes at the call site) — rather than growing the
+   same underline the active route already shows permanently, so hover
+   never reads as "this is also the current page". */
+.nav-link {
+  position: relative;
+}
+
+/* Same underline-grow mechanism as .nav-link, sized for unpadded inline text
+   (src/components/ui/Button.jsx `link` variant) rather than a padded nav
+   item — kept as a separate class so the inset doesn't need to compromise
+   between the two contexts. */
+.btn-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+@media (hover: hover) {
+  .btn-underline:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Contact page's one brand detail (src/pages/Contact.jsx) — a faint dot grid
+   behind the contact-info/form columns, opacity applied at the call site so
+   this stays a plain reusable pattern rather than a single-use magic number. */
+.contact-dot-grid {
+  background-image: radial-gradient(color-mix(in srgb, var(--color-electric) 60%, transparent) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+:root {
+  /* Motion tokens (Design System) — read by CSS animations directly; components/motion.js
+     mirrors these values for Framer Motion, which is JS-driven and can't read CSS vars. */
+  --motion-micro: 150ms;
+  --motion-base: 300ms;
+  --motion-reveal: 700ms;
+  --motion-step: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-micro: 0ms;
+    --motion-base: 0ms;
+    --motion-reveal: 150ms;
+    --motion-step: 150ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--color-primary);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+}

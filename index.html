@@ -23,7 +23,12 @@
         const baseUrl = isFresh ? 'https://fresh.navedhana.com' : 'https://www.navedhana.com';
         const currentPath = window.location.pathname;
         const fullUrl = baseUrl + currentPath;
-        
+        // fresh.navedhana.com serves byte-identical content to www — canonical
+        // always points at www so Google consolidates both into one indexed
+        // URL instead of treating them as duplicate content on two domains.
+        const CANONICAL_BASE = 'https://www.navedhana.com';
+        const canonicalUrl = CANONICAL_BASE + currentPath;
+
         // Set canonical URL
         let canonical = document.querySelector('link[rel="canonical"]');
         if (!canonical) {
@@ -31,9 +36,19 @@
           canonical.rel = 'canonical';
           document.head.appendChild(canonical);
         }
-        canonical.href = fullUrl;
-        
-        // Update sitemap reference
+        canonical.href = canonicalUrl;
+
+        // fresh.navedhana.com is not promoted in search — noindex it outright
+        // (on top of the canonical pointing at www above) so Google drops it
+        // from the index instead of just consolidating it.
+        if (isFresh) {
+          ['robots', 'googlebot'].forEach((name) => {
+            const tag = document.querySelector('meta[name="' + name + '"]');
+            if (tag) tag.setAttribute('content', 'noindex, follow');
+          });
+        }
+
+        // Update sitemap reference — always www, fresh has no sitemap of its own
         let sitemap = document.querySelector('link[rel="sitemap"]');
         if (!sitemap) {
           sitemap = document.createElement('link');
@@ -41,17 +56,18 @@
           sitemap.type = 'application/xml';
           document.head.appendChild(sitemap);
         }
-        sitemap.href = baseUrl + (isFresh ? '/sitemap-fresh.xml' : '/sitemap.xml');
-        
+        sitemap.href = 'https://www.navedhana.com/sitemap.xml';
+
         // Update preconnect
         let preconnect = document.querySelector('link[rel="preconnect"]');
         if (preconnect) {
           preconnect.href = baseUrl;
         }
-        
+
         // Store for use in structured data
         window.__NAVEDHANA_BASE_URL__ = baseUrl;
         window.__NAVEDHANA_FULL_URL__ = fullUrl;
+        window.__NAVEDHANA_CANONICAL_URL__ = canonicalUrl;
       })();
     </script>
     
@@ -60,12 +76,30 @@
     <link rel="preconnect" href="https://fresh.navedhana.com" />
     <link rel="dns-prefetch" href="https://www.navedhana.com" />
     <link rel="dns-prefetch" href="https://fresh.navedhana.com" />
-    
+
+    <!-- Design System Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Google Analytics (GA4) — set VITE_GA_MEASUREMENT_ID in .env -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', '%VITE_GA_MEASUREMENT_ID%');
+      window.gtag = gtag;
+    </script>
+
     <!-- Primary Meta Tags -->
-    <title id="page-title">Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products | www.navedhana.com</title>
-    <meta name="title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
-    <meta name="description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
-    <meta name="keywords" content="Navedhana, vegetables, delivery vegetables, fresh vegetables, fresh produce, software development, web development, AI solutions, mobile app development, seasonal products, festival supplies, organic farming, digital solutions, navedhana.com, best organic vegetables, software company, AI development services, farm fresh vegetables, custom software solutions, web app development, mobile app development company, seasonal festival products, organic produce delivery" />
+    <title id="page-title">Navedhana - Software Development & AI Engineering Company | www.navedhana.com</title>
+    <meta name="title" content="Navedhana - Software Development & AI Engineering Company" />
+    <meta name="description" content="Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises. Founded in 2023, based in Hyderabad, India." />
+    <meta name="keywords" content="Navedhana, Navedhana software, Navedhana AI, Navedhana technologies, Navedhana software company, Navedhana Hyderabad, Navedhana India, Navedhana Profit Amplifier, Navedhana Profit Amplifier Private Limited, navedhana.com, www.navedhana.com, Navedhna, Naveedhana, Navdhana, Nevedhana, Navedana, Navidhana, Navidana, Navidan, Navedhan, Navedan, software development company, software development, software developement, sofware development, software engineering company, AI development company, AI development services, artificial intelligence company, artificial intelligence, artifical intelligence, custom software development, custom software solutions, web development company, web app development, mobile app development, desktop application development, cloud and DevOps, QA automation, AI agents, AI agents development, generative AI development, RAG, RAG development, LLM integration, machine learning, machine learning company, software development company Hyderabad, software development company India, AI company India" />
     <meta name="author" content="Navedhana" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -86,8 +120,8 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.navedhana.com" id="og-url" />
-    <meta property="og:title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
-    <meta property="og:description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
+    <meta property="og:title" content="Navedhana - Software Development & AI Engineering Company" />
+    <meta property="og:description" content="Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises." />
     <meta property="og:image" content="https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -97,12 +131,12 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://www.navedhana.com" id="twitter-url" />
-    <meta name="twitter:title" content="Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products" />
-    <meta name="twitter:description" content="Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology." />
+    <meta name="twitter:title" content="Navedhana - Software Development & AI Engineering Company" />
+    <meta name="twitter:description" content="Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises." />
     <meta name="twitter:image" content="https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png" />
-    
+
     <!-- Additional SEO Meta Tags -->
-    <meta name="theme-color" content="#84cc16" />
+    <meta name="theme-color" content="#020617" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Navedhana" />
@@ -125,16 +159,18 @@
           "@type": "Organization",
           "@id": "https://www.navedhana.com/#organization",
           "name": "Navedhana",
+          "legalName": "Navedhana Profit Amplifier Private Limited",
           "url": "https://www.navedhana.com",
-          "alternateName": ["fresh.navedhana.com"],
+          "alternateName": ["Navedhana Profit Amplifier Private Limited"],
           "logo": {
             "@type": "ImageObject",
             "url": "https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png",
             "width": 1200,
             "height": 630
           },
-          "description": "Navedhana offers farm-fresh organic vegetables, innovative software development services (web, AI, mobile apps), and authentic seasonal festival products. Founded in 2023, we bridge traditional values with modern technology.",
+          "description": "Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises. Founded in 2023, based in Hyderabad, India.",
           "foundingDate": "2023",
+          "knowsAbout": ["Software Development", "Software Engineering", "Artificial Intelligence", "Machine Learning", "AI Agents", "Generative AI", "RAG", "LLM Integration", "Web Development", "Mobile App Development", "Cloud & DevOps", "QA Automation"],
           "sameAs": [],
           "contactPoint": {
             "@type": "ContactPoint",
@@ -153,32 +189,8 @@
                 "@type": "Offer",
                 "itemOffered": {
                   "@type": "Service",
-                  "name": "Organic Vegetables Supply",
-                  "description": "Farm-fresh, 100% organic vegetables delivered to your doorstep. Premium quality produce with guaranteed freshness.",
-                  "provider": {
-                    "@id": "https://www.navedhana.com/#organization"
-                  },
-                  "areaServed": "Worldwide"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Software Development Services",
-                  "description": "Custom web development, AI solutions, mobile app development, and scalable backend systems. Transform your business with cutting-edge technology.",
-                  "provider": {
-                    "@id": "https://www.navedhana.com/#organization"
-                  },
-                  "areaServed": "Worldwide"
-                }
-              },
-              {
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": "Seasonal Products",
-                  "description": "Authentic seasonal festival products and supplies. Celebrate every festival with premium quality traditional items.",
+                  "name": "Software Development & AI Engineering",
+                  "description": "Custom software development for web, mobile, and desktop, AI agents and RAG-powered assistants, cloud/DevOps, and QA automation. Engineered for scale.",
                   "provider": {
                     "@id": "https://www.navedhana.com/#organization"
                   },
@@ -192,9 +204,8 @@
           "@type": "WebSite",
           "@id": "https://www.navedhana.com/#website",
           "url": "https://www.navedhana.com",
-          "alternateName": "fresh.navedhana.com",
           "name": "Navedhana",
-          "description": "Fresh Organic Produce, Software Solutions & Seasonal Products",
+          "description": "Software Development & AI Engineering Company",
           "publisher": {
             "@id": "https://www.navedhana.com/#organization"
           },
@@ -212,8 +223,8 @@
           "@type": "WebPage",
           "@id": "https://www.navedhana.com/#webpage",
           "url": "https://www.navedhana.com",
-          "name": "Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products",
-          "description": "Navedhana offers farm-fresh organic vegetables, innovative software development services, and authentic seasonal festival products.",
+          "name": "Navedhana - Software Development & AI Engineering Company",
+          "description": "Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises.",
           "isPartOf": {
             "@id": "https://www.navedhana.com/#website"
           },
@@ -249,9 +260,8 @@
           "name": "Navedhana",
           "image": "https://www.navedhana.com/assets/logo/NPA_Logo_Enlarge.png",
           "url": "https://www.navedhana.com",
-          "description": "Navedhana offers farm-fresh organic vegetables, innovative software development services, and authentic seasonal festival products.",
-          "priceRange": "$$",
-          "servesCuisine": "Organic Produce, Software Solutions, Seasonal Products"
+          "description": "Navedhana is a software development and AI engineering company building web, mobile, desktop, and AI-powered products for startups and enterprises.",
+          "priceRange": "$$"
         }
       ]
     }
@@ -261,24 +271,26 @@
       (function() {
         const hostname = window.location.hostname;
         const isFresh = hostname === 'fresh.navedhana.com' || hostname.includes('fresh.navedhana.com');
-        const baseUrl = isFresh ? 'https://fresh.navedhana.com' : 'https://www.navedhana.com';
         const domainDisplay = isFresh ? 'fresh.navedhana.com' : 'www.navedhana.com';
         const currentPath = window.location.pathname;
-        const fullUrl = baseUrl + currentPath;
-        
+        // Same www-only consolidation as the canonical link above — og:url and
+        // the JSON-LD @ids should point at the one indexed domain, not
+        // whichever host the visitor happens to be on.
+        const canonicalUrl = 'https://www.navedhana.com' + currentPath;
+
         // Update page title
         const title = document.getElementById('page-title');
         if (title) {
-          title.textContent = 'Navedhana - Fresh Organic Produce, Software Solutions & Seasonal Products | ' + domainDisplay;
+          title.textContent = 'Navedhana - Software Development & AI Engineering Company | ' + domainDisplay;
         }
-        
+
         // Update Open Graph URL
         const ogUrl = document.getElementById('og-url');
-        if (ogUrl) ogUrl.content = fullUrl;
-        
+        if (ogUrl) ogUrl.content = canonicalUrl;
+
         // Update Twitter URL
         const twitterUrl = document.getElementById('twitter-url');
-        if (twitterUrl) twitterUrl.content = fullUrl;
+        if (twitterUrl) twitterUrl.content = canonicalUrl;
         
         // Update structured data
         const structuredData = document.getElementById('structured-data');
@@ -286,34 +298,12 @@
           try {
             const data = JSON.parse(structuredData.textContent);
             if (data['@graph']) {
+              // @id/url deliberately stay on www.navedhana.com regardless of
+              // which host is serving the page — one canonical entity per
+              // page, not a second copy under fresh.navedhana.com.
               data['@graph'].forEach(item => {
-                if (item['@id']) {
-                  item['@id'] = item['@id'].replace('https://www.navedhana.com', baseUrl);
-                }
-                if (item.url) {
-                  item.url = item.url.replace('https://www.navedhana.com', baseUrl);
-                }
                 if (item['@type'] === 'WebPage' && item.url) {
-                  item.url = fullUrl;
-                }
-                if (item.logo && item.logo.url) {
-                  // Keep logo URL as is (same for both domains)
-                }
-                if (item.image && typeof item.image === 'string') {
-                  // Keep image URL as is
-                }
-                if (item.image && item.image.url) {
-                  // Keep image URL as is
-                }
-                if (item.target && item.target.urlTemplate) {
-                  item.target.urlTemplate = item.target.urlTemplate.replace('https://www.navedhana.com', baseUrl);
-                }
-                if (item.itemListElement) {
-                  item.itemListElement.forEach(li => {
-                    if (li.item) {
-                      li.item = li.item.replace('https://www.navedhana.com', baseUrl);
-                    }
-                  });
+                  item.url = canonicalUrl;
                 }
               });
               structuredData.textContent = JSON.stringify(data);

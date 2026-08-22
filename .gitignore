@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local environment. Values here are VITE_* (inlined into the client
+# bundle and therefore public), but keeping the file untracked stops a
+# genuinely secret value from being committed later by habit.
+.env
+.env.local
+.env.*.local

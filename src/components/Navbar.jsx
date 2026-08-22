@@ -1,232 +1,203 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-const logo = '/assets/logo/NPA_Logo_Enlarge.png';
-const blueLogo = '/assets/logo/blueLogo_Englarge.png';
-const orangeLogo = '/assets/logo/orangeLogo_Englarge.png';
 import { motion, AnimatePresence } from 'framer-motion';
+import Button from './ui/Button';
+import LogoMark from './intro/LogoMark';
+import { trackEvent } from '../lib/analytics';
 
-const Navbar = () => {
+const links = [
+  { name: 'Home', path: '/' },
+  { name: 'Services', path: '/services' },
+  { name: 'Products', path: '/products' },
+  { name: 'About', path: '/about' },
+  { name: 'Contact', path: '/contact' },
+];
+
+// Full-width on scroll — a flat solid bar with one hairline border, not a
+// floating inset pill. Secondary destinations (AI Agent, Insights, Vegetable
+// Service) live in the footer — keeping the primary nav to five links is
+// what lets the dropdown go away entirely. The active link is marked by an
+// underline that slides between links (shared layoutId), not a dot.
+const Navbar = ({ introDone = true }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const isActive = (path) => location.pathname === path;
+  const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  // The mobile dropdown had no backdrop and nothing behind it was blocked —
+  // the page kept scrolling and the hero's own CTAs stayed clickable right
+  // through it, so it never read as a real overlay. This closes it on route
+  // change (in case navigation happens some way other than clicking a link
+  // in the menu itself) and on Escape, and locks body scroll while open so
+  // the page underneath can't scroll out from behind it.
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
-  const links = [
-    { name: 'Home', path: '/' },
-    { name: 'Vegetables', path: '/vegetables' },
-    { name: 'Software Services', path: '/software' },
-    { name: 'Seasonal', path: '/seasonal' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
-  ];
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
 
-  const isActive = (path) => location.pathname === path;
+  // Home's hero is a fixed, full-viewport section (Home.jsx) with its own
+  // large "Discuss Your Project" CTA — the navbar's copy is redundant while
+  // the navbar is still transparent over the hero, and appears the moment
+  // the navbar itself turns solid/white (the same `isScrolled` threshold).
+  // Every other page has no equivalent hero CTA, so it just stays visible.
+  const showNavCta = !isHome || isScrolled;
 
-  // Get logo based on current route
-  const getCurrentLogo = () => {
-    switch (location.pathname) {
-      case '/software':
-        return blueLogo;
-      case '/seasonal':
-        return orangeLogo;
-      default:
-        return logo;
-    }
-  };
-
-  // Dynamic styles based on route
-  const getThemeStyles = () => {
-    switch (location.pathname) {
-      case '/':
-        return {
-          border: 'border-lime-200/50',
-          activeBg: 'bg-lime-600',
-          activeText: 'text-lime-600',
-          buttonBg: 'bg-lime-600 hover:bg-lime-700',
-          buttonBorder: 'border-lime-600',
-          glow: 'shadow-lime-500/20',
-          gradientText: 'from-lime-700 to-lime-900'
-        };
-      case '/vegetables':
-        return {
-          border: 'border-green-200/50',
-          activeBg: 'bg-green-600',
-          activeText: 'text-green-600',
-          buttonBg: 'bg-green-600 hover:bg-green-700',
-          buttonBorder: 'border-green-600',
-          glow: 'shadow-green-500/20',
-          gradientText: 'from-green-700 to-emerald-900'
-        };
-      case '/about':
-        return {
-          border: 'border-lime-200/50',
-          activeBg: 'bg-lime-600',
-          activeText: 'text-lime-600',
-          buttonBg: 'bg-lime-600 hover:bg-lime-700',
-          buttonBorder: 'border-lime-600',
-          glow: 'shadow-lime-500/20',
-          gradientText: 'from-lime-700 to-lime-900'
-        };
-      case '/software':
-        return {
-          border: 'border-blue-200/50',
-          activeBg: 'bg-blue-600',
-          activeText: 'text-blue-600',
-          buttonBg: 'bg-blue-600 hover:bg-blue-700',
-          buttonBorder: 'border-blue-600',
-          glow: 'shadow-blue-500/20',
-          gradientText: 'from-blue-700 to-cyan-900'
-        };
-      case '/seasonal':
-        return {
-          border: 'border-orange-200/50',
-          activeBg: 'bg-orange-600',
-          activeText: 'text-orange-600',
-          buttonBg: 'bg-orange-600 hover:bg-orange-700',
-          buttonBorder: 'border-orange-600',
-          glow: 'shadow-orange-500/20',
-          gradientText: 'from-orange-700 to-amber-900'
-        };
-      case '/contact':
-        return {
-          border: 'border-blue-200/50',
-          activeBg: 'bg-blue-600',
-          activeText: 'text-blue-600',
-          buttonBg: 'bg-blue-600 hover:bg-blue-700',
-          buttonBorder: 'border-blue-600',
-          glow: 'shadow-blue-500/20',
-          gradientText: 'from-blue-700 to-cyan-900'
-        };
-      default:
-        return {
-          border: 'border-gray-200/50',
-          activeBg: 'bg-gray-600',
-          activeText: 'text-gray-900',
-          buttonBg: 'bg-gray-600 hover:bg-gray-700',
-          buttonBorder: 'border-gray-600',
-          glow: 'shadow-gray-500/20',
-          gradientText: 'from-gray-700 to-gray-900'
-        };
-    }
-  };
-
-  const theme = getThemeStyles();
+  // The home hero (Home.jsx `.dark-scope`) is a dark background; the navbar
+  // is a DOM sibling of it, not a descendant, so it can't pick up that
+  // scope's light-text token overrides via CSS cascade — it needs its own
+  // light-text state for exactly the window where it's transparent over
+  // that dark section (home, not yet scrolled).
+  const overDarkHero = isHome && !isScrolled;
 
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-colors transition-shadow duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-lg shadow-lg' : 'bg-white'
-          }`}
+        className={`fixed z-50 mx-auto flex items-center justify-between gap-6 border transition-all duration-300 ease-in-out ${
+          isScrolled
+            ? 'top-3 sm:top-4 left-3 right-3 sm:left-6 sm:right-6 lg:left-10 lg:right-10 max-w-7xl h-[68px] px-5 sm:px-8 rounded-full bg-card/65 backdrop-blur-xl backdrop-saturate-150 border-white/40 shadow-[0_8px_30px_-8px_rgba(28,26,23,0.2),0_1px_0_0_rgba(255,255,255,0.5)_inset]'
+            : 'top-0 left-0 right-0 max-w-none w-full h-[76px] px-4 sm:px-8 rounded-none bg-transparent border-transparent shadow-none'
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+        <Link to="/" className="group relative flex items-center gap-2.5 flex-shrink-0 min-h-[44px]">
+          <span
+            className="absolute -left-2 -top-2 w-11 h-11 rounded-full bg-electric/0 group-hover:bg-electric/10 blur-md transition-colors duration-base"
+            aria-hidden="true"
+          />
+          <motion.span
+            className="relative inline-block h-10 w-10"
+            whileHover={{ scale: 1.08, rotate: -4 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+          >
+            <LogoMark
+              stage="settled"
+              layoutId={introDone ? 'brand-logomark' : undefined}
+              className={`h-10 w-10 text-electric transition-opacity duration-300 ${
+                introDone ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          </motion.span>
+          <span className={`font-display font-semibold text-xl tracking-tight ${overDarkHero ? 'text-white' : 'text-ink'}`}>Navedhana</span>
+        </Link>
 
-            {/* Logo Section */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 group-hover:scale-110 transition-transform duration-300">
-                <img src={getCurrentLogo()} alt="Navedhana" className="w-full h-full object-contain" />
-              </div>
-              <span className={`font-bold text-xl bg-gradient-to-r ${theme.gradientText} bg-clip-text text-transparent tracking-tight`}>
-                Navedhana
-              </span>
-            </Link>
-
-            {/* Desktop Navigation - Center */}
-            <div className="hidden lg:flex items-center space-x-8">
-              {links.map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={`relative text-sm font-medium transition-colors duration-200 ${isActive(link.path)
-                    ? theme.activeText
-                    : 'text-gray-700 hover:text-gray-900'
-                    }`}
-                >
-                  {link.name}
-                  {isActive(link.path) && (
-                    <motion.div
-                      layoutId="navbar-underline"
-                      className={`absolute -bottom-1 left-0 right-0 h-0.5 ${theme.activeBg}`}
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </Link>
-              ))}
-            </div>
-
-            {/* Action Buttons - Right */}
-            <div className="hidden lg:flex items-center gap-4">
-              <a
-                href="/#services"
-                onClick={(e) => {
-                  if (location.pathname === '/') {
-                    e.preventDefault();
-                    const servicesSection = document.getElementById('services');
-                    if (servicesSection) {
-                      servicesSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }
-                  // If on another page, let the default href="/#services" handle navigation
-                }}
-                className={`px-5 py-2.5 text-sm font-semibold ${theme.activeText} border-2 ${theme.buttonBorder} rounded-lg hover:bg-opacity-10 transition-all cursor-pointer`}
-              >
-                GET STARTED
-              </a>
-              <Link
-                to="/contact"
-                className={`px-5 py-2.5 text-sm font-semibold text-white ${theme.buttonBg} rounded-lg transition-all shadow-md hover:shadow-lg cursor-pointer`}
-              >
-                CONTACT US
-              </Link>
-            </div>
-
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-800"
+        <div className={`relative hidden lg:flex items-center gap-2 text-[14.5px] font-medium whitespace-nowrap ${overDarkHero ? 'text-white/70' : 'text-ink/70'}`}>
+          {links.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`nav-link px-3.5 py-2 rounded-full transition-colors duration-base ${
+                isActive(link.path)
+                  ? (overDarkHero ? 'text-white' : 'text-ink')
+                  : (overDarkHero ? 'hover:text-white hover:bg-white/10' : 'hover:text-ink hover:bg-ink/[0.05]')
+              }`}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+              {link.name}
+              {isActive(link.path) && (
+                <motion.span
+                  layoutId="navbar-underline"
+                  className="absolute left-3.5 right-3.5 -bottom-[1px] h-[1.5px] rounded-full bg-electric"
+                  style={{ boxShadow: '0 0 6px rgba(1,100,245,0.5)' }}
+                  transition={{ type: 'spring', bounce: 0.25, duration: 0.55 }}
+                />
+              )}
+            </Link>
+          ))}
         </div>
+
+        <div className="hidden lg:block flex-shrink-0 min-w-[186px] text-right">
+          <AnimatePresence>
+            {showNavCta && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Button to="/contact" size="sm" onClick={() => trackEvent('cta_click', { location: 'navbar' })}>
+                  Discuss Your Project →
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <button
+          onClick={() => setIsOpen((v) => !v)}
+          className={`lg:hidden -mr-2 flex items-center justify-center min-w-[44px] min-h-[44px] ${overDarkHero ? 'text-white' : 'text-ink'}`}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav-menu"
+        >
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
       </nav>
 
-      {/* Mobile Menu Dropdown */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-[80px] left-1/2 -translate-x-1/2 z-[2000] w-[90%] max-w-sm bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden lg:hidden"
+            className="fixed inset-0 z-40 bg-ink/40 backdrop-blur-sm lg:hidden"
+            onClick={() => setIsOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
 
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id="mobile-nav-menu"
+            role="dialog"
+            aria-modal="true"
+            initial={{ opacity: 0, y: -16, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-[84px] left-4 right-4 z-[2000] rounded-2xl bg-card border border-ink/15 shadow-2xl p-2 max-h-[calc(100vh-100px)] overflow-auto lg:hidden"
           >
-            <div className="p-2 space-y-1">
-              {links.map((link) => (
-                <div key={link.path} onClick={() => setIsOpen(false)} className="w-full">
-                  <Link
-                    to={link.path}
-                    className={`flex items-center justify-center px-4 py-3 rounded-2xl text-base font-medium transition-all w-full ${isActive(link.path)
-                      ? `${theme.activeBg} text-white`
-                      : 'text-gray-600 hover:bg-gray-50'
-                      }`}
-                  >
-                    {link.name}
-                  </Link>
-                </div>
-              ))}
-            </div>
+            {links.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={`flex items-center min-h-[48px] px-4 rounded-xl text-[16px] font-medium transition-colors ${
+                  isActive(link.path) ? 'bg-ink/[0.06] text-ink' : 'text-ink/70 hover:bg-ink/[0.06]'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link
+              to="/contact"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center min-h-[52px] mt-2 px-4 rounded-xl bg-electric text-primary font-bold text-[16px]"
+            >
+              Discuss Your Project →
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

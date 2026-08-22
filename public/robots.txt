@@ -1,11 +1,12 @@
-# robots.txt (serve the right one per domain)
+# robots.txt — fresh.navedhana.com is noindexed via meta tag (see index.html),
+# not blocked here, since a robots.txt Disallow would stop Google from
+# crawling it at all and never seeing that noindex directive.
 
 User-agent: *
 Allow: /
 
-# Sitemap location(s)
+# Sitemap location
 Sitemap: https://www.navedhana.com/sitemap.xml
-Sitemap: https://fresh.navedhana.com/sitemap.xml
 
 # Disallow admin or private areas (if any)
 # Disallow: /admin/
