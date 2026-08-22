@@ -24,11 +24,26 @@ export const SPRING = { type: 'spring', stiffness: 300, damping: 30 };
 // which is what makes repeat visits tiring.
 const VIEWPORT = { once: true, amount: 0.25 };
 
+// Read once at module load (not reactive to the OS setting flipping mid-
+// session — the same trade-off Home.jsx's own local reducedMotion checks
+// already make; a live listener is more than this is worth). Below-the-fold
+// content sits in its `hidden` pose (opacity:0, x/y offset, blur, scale)
+// until whileInView fires, which is invisible on a normal scroll — but a
+// reduced-motion visitor should never see motion OR that pose at all, and
+// without this check none of these presets checked for that. The x:±32
+// slideLeft/slideRight offset was also the direct cause of a real 16px
+// horizontal-overflow bug on /services at narrow widths: any below-the-fold
+// image sitting in that untriggered hidden state was measurably 32px off
+// its resting position, wide enough to push part of it past the viewport
+// edge before the visitor ever scrolled there.
+const prefersReducedMotion =
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
 const preset = (hidden, show, duration = DURATION.reveal) => ({
-  initial: hidden,
+  initial: prefersReducedMotion ? false : hidden,
   whileInView: show,
   viewport: VIEWPORT,
-  transition: { duration, ease: EASE_SIGNATURE },
+  transition: { duration: prefersReducedMotion ? 0 : duration, ease: EASE_SIGNATURE },
 });
 
 /** Rises from below. The original site-wide effect, now one option of several. */
@@ -63,11 +78,15 @@ export const dropIn = preset({ opacity: 0, y: -22 }, { opacity: 1, y: 0 });
 // the presets above these are `variants` objects, so the parent needs
 // initial="hidden" whileInView="show".
 
+// `initial: false` here doesn't just skip the parent's own (empty) hidden
+// state — framer-motion propagates it to every descendant that doesn't set
+// its own `initial`, which is exactly the *Child variants below. That's what
+// stops riseChild/slideChild/etc. from sitting in their offset hidden pose.
 export const staggerParent = (stagger = 0.08, delay = 0.05) => ({
-  initial: 'hidden',
+  initial: prefersReducedMotion ? false : 'hidden',
   whileInView: 'show',
   viewport: VIEWPORT,
-  variants: { hidden: {}, show: { transition: { staggerChildren: stagger, delayChildren: delay } } },
+  variants: { hidden: {}, show: { transition: { staggerChildren: prefersReducedMotion ? 0 : stagger, delayChildren: prefersReducedMotion ? 0 : delay } } },
 });
 
 export const riseChild = {

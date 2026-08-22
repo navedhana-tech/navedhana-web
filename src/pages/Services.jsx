@@ -1,115 +1,105 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Cpu, Layers, Workflow, Box, Sprout, Gift, ArrowUpRight } from 'lucide-react';
+import { Cpu, Layers, Workflow, Box, Sprout, Gift, Sun, ArrowUpRight } from 'lucide-react';
 import PageHero from '../components/ui/PageHero';
 import SectionKicker from '../components/ui/SectionKicker';
-import AccentIcon from '../components/ui/AccentIcon';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
-import { slideLeft, slideRight, blurIn, scaleIn, rise, staggerParent, riseChild } from '../lib/motion';
+import { slideLeft, slideRight, blurIn, rise, staggerParent, riseChild } from '../lib/motion';
 
 // One accent for all four, matching Home's capability cards. The four separate
 // hues that used to live here were the same thing removed from those cards.
 const ACCENT = 'var(--color-electric)';
 
-// Home's "What We Do" cards name these same four capabilities. What earns this
-// page its "full breakdown" link is the three blocks below each one: the
-// situation you would be in (`when`), the kind of system we build (`build`,
-// each item a short label plus what it actually does — not a bare noun), and
-// what actually lands in your hands at the end (`receive`).
+// Restructured to match a reference layout the user approved: a punchy
+// one-line `headline` carries the section (the service name moves to a small
+// tag above it), `build` is a tight 4-item grid rather than a 5-item list,
+// and the separate "when you need it" bullets are gone — their substance now
+// lives in `lead` instead of a parallel block. `dark` alternates 01/03 true,
+// 02/04 false, and is what both the section background AND which side the
+// image sits on are driven from — image-left pairs with dark, image-right
+// with light, exactly like the reference.
 //
-// `receive` deliberately describes a system, not an outcome — no metrics,
-// timelines or results are claimed anywhere on this page.
+// `receive` still describes a system, not an outcome — no metrics, timelines
+// or results are claimed anywhere on this page.
 const GROUPS = [
   {
     id: 'ai-engineering',
     title: 'AI Engineering',
     icon: Cpu,
-    image: '/assets/services/ai-engineering.png',
-    lead: 'AI that is wired into your data, your tools and your rules — not a demo sitting beside them.',
-    when: [
-      'You want AI inside a product you already run.',
-      'Your team reads, sorts or summarises large amounts of information by hand.',
-      'You need an assistant or agent that can act, not just answer.',
-      'You hold business data that should be driving decisions and currently is not.',
-    ],
+    image: '/assets/services/ai-engineering.webp',
+    dark: true,
+    headline: 'Build intelligence into the system.',
+    lead: 'AI that works with your data, tools and workflows — not a demo sitting beside them.',
     build: [
-      { title: 'AI Agents', desc: 'Agents that use tools and complete tasks, not just answer questions.' },
-      { title: 'RAG Systems', desc: 'Retrieval over your own documents and data, kept current.' },
-      { title: 'Intelligent Assistants', desc: 'Embedded directly inside a product you already run.' },
-      { title: 'ML & Computer Vision', desc: 'Models trained on your data, not a generic API call.' },
-      { title: 'LLM Integrations', desc: 'Language models wired into your existing workflows.' },
+      { title: 'AI Agents', desc: 'Reason, use tools and complete tasks.' },
+      { title: 'RAG Systems', desc: 'Retrieval over your own documents and data.' },
+      { title: 'Intelligent Assistants', desc: 'Embedded directly inside a product you run.' },
+      { title: 'Machine Learning & Computer Vision', desc: 'Models trained on your data, not a generic API.' },
     ],
-    receive:
-      'A production system that connects your models, business data, tools and users into one working flow — with the evaluation showing where it is reliable, and the documentation to operate it.',
+    receive: {
+      title: 'A production-ready AI system',
+      body: 'Connecting your models, business data, tools and users into one working flow.',
+    },
   },
   {
     id: 'custom-software',
     title: 'Custom Software',
     icon: Layers,
-    image: '/assets/services/custom-software.png',
-    lead: 'Systems built around how your business actually works, rather than the shape a package vendor assumed.',
-    when: [
-      'The tools you pay for almost fit, and the gap is where your real work happens.',
-      'Several systems hold pieces of the same process and none of them talk.',
-      'A core operation runs on spreadsheets and email because nothing else fits it.',
-      'You need internal software only your organisation would ever use.',
-    ],
+    image: '/assets/services/custom-software.webp',
+    dark: false,
+    headline: 'Build the system your workflow actually needs.',
+    lead: 'Software shaped around how your business works, not the shape a package vendor assumed.',
     build: [
-      { title: 'Business Platforms', desc: "Internal tools built around how your team actually works." },
+      { title: 'Business Platforms', desc: 'Internal tools built around how your team works.' },
       { title: 'Web, Desktop & Mobile', desc: 'Applications across whichever surface the job needs.' },
-      { title: 'APIs & Integrations', desc: "Connecting systems that currently don't talk to each other." },
-      { title: 'SaaS Products', desc: 'Multi-tenant software you can sell, not just use internally.' },
-      { title: 'Workflow Systems', desc: 'Dashboards and tools shaped around one specific process.' },
+      { title: 'APIs & Integrations', desc: "Connecting systems that don't talk to each other." },
+      { title: 'SaaS Products', desc: 'Multi-tenant software you can sell, not just use.' },
     ],
-    receive:
-      'A deployed application built to your process, the integrations that keep it in step with your other systems, and the architecture notes and handover needed to maintain it.',
+    receive: {
+      title: 'Software built around your workflow',
+      body: 'A deployed application built to your process, with the integrations and handover needed to maintain it.',
+    },
   },
   {
     id: 'intelligent-automation',
     title: 'Intelligent Automation',
     icon: Workflow,
-    image: '/assets/services/intelligent-automation.png',
-    lead: 'Taking the repetitive middle out of a process, including the parts too messy for conventional automation.',
-    when: [
-      'Repetitive manual steps are consuming hours of your team’s week.',
-      'Information is being copied by hand between systems.',
-      'The same operational sequence is performed again and again.',
-      'Existing automation breaks whenever the input is not perfectly uniform.',
-    ],
+    image: '/assets/services/intelligent-automation.webp',
+    dark: true,
+    headline: 'Make repetitive work move on its own.',
+    lead: 'Connecting messy real-world inputs to intelligent decisions and automated actions.',
     build: [
-      { title: 'Automated Processes', desc: "End-to-end, not just the easy first and last steps." },
+      { title: 'Automated Processes', desc: 'End to end, not just the easy first and last steps.' },
       { title: 'AI-Powered Workflows', desc: "Handling the judgement calls rigid automation can't." },
-      { title: 'Document Workflows', desc: 'Intake, extraction and routing, without manual re-entry.' },
+      { title: 'Document Workflows', desc: 'Intake, extraction and routing, without re-entry.' },
       { title: 'Data Pipelines', desc: 'Moving information between systems on its own.' },
-      { title: 'Event-Driven Automation', desc: 'Reacting the moment something changes, not on a schedule.' },
     ],
-    receive:
-      'The process mapped, the repeatable parts running without a person, and monitoring that tells you when something genuinely needs human attention.',
+    receive: {
+      title: 'A connected automation system',
+      body: 'The repeatable parts run without a person, with monitoring for when it genuinely needs you.',
+    },
   },
   {
     id: 'product-engineering',
     title: 'Product Engineering',
     icon: Box,
-    image: '/assets/services/product-engineering.png',
-    lead: 'Taking a product from idea to something that survives real users — or rescuing one that has outgrown its first build.',
-    when: [
-      'You have an idea and need it turned into a real, usable product.',
-      'You need an MVP that can be put in front of users quickly.',
-      'An early version works but will not hold up as usage grows.',
-      'An existing product needs extending, modernising or re-architecting.',
-    ],
+    image: '/assets/services/product-engineering.webp',
+    dark: false,
+    headline: 'Turn an idea into a product that keeps growing.',
+    lead: 'From the first usable version to the engineering real users demand.',
     build: [
       { title: 'Product MVPs', desc: 'A first real version you can put in front of users.' },
       { title: 'Production Applications', desc: 'Built to hold up once real usage arrives.' },
       { title: 'Product Enhancements', desc: 'Extending something already live and in use.' },
       { title: 'Architecture Improvements', desc: 'Fixing the foundation so the product can keep growing.' },
-      { title: 'Feature Development', desc: 'Ongoing capability added to an existing product.' },
     ],
-    receive:
-      'A product you can put in front of users, engineered on an architecture meant to be extended, with the reasoning behind the technical decisions written down.',
+    receive: {
+      title: 'A maintainable, production-ready product',
+      body: 'Engineered on an architecture meant to be extended, ready to put in front of users.',
+    },
   },
 ];
 
@@ -134,38 +124,49 @@ const LEKVYA_CAPABILITIES = ['AI Engineering', 'Custom Software', 'Intelligent A
 // `/seasonal` exists only as a redirect to /vegetables, so both point there —
 // no seasonal-products route is invented here.
 const OTHER_VENTURES = [
-  { title: 'Vegetables Supply', icon: Sprout, desc: 'Farm-fresh, organic vegetables and seasonal produce.', to: '/vegetables', status: null },
+  { title: 'Agri Tech Service', icon: Sprout, desc: 'Farm-fresh, organic vegetables and seasonal produce.', to: '/vegetables', status: null },
   { title: 'Seasonal Products', icon: Gift, desc: 'Authentic seasonal and festive products.', to: '/vegetables', status: 'Launching soon' },
+  { title: 'Solar Service', icon: Sun, desc: 'Solar installation and clean energy solutions.', to: '/contact', status: 'Launching soon' },
 ];
 
 // The navbar is fixed, so an anchored section would otherwise land underneath
 // it. Applied to each capability section rather than globally.
 const ANCHOR_OFFSET = 'scroll-mt-[96px]';
 
-// The five-item "what we build" list, restyled as compact label+description
-// pairs (title bold, one short line under it) rather than a flat bullet list
-// or five full cards — a left rule carries the accent instead of a bordered
-// box, so five of these read as one scannable block, not five tiles.
-const ServiceDeliverables = ({ items }) => (
-  <div className="grid sm:grid-cols-2 gap-x-5 gap-y-3.5">
-    {items.map((it) => (
-      <div key={it.title} className="border-l-2 border-electric/30 pl-3">
-        <h4 className="font-display text-[13px] font-semibold text-ink leading-snug">{it.title}</h4>
-        <p className="text-[12.5px] leading-snug text-muted mt-0.5">{it.desc}</p>
+// The 4-item "what we build" grid. A bordered, gap-px-divided 2x2 (the same
+// idiom ENGAGEMENT already uses below, just 2 columns instead of 5) rather
+// than a bullet list or four separate cards — reads as one compact reference
+// block. `dark` swaps the cell fill between the two section backgrounds;
+// text-ink/text-muted/text-royal already re-theme automatically via the
+// .dark-scope cascade, so only the fill and divider need the branch.
+const ServiceBuildGrid = ({ items, dark }) => (
+  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-px rounded-2xl overflow-hidden border ${dark ? 'bg-white/10 border-white/10' : 'bg-ink/15 border-ink/15'}`}>
+    {items.map((it, i) => (
+      <div key={it.title} className={dark ? 'bg-[var(--hero-bg)] p-4' : 'bg-card p-4'}>
+        <span className="font-display text-[10.5px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+        <h4 className="font-display text-[13.5px] font-semibold text-ink mt-1.5 leading-snug">{it.title}</h4>
+        <p className="text-[12px] leading-snug text-muted mt-1">{it.desc}</p>
       </div>
     ))}
   </div>
 );
 
-// The one highlighted callout per service. Kept to a single small card
-// (light blue fill, thin blue border) rather than four large panels — it
-// should read as the answer to one specific question, not another section.
-const ServiceReceiveCard = ({ children }) => (
-  <div className="rounded-xl border border-electric/20 bg-electric/[0.05] p-4">
-    <h3 className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-royal mb-1.5">
+// The one highlighted callout per service — a left accent bar (border-l-4)
+// rather than an absolutely-positioned pseudo-element bar, since Tailwind's
+// border utilities give the identical visual result natively. `title` is the
+// tangible deliverable itself ("A production-ready AI system") as its own
+// strong line, not buried inside the first sentence of `body`.
+const ServiceReceiveCard = ({ title, body, dark }) => (
+  <div
+    className={`rounded-xl border-l-4 border-electric py-4 px-5 ${
+      dark ? 'bg-white/[0.04] border-y border-r border-white/10' : 'bg-electric/[0.05] border-y border-r border-electric/20'
+    }`}
+  >
+    <h3 className="font-display text-[10.5px] font-bold uppercase tracking-[0.1em] text-royal mb-1.5">
       What you receive
     </h3>
-    <p className="text-[13.5px] leading-relaxed text-ink/80">{children}</p>
+    <p className="font-display text-[15px] font-semibold text-ink mb-1">{title}</p>
+    <p className="text-[13px] leading-relaxed text-muted">{body}</p>
   </div>
 );
 
@@ -208,48 +209,61 @@ const Services = () => {
       </section>
 
       {/* The four capabilities in depth. Each answers three things Home's
-          teaser cards do not: the situation, the system, the deliverable. */}
+          teaser cards do not: the situation (folded into the headline/lead),
+          the system ("what we build"), the deliverable ("what you receive").
+          Alternation is two axes at once, in sync: dark background pairs with
+          image-left, light pairs with image-right — 01/03 dark+left,
+          02/04 light+right. */}
       {GROUPS.map((grp, i) => {
-        // Alternating sides: even index (01, 03) carries the image left of
-        // the text, odd index (02, 04) flips it. lg:order-2 on the image is
-        // what actually flips the side — the grid columns stay in the same
-        // DOM order either way, so a keyboard/screen-reader pass still meets
-        // the heading before the illustration. Below lg the image always
-        // leads (alternation has no meaning in a single stacked column).
-        const imageSecond = i % 2 === 1;
+        const imageSecond = !grp.dark;
         return (
           <section
             key={grp.id}
             id={grp.id}
             aria-labelledby={`${grp.id}-heading`}
-            className={`${ANCHOR_OFFSET} px-4 sm:px-8`}
+            className={`${ANCHOR_OFFSET} px-4 sm:px-8 ${grp.dark ? 'dark-scope bg-[var(--hero-bg)]' : ''}`}
           >
-            <div className="max-w-6xl mx-auto py-10 sm:py-14 border-t border-ink/15">
-              {/* min-w-0 on both grid children: without it, a CSS grid item's
-                  default min-width is its content's own intrinsic size, so
-                  the illustration's native pixel width was forcing this track
-                  wider than the viewport at mobile — a real 16px horizontal
-                  overflow, not a rounding artifact. */}
-              <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
+            <div className="max-w-6xl mx-auto py-10 sm:py-16">
+              <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
                 <motion.div
                   {...(imageSecond ? slideRight : slideLeft)}
                   transition={{ duration: 0.5, delay: 0.04 }}
-                  className={`min-w-0 flex justify-center ${imageSecond ? 'lg:order-2' : ''}`}
+                  className={`relative min-w-0 flex justify-center ${imageSecond ? 'lg:order-2' : ''}`}
                 >
-                  {/* No card, border or fill behind the artwork — these are
-                      pre-cut, transparent-background illustrations meant to
-                      float directly on the page rather than sit boxed inside
-                      a frame. Sized to ~50% of the section width (its column)
-                      rather than a small fixed thumbnail. drop-shadow (not
-                      box-shadow, which needs a rectangular layer) gives it
-                      lift while following the artwork's own silhouette. */}
-                  <img
-                    src={grp.image}
-                    alt=""
-                    aria-hidden="true"
-                    loading="lazy"
-                    className="w-full max-w-[560px] h-auto drop-shadow-[0_25px_35px_rgba(9,88,214,0.18)]"
-                  />
+                  {grp.boxed ? (
+                    // This source photo has an opaque background rather than
+                    // a transparent cut-out, so it sits in a bordered card
+                    // (same border/fill tokens the venture and index cards
+                    // already use) instead of floating — a visible rectangle
+                    // is honest here, not a bug, since the image itself is a
+                    // literal screenshot-style render, not an illustration.
+                    <div
+                      className={`w-full max-w-[560px] rounded-2xl overflow-hidden border shadow-sm ${
+                        grp.dark ? 'border-white/10 bg-white/[0.04]' : 'border-ink/15 bg-card'
+                      }`}
+                    >
+                      <img src={grp.image} alt="" aria-hidden="true" loading="lazy" className="w-full h-auto" />
+                    </div>
+                  ) : (
+                    <>
+                      {/* Same subtle radial-blob idiom as the page-level
+                          GradientBlobs (bg-electric/[0.05..0.08] blur-[Npx]) —
+                          an ambient glow behind the artwork, not a container.
+                          Slightly stronger on dark sections, where a faint glow
+                          needs more presence to register against navy. */}
+                      <div
+                        className={`absolute inset-[8%] -z-10 rounded-full blur-[60px] ${grp.dark ? 'bg-electric/[0.16]' : 'bg-electric/[0.08]'}`}
+                        aria-hidden="true"
+                      />
+                      <img
+                        src={grp.image}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        className="relative w-full max-w-[560px] h-auto drop-shadow-[0_25px_35px_rgba(9,88,214,0.18)]"
+                      />
+                    </>
+                  )}
                 </motion.div>
 
                 <motion.div
@@ -257,42 +271,27 @@ const Services = () => {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className={`min-w-0 ${imageSecond ? 'lg:order-1' : ''}`}
                 >
-                  <div className="flex items-center gap-3 mb-4">
-                    <AccentIcon accent={ACCENT} className="w-10 h-10">
-                      <grp.icon size={19} aria-hidden="true" />
-                    </AccentIcon>
-                    <span className="font-display text-sm font-bold text-ink/25" aria-hidden="true">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <span className="font-display text-[11px] font-bold text-electric tabular-nums">
                       {String(i + 1).padStart(2, '0')}
                     </span>
+                    <span className="font-display text-[11px] font-bold uppercase tracking-[0.15em] text-royal">
+                      {grp.title}
+                    </span>
                   </div>
-                  <h2 id={`${grp.id}-heading`} className="font-display text-[24px] sm:text-[30px] font-semibold tracking-tight text-ink mb-3">
-                    {grp.title}
+                  <h2 id={`${grp.id}-heading`} className="font-display text-[30px] sm:text-[38px] font-bold tracking-tight leading-[1.08] text-ink mb-3">
+                    {grp.headline}
                   </h2>
-                  <p className="text-[15px] leading-relaxed text-muted mb-6 max-w-[520px]">{grp.lead}</p>
+                  <p className="text-[15px] leading-relaxed text-muted mb-5 max-w-[460px]">{grp.lead}</p>
 
-                  <div className="flex flex-col gap-5 mb-5">
-                    <div>
-                      <h3 className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-royal mb-2.5">
-                        When you need it
-                      </h3>
-                      <ul className="flex flex-col gap-1.5">
-                        {grp.when.map((w) => (
-                          <li key={w} className="flex gap-2.5 text-[13px] leading-snug text-muted">
-                            <span className="mt-[6px] w-1.5 h-1.5 rounded-full bg-electric/60 flex-shrink-0" aria-hidden="true" />
-                            {w}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h3 className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-royal mb-2.5">
-                        What we build
-                      </h3>
-                      <ServiceDeliverables items={grp.build} />
-                    </div>
+                  <h3 className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-royal mb-2.5">
+                    What we build
+                  </h3>
+                  <div className="mb-5">
+                    <ServiceBuildGrid items={grp.build} dark={grp.dark} />
                   </div>
 
-                  <ServiceReceiveCard>{grp.receive}</ServiceReceiveCard>
+                  <ServiceReceiveCard title={grp.receive.title} body={grp.receive.body} dark={grp.dark} />
                 </motion.div>
               </div>
             </div>
@@ -300,105 +299,18 @@ const Services = () => {
         );
       })}
 
-      {/* How we work — the one dark section, both for rhythm against the light
-          sections either side and because it is what a buyer needs before they
-          will make contact. */}
-      <section aria-labelledby="how-we-work-heading" className="dark-scope bg-[var(--hero-bg)] py-14 sm:py-20 px-4 sm:px-8 mt-4">
+      {/* Beyond the software — dark, matching How We Work's treatment so the
+          page's two dark sections read as one system. Navedhana runs these
+          too, but a software buyer should not meet them as peers of AI
+          Engineering — compact cards, links out, clearly labelled status. */}
+      <section aria-labelledby="ventures-heading" className="dark-scope bg-[var(--hero-bg)] py-14 sm:py-20 px-4 sm:px-8">
         <div className="max-w-6xl mx-auto">
-          <motion.div {...blurIn} className="max-w-2xl mb-10 sm:mb-12">
-            <SectionKicker className="mb-3.5">How We Work</SectionKicker>
-            <h2 id="how-we-work-heading" className="font-display text-[26px] sm:text-[34px] font-bold tracking-tight leading-[1.15] text-ink mb-4">
-              What working with us looks like
+          <motion.div {...rise} className="mb-8 sm:mb-10">
+            <SectionKicker className="mb-3.5">Beyond the Software</SectionKicker>
+            <h2 id="ventures-heading" className="font-display text-[24px] sm:text-[30px] font-bold tracking-tight text-ink mb-2">
+              Other Navedhana ventures
             </h2>
-            <p className="text-[14.5px] leading-relaxed text-muted">
-              Every engagement runs through the same five stages. Scope, timeline and commercial terms depend entirely
-              on the problem — <strong className="text-ink font-semibold">[TO CONFIRM]</strong> — so we work those out
-              with you in the first two stages rather than quoting a number before we understand the work.
-            </p>
-          </motion.div>
-
-          <motion.ol {...staggerParent(0.09)} className="grid sm:grid-cols-2 lg:grid-cols-5 gap-px bg-ink/15 border border-ink/15 rounded-2xl overflow-hidden">
-            {ENGAGEMENT.map((step, i) => (
-              <motion.li key={step.title} variants={riseChild} className="bg-[var(--hero-bg)] p-5 sm:p-6">
-                <span className="font-display text-[12.5px] font-bold text-electric tabular-nums">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <h3 className="font-display text-[15.5px] font-semibold text-ink mt-3 mb-2">{step.title}</h3>
-                <p className="text-[13px] leading-relaxed text-muted">{step.body}</p>
-              </motion.li>
-            ))}
-          </motion.ol>
-        </div>
-      </section>
-
-      {/* Selected work — the page sells four capabilities, so it should show
-          something built with them. Lekvya is live and linkable. */}
-      <section aria-labelledby="selected-work-heading" className="py-14 sm:py-20 px-4 sm:px-8 max-w-6xl mx-auto">
-        <motion.div {...scaleIn} className="grid lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-12 items-center">
-          <div className="rounded-2xl overflow-hidden border border-ink/15 bg-card shadow-sm">
-            <img
-              src="/assets/redesign/lekvya-screenshot.png"
-              alt="The Lekvya web application, showing its client-communication automation homepage"
-              width={1600}
-              height={1000}
-              loading="lazy"
-              className="w-full h-auto"
-            />
-          </div>
-          <div>
-            <SectionKicker className="mb-3.5">Selected Work</SectionKicker>
-            <h2 id="selected-work-heading" className="font-display text-[24px] sm:text-[30px] font-bold tracking-tight text-ink mb-4">
-              Built for real workflows
-            </h2>
-            <p className="text-[14.5px] leading-relaxed text-muted mb-4">
-              Lekvya is our AI-powered workflow and client-communication platform for Chartered Accountants and
-              financial-service firms, built around scheduling, client management and document handling. It is live,
-              and we built and run it ourselves.
-            </p>
-            <p className="text-[14.5px] leading-relaxed text-muted mb-5">
-              We also build custom software for other businesses, including client work for Yugminds.
-            </p>
-
-            <ul className="flex flex-wrap gap-2 mb-6" aria-label="Capabilities used to build Lekvya">
-              {LEKVYA_CAPABILITIES.map((c) => (
-                <li
-                  key={c}
-                  className="px-3 py-1.5 rounded-lg bg-electric/[0.07] border border-electric/25 text-[13.5px] sm:text-[12.5px] font-display text-ink/80"
-                >
-                  {c}
-                </li>
-              ))}
-            </ul>
-
-            {/* No case-study route exists yet, so this points at the live
-                product rather than inventing one.
-                TODO: swap to an internal /work/lekvya case study when written. */}
-            <div className="flex flex-wrap gap-3">
-              <Button
-                href="https://ca.navedhana.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                size="sm"
-                onClick={() => trackEvent('cta_click', { location: 'services_lekvya' })}
-              >
-                Explore the project →
-              </Button>
-              <Button to="/products" variant="outline" size="sm">See all products</Button>
-            </div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Beyond the software — Navedhana runs these too, but a software buyer
-          should not meet them as peers of AI Engineering. Compact strip, links
-          out, clearly labelled status. */}
-      <section aria-labelledby="ventures-heading" className="py-10 sm:py-14 px-4 sm:px-8 bg-surface">
-        <div className="max-w-6xl mx-auto">
-          <motion.div {...rise} className="mb-5">
-            <h2 id="ventures-heading" className="font-display text-[15px] font-semibold text-ink mb-1">
-              Beyond the software
-            </h2>
-            <p className="text-[13.5px] text-muted">
+            <p className="text-[14px] text-muted max-w-lg">
               Navedhana runs ventures outside its technology practice. They are separate from the engineering work above.
             </p>
           </motion.div>
@@ -406,30 +318,34 @@ const Services = () => {
           {/* Plain Links, not <Button>: Button splits a trailing arrow out of
               its label and applies its own padding, neither of which suits a
               two-line card — forcing it needed !important overrides. */}
-          <motion.div {...staggerParent(0.09)} className="grid sm:grid-cols-2 gap-4">
-            {OTHER_VENTURES.map((v) => (
-              <motion.div key={v.title} variants={riseChild}>
+          <motion.div {...staggerParent(0.09)} className="grid sm:grid-cols-3 gap-4">
+            {OTHER_VENTURES.map((v, i) => (
+              <motion.div key={v.title} variants={riseChild} className="h-full">
                 <Link
                   to={v.to}
-                  className="group flex items-center gap-4 min-h-[44px] px-5 py-4 rounded-xl border border-ink/15 bg-primary hover:border-ink/25 hover:bg-card focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-surface transition-colors duration-300"
+                  className="group h-full flex flex-col justify-between min-h-[168px] p-6 rounded-2xl border border-white/10 bg-white/[0.04] hover:border-electric/40 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--hero-bg)] transition-colors duration-300"
                 >
-                  <v.icon size={20} className="text-muted flex-shrink-0" aria-hidden="true" />
-                  <span className="flex-1">
-                    <span className="flex items-center gap-2 flex-wrap">
-                      <span className="font-display text-[15px] font-semibold text-ink">{v.title}</span>
-                      {v.status && (
-                        <span className="px-2 py-0.5 rounded-full bg-ink/[0.06] text-muted font-display text-[10.5px] font-bold tracking-wide">
-                          {v.status}
-                        </span>
-                      )}
+                  <div>
+                    <span className="block font-display text-[11px] font-bold text-electric tabular-nums mb-3">
+                      {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="block text-[13px] text-muted mt-0.5">{v.desc}</span>
-                  </span>
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted flex-shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    aria-hidden="true"
-                  />
+                    <h3 className="font-display text-[19px] font-semibold text-ink mb-1.5">{v.title}</h3>
+                    <p className="text-[13px] text-muted">{v.desc}</p>
+                  </div>
+                  {v.status ? (
+                    <span className="self-start mt-5 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
+                      {v.status}
+                    </span>
+                  ) : (
+                    <span className="self-start mt-5 flex items-center gap-1.5 text-[12.5px] font-display font-bold text-electric">
+                      Explore
+                      <ArrowUpRight
+                        size={14}
+                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  )}
                 </Link>
               </motion.div>
             ))}

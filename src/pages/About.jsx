@@ -176,7 +176,7 @@ const About = () => {
         </div>
       </section>
 
-      <section className="py-10 sm:py-16 px-4 sm:px-8 bg-surface">
+      <section className="dark-scope bg-[var(--hero-bg)] py-10 sm:py-16 px-4 sm:px-8">
         <div className="max-w-5xl mx-auto">
           <motion.div {...tiltIn} className="max-w-xl mx-auto mb-10 text-center">
             <SectionKicker centered className="mb-3.5">Purpose</SectionKicker>

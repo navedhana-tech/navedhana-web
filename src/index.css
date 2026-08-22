@@ -155,8 +155,18 @@
    an accent wash that follows the cursor. Tuned far weaker than the dark
    version — a bright radial over a pale background reads as a smudge, not a
    glow. --accent is set inline per card; --mx/--my are updated on mousemove
-   (JS, gated on useReducedMotion — CSS alone can't read pointer position). */
+   (JS, gated on useReducedMotion — CSS alone can't read pointer position).
+
+   Same light-token reset as .wwd-card, for the same reason: this card keeps
+   its own bg-card (white) background no matter what section wraps it, so if
+   that section is ever a .dark-scope, text-ink/text-muted must still resolve
+   to the normal dark-on-white values, not .dark-scope's light-on-dark ones.
+   A no-op everywhere else, since these already match @theme's defaults. */
 .glow-card {
+  --color-ink: #1c1a17;
+  --color-muted: #635c50;
+  --color-electric: #0958d6;
+  --color-royal: #083f9e;
   --mx: 50%;
   --my: 50%;
   position: relative;

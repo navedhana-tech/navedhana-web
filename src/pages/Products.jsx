@@ -17,11 +17,10 @@ const DEV_PRODUCTS = [
 const Products = () => {
   return (
   <div className="bg-primary">
-    {/* Product-first: the header stays compact and left-aligned rather than the
-        tall centered one the other pages use, so the Lekvya screenshot below is
-        still the first substantial thing a visitor sees. */}
+    {/* Product-first: the header stays compact rather than the tall one other
+        pages use, so the Lekvya screenshot below is still the first
+        substantial thing a visitor sees. Centered per request. */}
     <PageHero
-      align="left"
       backdrop="/assets/photos/abstract-blue.jpg"
       className="pt-[104px] sm:pt-[140px] pb-6"
       kicker="Our Products"

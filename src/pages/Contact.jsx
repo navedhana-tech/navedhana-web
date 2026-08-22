@@ -1,9 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
+import { Phone, Mail, Globe2 } from 'lucide-react';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
 import { canHover } from '../lib/canHover';
+
+// Replaces the old decorative leaf-art image — real contact info instead of
+// empty decoration, and it absorbs the separate phone/email/availability
+// strip that used to sit below the form, so that fact isn't stated twice.
+const CONTACT_POINTS = [
+  { icon: Phone, label: 'Phone', value: '+91 63053 04978', href: 'tel:+916305304978' },
+  { icon: Mail, label: 'Email', value: 'navedhanaprofitamplifier@gmail.com', href: 'mailto:navedhanaprofitamplifier@gmail.com' },
+  { icon: Globe2, label: 'Availability', value: 'Remote-first · Serving clients worldwide', href: null },
+];
 
 const inputClasses =
   'w-full px-4 py-3.5 rounded-xl bg-ink/[0.035] border border-ink/15 text-ink placeholder:text-muted/50 text-[14.5px] focus:ring-2 focus:ring-electric focus:border-transparent transition-all outline-none';
@@ -108,20 +118,40 @@ const Contact = () => {
       </section>
 
       <section className="py-6 pb-14 px-4 sm:px-8 max-w-[1180px] mx-auto">
-        <div className="grid md:grid-cols-2 gap-14 items-center">
+        <div className="grid md:grid-cols-2 gap-14 items-start">
           <motion.div
-            initial={{ opacity: 0, scale: 1.05, y: 16 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="flex items-center justify-center order-2 md:order-1"
+            className="order-2 md:order-1 md:pt-2"
           >
-            <img
-              src="/assets/redesign/leaf-binary-art.png"
-              alt="Navedhana"
-              className="w-full max-w-[340px] h-auto rounded-2xl"
-              style={{ filter: 'drop-shadow(0 0 40px oklch(55% 0.19 232 / 0.25))' }}
-            />
+            <SectionKicker className="mb-3.5">Get in Touch</SectionKicker>
+            <h2 className="font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-4">
+              We usually reply within one business day
+            </h2>
+            <p className="text-[14.5px] leading-relaxed text-muted mb-8 max-w-md">
+              Tell us what you're building, or just ask a question — no obligation, no sales pitch. If it turns out
+              you don't need custom software, we'll say so.
+            </p>
+            <div className="flex flex-col gap-5">
+              {CONTACT_POINTS.map((c) => {
+                const Tag = c.href ? 'a' : 'div';
+                return (
+                  <Tag key={c.label} href={c.href ?? undefined} className="group flex items-center gap-3.5">
+                    <span className="w-11 h-11 rounded-xl bg-electric/[0.08] border border-electric/20 flex items-center justify-center text-electric flex-shrink-0">
+                      <c.icon size={18} />
+                    </span>
+                    <span>
+                      <span className="block font-display text-[10.5px] font-bold uppercase tracking-wide text-muted">{c.label}</span>
+                      <span className="block text-[14.5px] font-semibold text-ink group-hover:text-electric transition-colors break-words">
+                        {c.value}
+                      </span>
+                    </span>
+                  </Tag>
+                );
+              })}
+            </div>
           </motion.div>
 
           <div className="order-1 md:order-2">
@@ -157,14 +187,6 @@ const Contact = () => {
               )}
             </AnimatePresence>
           </div>
-        </div>
-      </section>
-
-      <section className="py-6 px-4 sm:px-8 border-y border-ink/15">
-        <div className="max-w-7xl mx-auto flex flex-wrap justify-center gap-9 text-[13.5px] text-muted">
-          <span>Phone: <span className="text-ink">+91 63053 04978</span></span>
-          <span>Email: <span className="text-ink">navedhanaprofitamplifier@gmail.com</span></span>
-          <span>Remote-First · Serving Clients Worldwide</span>
         </div>
       </section>
     </div>

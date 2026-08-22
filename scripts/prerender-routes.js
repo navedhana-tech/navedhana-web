@@ -69,25 +69,41 @@ async function main() {
     protocolTimeout: 60000,
   });
 
+  // A route that's merely slow to settle (a heavy image, a flaky CI network)
+  // used to throw out of the loop uncaught, which failed this whole script
+  // and — since `build` is `vite build && npm run prerender` — failed the
+  // entire `npm run build`. On Render that means the deploy never happens
+  // and the site silently keeps serving whatever the last successful build
+  // was, with no obvious error visible from the pushed commit alone. One
+  // route now failing just skips its prerendered HTML (that route still
+  // works at runtime via the client-rendered SPA shell + fallback rewrite in
+  // render.yaml) instead of taking every other route down with it.
+  const failed = [];
   try {
     for (const route of routes) {
       const page = await browser.newPage();
-      const url = `http://localhost:${PORT}${route}`;
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
-      // React/Framer Motion mount after networkidle0's own settling; give the
-      // root a moment to actually have children before snapshotting.
-      await page.waitForSelector('#root > *', { timeout: 10000 }).catch(() => {});
-      const html = await page.content();
-      await page.close();
+      try {
+        const url = `http://localhost:${PORT}${route}`;
+        await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+        // React/Framer Motion mount after networkidle0's own settling; give
+        // the root a moment to actually have children before snapshotting.
+        await page.waitForSelector('#root > *', { timeout: 10000 }).catch(() => {});
+        const html = await page.content();
 
-      const routePath = route === '/' ? 'index.html' : `${route.slice(1)}/index.html`;
-      const outputPath = path.join(distDir, routePath);
-      const outputDir = path.dirname(outputPath);
-      if (!fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+        const routePath = route === '/' ? 'index.html' : `${route.slice(1)}/index.html`;
+        const outputPath = path.join(distDir, routePath);
+        const outputDir = path.dirname(outputPath);
+        if (!fs.existsSync(outputDir)) {
+          fs.mkdirSync(outputDir, { recursive: true });
+        }
+        fs.writeFileSync(outputPath, html, 'utf-8');
+        console.log(`✅ Prerendered: ${route} -> ${routePath} (${(html.length / 1024).toFixed(1)} KB)`);
+      } catch (err) {
+        failed.push(route);
+        console.error(`⚠️  Skipped ${route}: ${err.message}`);
+      } finally {
+        await page.close();
       }
-      fs.writeFileSync(outputPath, html, 'utf-8');
-      console.log(`✅ Prerendered: ${route} -> ${routePath} (${(html.length / 1024).toFixed(1)} KB)`);
     }
   } finally {
     await browser.close();
@@ -96,6 +112,10 @@ async function main() {
 
   console.log('\n✨ Prerendering complete!');
   console.log(`   - Total routes: ${routes.length}`);
+  console.log(`   - Prerendered: ${routes.length - failed.length}`);
+  if (failed.length) {
+    console.log(`   - Skipped (still work at runtime, just without prerendered HTML): ${failed.join(', ')}`);
+  }
   console.log('   - Each route now has its own fully-rendered static HTML file');
 }
 
