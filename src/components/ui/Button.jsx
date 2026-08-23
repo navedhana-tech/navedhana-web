@@ -76,7 +76,13 @@ const Button = ({ to, href, variant = 'primary', size = 'lg', hoverEffects = tru
  // utilities, and which one wins would come down to Tailwind's output order,
  // not the order they appear in the class string.
  const sizeClasses = (isChip && !hasArrow && SIZES_NO_CHIP[size]) || SIZES[size];
- const classes = `group inline-flex items-center justify-center gap-2 ${shape} font-semibold transition-all duration-base focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${sizeClasses} ${variantClasses} ${className}`;
+ // Press feedback. Every state on this button until now was a `hover:` one,
+ // which a touch device never enters — so tapping a CTA on a phone gave no
+ // acknowledgement at all between the tap and the next page painting. `active:`
+ // fires on touch as well as mouse, and `motion-safe:` keeps it out of the way
+ // of a reduced-motion visitor. CSS rather than Framer `whileTap` because this
+ // component renders a Link/anchor/button, none of which are motion elements.
+ const classes = `group inline-flex items-center justify-center gap-2 ${shape} font-semibold transition-all duration-base motion-safe:active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary ${sizeClasses} ${variantClasses} ${className}`;
 
  const Component = to ? Link : href ? 'a' : 'button';
  const linkProps = to ? { to } : href ? { href } : {};

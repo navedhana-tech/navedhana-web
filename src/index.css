@@ -500,6 +500,26 @@
   --motion-step: 500ms;
 }
 
+/* Route enter (App.jsx). Transform-only, and deliberately NOT a fade.
+
+   This class wraps every page on the site, which makes its failure mode the
+   whole product. Anything animating opacity from 0 is only visible once the
+   animation actually progresses — so a frozen or never-started animation
+   leaves the entire site blank. Starting from a 6px offset instead means the
+   worst case is a page sitting 6px low: fully legible, no content lost.
+
+   It is also enough on its own. Every page already reveals its own sections on
+   scroll, so this only needs to mark "the page changed", not perform. The
+   reduced-motion block below zeroes --motion-base, collapsing it to nothing. */
+@keyframes page-enter {
+  from {
+    transform: translateY(6px);
+  }
+}
+.page-enter {
+  animation: page-enter var(--motion-base) ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-micro: 0ms;
@@ -519,8 +539,31 @@
 }
 
 @layer base {
+  /* This design is light-only: every token above is a light-theme value and
+     the dark areas (hero, footer) are opted into explicitly with .dark-scope.
+     Nothing here responds to prefers-color-scheme — which is exactly why the
+     scheme has to be DECLARED. Left at the default `normal`, iOS Safari treats
+     the page as scheme-agnostic and applies its own dark-mode treatment on a
+     dark-mode phone: it darkens the canvas (what shows through html, behind
+     the fixed navbar and in the rubber-band overscroll area) and restyles form
+     controls. The page's own text stays light-theme dark-on-light, so the
+     result is dark-on-dark — the navbar reading as "missing" and the brand
+     wordmark as black-on-black. Declaring `light` opts the whole document out
+     of that treatment. */
+  :root {
+    color-scheme: light;
+  }
+
+  /* Both, deliberately. `body` alone leaves the root element transparent, and
+     the canvas is painted from `html` — so anything drawn outside the body box
+     (iOS overscroll, the strip behind the fixed navbar) falls back to the UA
+     canvas colour rather than the page's. */
+  html,
   body {
     background-color: var(--color-primary);
+  }
+
+  body {
     color: var(--color-ink);
     font-family: var(--font-sans);
   }

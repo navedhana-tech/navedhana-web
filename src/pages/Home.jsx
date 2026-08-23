@@ -267,32 +267,51 @@ const Home = () => {
               <motion.div variants={heroItem}>
                 <SectionKicker centered className="mb-4 hero-text-glow">Software · AI · Product Engineering</SectionKicker>
               </motion.div>
+              {/* Fluid below sm. The headline is a parallel construction — two
+                  sentences, one per line, the second in accent — and that only
+                  reads as parallel while each sentence occupies exactly one
+                  line. At a fixed 34px "We build the intelligence." needs 395px
+                  against 358px available on a 390px phone, so it wrapped and
+                  split the accent line mid-phrase ("We build the" /
+                  "intelligence."). Anything from 31px up wraps; 30px and below
+                  fits. A clamp keeps it at the largest size that still fits one
+                  line at any phone width, instead of a fixed value that is
+                  correct on one device and broken on the next one down. */}
               <motion.h1
                 variants={heroItem}
-                className="font-display text-[34px] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink hero-text-glow"
+                className="font-display text-[clamp(24px,7.5vw,34px)] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink hero-text-glow"
               >
                 We build the software.
                 <br />
                 <span className="text-electric">We build the intelligence.</span>
               </motion.h1>
-              {/* Hidden below sm: the kicker + two-line headline already
-                  carry the message on a phone screen; this line is a nice-
-                  to-have on room to spare, not essential copy — a width
-                  check, not the height-based hiding removed above, since
-                  width doesn't jitter with browser chrome. */}
-              <motion.p variants={heroItem} className="hidden sm:block text-base leading-relaxed text-muted mt-4 max-w-2xl mx-auto hero-text-glow">
+              {/* Shown on phones again. This was hidden below sm on the
+                  reasoning that the line was a nice-to-have "on room to
+                  spare" — but measured at 390x844 the hero runs 63% empty
+                  (306px above the content, 222px below it), so the room to
+                  spare is exactly what this screen has most of. Hiding it
+                  bought nothing and cost the one line that says what the
+                  company actually does. */}
+              <motion.p variants={heroItem} className="text-[14.5px] sm:text-base leading-relaxed text-muted mt-3.5 sm:mt-4 max-w-2xl mx-auto hero-text-glow">
                 Products we've shipped. Systems we've built for others. Same engineering standard either way.
               </motion.p>
-              <motion.div variants={heroItem} className="flex flex-wrap justify-center gap-3.5 mt-6">
+              {/* Phones stack the CTAs full-width instead of letting them wrap.
+                  Side by side they measure 392px against 358px of available
+                  width, so they always wrapped anyway — but as a centred wrap
+                  of two different widths (197px over 181px), which reads as a
+                  layout accident rather than a choice. Stacking makes it
+                  deliberate, equal-width, and a full-width tap target. */}
+              <motion.div variants={heroItem} className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-stretch sm:items-center gap-3 sm:gap-3.5 mt-6">
                 <Button
                   to="/contact"
                   size="sm"
                   hoverEffects={false}
+                  className="w-full sm:w-auto"
                   onClick={() => trackEvent('cta_click', { location: 'home_hero' })}
                 >
                   Discuss Your Project →
                 </Button>
-                <Button to="/products" variant="outline" size="sm" hoverEffects={false}>
+                <Button to="/products" variant="outline" size="sm" hoverEffects={false} className="w-full sm:w-auto">
                   See What We've Built
                 </Button>
               </motion.div>

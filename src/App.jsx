@@ -65,7 +65,23 @@ function AppContent() {
             {shouldRunIntro && !introDone && <LogoIntro key="logo-intro" onComplete={handleIntroComplete} />}
           </AnimatePresence>
           <Navbar introDone={introDone} />
+          {/* Route transition. Keyed on pathname so each navigation mounts a
+              fresh node and replays the `page-enter` keyframe (index.css).
+
+              Deliberately CSS rather than a Framer initial/animate pair, and
+              deliberately transform-only rather than a fade. This element wraps
+              EVERY page, so its failure mode is the whole site: anything that
+              starts at opacity 0 is invisible until the animation actually
+              progresses, which turns a stalled animation into a blank page.
+              Starting 6px low instead means the worst case is a slightly
+              offset — but fully readable — page.
+
+              No exit animation and no AnimatePresence mode="wait" either: both
+              keep the outgoing page mounted while the incoming one arrives,
+              which stacks two full pages and fights ScrollToTop for the scroll
+              position. */}
           <main className="flex-1">
+            <div key={location.pathname} className="page-enter">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
@@ -81,6 +97,7 @@ function AppContent() {
               <Route path="/terms" element={<Terms />} />
               <Route path="/work" element={<Navigate to="/products" replace />} />
             </Routes>
+            </div>
           </main>
           <Footer />
         </div>

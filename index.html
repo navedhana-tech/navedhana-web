@@ -14,6 +14,14 @@
     <!-- Web manifest -->
     <link rel="manifest" href="/favicon_io/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <!-- Light-only design (see the color-scheme note in src/index.css). Both
+         tags are needed on iOS: color-scheme stops Safari applying dark-mode
+         treatment to the page, while theme-color sets the browser chrome and
+         the status-bar strip the fixed navbar sits under. Without it Safari
+         picks its own colour on a dark-mode phone, and the navbar reads as
+         missing because it blends into that dark band. -->
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#eef3f8" />
     
     <!-- Dynamic Domain Detection Script -->
     <script>

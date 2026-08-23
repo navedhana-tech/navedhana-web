@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Linkedin, Instagram, Mail } from 'lucide-react';
+import { staggerParent, riseChild } from '../lib/motion';
 
 const SERVICE_LINKS = [
   'AI Engineering',
@@ -39,10 +41,10 @@ const FOOTER_LINK =
   'flex items-center justify-center sm:justify-start min-h-[30px] sm:min-h-0 sm:py-1 text-[12.5px] sm:text-[13.5px] leading-snug text-muted hover:text-ink transition-colors';
 
 const FooterColumn = ({ title, children }) => (
-  <div className="text-center sm:text-left">
+  <motion.div variants={riseChild} className="text-center sm:text-left">
     <h5 className="text-[11.5px] sm:text-[12.5px] font-bold uppercase tracking-wide text-muted/60 mb-1 sm:mb-4">{title}</h5>
     <div className="flex flex-col sm:gap-1.5">{children}</div>
-  </div>
+  </motion.div>
 );
 
 // dark-scope reused from Home.jsx (see index.css) — same CSS-variable
@@ -53,8 +55,14 @@ const Footer = () => (
     <div className="max-w-7xl mx-auto">
       {/* Stays 2-wide on a phone, spacing tightened on mobile so the full
           footer fits one viewport without scrolling. */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-3 sm:gap-10 mb-4 sm:mb-11">
-        <div className="col-span-2 md:col-span-1 text-center sm:text-left">
+      {/* The footer is the one global block that had no reveal at all, so it
+          appeared fully-formed under sections that had just animated in. Small
+          stagger: it is the end of the page, not a feature of it. */}
+      <motion.div
+        {...staggerParent(0.06)}
+        className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-3 sm:gap-10 mb-4 sm:mb-11"
+      >
+        <motion.div variants={riseChild} className="col-span-2 md:col-span-1 text-center sm:text-left">
           <Link to="/" className="flex w-full justify-center sm:inline-flex sm:w-auto sm:justify-start items-center gap-2.5 mb-1.5 sm:mb-3 min-h-[30px] sm:min-h-[44px]">
             <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-7 sm:h-9 w-auto" />
             <span className="font-display font-semibold text-lg sm:text-xl text-ink">Navedhana</span>
@@ -92,7 +100,7 @@ const Footer = () => (
               <Mail size={18} className="hidden sm:block" />
             </a>
           </div>
-        </div>
+        </motion.div>
 
         <FooterColumn title="Services">
           {SERVICE_LINKS.map((name) => (
@@ -131,7 +139,7 @@ const Footer = () => (
             </Link>
           ))}
         </FooterColumn>
-      </div>
+      </motion.div>
 
       <div className="flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4 pt-2.5 sm:pt-6 border-t border-ink/15 text-[11.5px] sm:text-[12.5px] text-muted/60">
         <span className="order-2 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
