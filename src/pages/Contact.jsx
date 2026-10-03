@@ -13,7 +13,7 @@ import { useDocumentMeta } from '../hooks/useDocumentMeta';
 // reply speed are what a first-time visitor actually needs to know, not a
 // generic "remote-first" line.
 const CONTACT_POINTS = [
-  { icon: Phone, label: 'Phone', value: '+91 63053 04978', href: 'tel:+916305304978' },
+  { icon: Phone, label: 'Phone', value: '+91 79810 02950', href: 'tel:+91 79810 02950' },
   { icon: Mail, label: 'Email', value: 'contact@navedhana.com', href: 'mailto:contact@navedhana.com' },
   { icon: Clock, label: 'Response Time', value: 'Within one business day', href: null },
 ];
