@@ -3,6 +3,20 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
+// GA4 only when an ID is configured — otherwise the page would request
+// gtag/js?id=%VITE_GA_MEASUREMENT_ID% and track nothing.
+const GA_ID = import.meta.env.VITE_GA_MEASUREMENT_ID;
+if (GA_ID && typeof window !== 'undefined') {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', GA_ID);
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_ID)}`;
+  document.head.appendChild(s);
+}
+
 const root = createRoot(document.getElementById('root'));
 
 root.render(

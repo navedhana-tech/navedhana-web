@@ -84,10 +84,27 @@ async function main() {
       const page = await browser.newPage();
       try {
         const url = `http://localhost:${PORT}${route}`;
+        // Reduced motion skips the logo intro overlay (App.jsx) and the pages'
+        // own entrance states, so the snapshot isn't of a covered page.
+        await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+        await page.setViewport({ width: 1440, height: 900 });
         await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
         // React/Framer Motion mount after networkidle0's own settling; give
         // the root a moment to actually have children before snapshotting.
         await page.waitForSelector('#root > *', { timeout: 10000 }).catch(() => {});
+        // Sections fade in on whileInView and start at opacity 0. Scroll the
+        // whole page once so each fires (they're all `once`), otherwise the
+        // saved HTML has everything below the fold invisible to crawlers.
+        await page.evaluate(async () => {
+          for (let y = 0; y < document.documentElement.scrollHeight; y += 400) {
+            window.scrollTo(0, y);
+            await new Promise((r) => setTimeout(r, 60));
+          }
+          window.scrollTo(0, 0);
+        });
+        await new Promise((r) => setTimeout(r, 1200));
+        const hidden = await page.$$eval('#root [style*="opacity: 0"]', (els) => els.length);
+        if (hidden) console.warn(`   ${route}: ${hidden} element(s) still at opacity 0`);
         const html = await page.content();
 
         const routePath = route === '/' ? 'index.html' : `${route.slice(1)}/index.html`;

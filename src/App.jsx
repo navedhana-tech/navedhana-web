@@ -18,6 +18,7 @@ import Products from './pages/Products';
 import Insights from './pages/Insights';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import NotFound from './pages/NotFound';
 import { useScrollDepth } from './hooks/useScrollDepth';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -96,6 +97,7 @@ function AppContent() {
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/work" element={<Navigate to="/products" replace />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             </div>
           </main>

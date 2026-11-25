@@ -18,6 +18,8 @@ const CONTACT_POINTS = [
   { icon: Clock, label: 'Response Time', value: 'Within one business day', href: null },
 ];
 
+const SEND_ERROR = "Sorry, your message couldn't be sent. Please try again, or email us at contact@navedhana.com.";
+
 const labelClasses = 'block text-[12.5px] font-semibold text-ink/80 mb-1.5';
 const inputClasses =
   'w-full px-4 py-3.5 rounded-xl bg-card border border-ink/12 text-ink placeholder:text-muted/50 text-[14.5px] transition-all outline-none hover:border-ink/25 focus:border-electric focus:ring-2 focus:ring-electric/20';
@@ -45,9 +47,10 @@ const Contact = () => {
       "Tell us the problem — you don't need to know whether you need AI, automation, or custom software. Get in touch with Navedhana's software and AI engineering team.",
   });
 
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '', company_website: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
+  const [error, setError] = useState('');
 
   const progressRef = useRef(null);
   useScrollProgress(progressRef);
@@ -56,12 +59,26 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setError('');
 
+    // Honeypot: hidden from people, filled in by bots. Pretend success so the
+    // bot has nothing to retry against.
+    if (formData.company_website) {
+      setFormSent(true);
+      return;
+    }
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    if (!serviceId || !templateId || !publicKey) {
+      console.error('EmailJS is not configured: set VITE_EMAILJS_* in .env');
+      setError(SEND_ERROR);
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID';
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
 
       const templateParams = {
         from_name: formData.name,
@@ -76,11 +93,11 @@ const Contact = () => {
 
       setIsSubmitting(false);
       setFormSent(true);
-      setFormData({ name: '', email: '', phone: '', message: '' });
-    } catch (error) {
-      console.error('Email sending failed: ', error);
+      setFormData({ name: '', email: '', phone: '', message: '', company_website: '' });
+    } catch (err) {
+      console.error('Email sending failed: ', err);
       setIsSubmitting(false);
-      alert('Failed to send message. Please try again or contact us directly at contact@navedhana.com');
+      setError(SEND_ERROR);
     }
   };
 
@@ -224,6 +241,23 @@ const Contact = () => {
                       className={`${inputClasses} min-h-[100px] resize-y`}
                     />
                   </div>
+                  {/* Honeypot — off-screen, skipped by keyboard and screen readers. */}
+                  <div className="absolute -left-[9999px] w-px h-px overflow-hidden" aria-hidden="true">
+                    <label htmlFor="company_website">Company website</label>
+                    <input
+                      id="company_website"
+                      name="company_website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.company_website}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  {error && (
+                    <p role="alert" className="text-[13.5px] text-red-600">
+                      {error}
+                    </p>
+                  )}
                   <div className="flex flex-col items-stretch sm:items-start gap-2">
                     <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto disabled:opacity-50">
                       {isSubmitting ? 'Sending…' : 'Start the Conversation →'}
