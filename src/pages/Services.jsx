@@ -149,9 +149,9 @@ const ServiceBuildGrid = ({ items, dark }) => (
         key={it.title}
         className={`p-2.5 sm:p-3 transition-colors duration-300 ${dark ? 'bg-[var(--hero-bg)] hover:bg-white/[0.04]' : 'bg-card hover:bg-ink/[0.02]'}`}
       >
-        <span className="font-display text-[10px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-        <h4 className="font-display text-[13px] font-semibold text-ink mt-1 leading-snug">{it.title}</h4>
-        <p className="text-[11.5px] leading-snug text-muted mt-0.5">{it.desc}</p>
+        <span className="font-display text-[12px] font-bold text-electric tabular-nums">{String(i + 1).padStart(2, '0')}</span>
+        <h4 className="font-display text-[15px] font-semibold text-ink mt-1 leading-snug">{it.title}</h4>
+        <p className="text-[13px] leading-snug text-muted mt-0.5">{it.desc}</p>
       </div>
     ))}
   </div>
@@ -168,11 +168,11 @@ const ServiceReceiveCard = ({ title, body, dark }) => (
       dark ? 'bg-white/[0.04] border-y border-r border-white/10' : 'bg-electric/[0.05] border-y border-r border-electric/20'
     }`}
   >
-    <h3 className="font-display text-[10.5px] font-bold uppercase tracking-[0.1em] text-royal mb-1.5">
+    <h3 className="font-display text-[12px] font-bold uppercase tracking-[0.1em] text-royal mb-1.5">
       What you receive
     </h3>
-    <p className="font-display text-[15px] font-semibold text-ink mb-1">{title}</p>
-    <p className="text-[13px] leading-relaxed text-muted">{body}</p>
+    <p className="font-display text-[17px] font-semibold text-ink mb-1">{title}</p>
+    <p className="text-[15px] leading-relaxed text-muted">{body}</p>
   </div>
 );
 
@@ -206,10 +206,10 @@ const Services = () => {
                 href={`#${grp.id}`}
                 className="group flex items-center gap-2.5 sm:gap-3 min-h-[56px] px-3 sm:px-4 py-3 rounded-xl border border-ink/15 bg-card hover:border-electric/40 hover:bg-electric/[0.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-primary transition-colors duration-300"
               >
-                <span className="font-display text-[12.5px] font-bold text-electric tabular-nums">
+                <span className="font-display text-[14px] font-bold text-electric tabular-nums">
                   {String(i + 1).padStart(2, '0')}
                 </span>
-                <span className="font-display text-[13.5px] sm:text-[14.5px] font-semibold text-ink flex-1 leading-snug">{grp.title}</span>
+                <span className="font-display text-[15px] sm:text-[16px] font-semibold text-ink flex-1 leading-snug">{grp.title}</span>
                 <grp.icon size={17} className="text-muted flex-shrink-0 hidden sm:block" aria-hidden="true" />
               </a>
             </motion.li>
@@ -287,19 +287,19 @@ const Services = () => {
                   className={`min-w-0 ${imageSecond ? 'lg:order-1' : ''}`}
                 >
                   <div className="flex items-center gap-2.5 mb-2.5">
-                    <span className="font-display text-[11px] font-bold text-electric tabular-nums">
+                    <span className="font-display text-[12.5px] font-bold text-electric tabular-nums">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-display text-[11px] font-bold uppercase tracking-[0.15em] text-royal">
+                    <span className="font-display text-[12.5px] font-bold uppercase tracking-[0.15em] text-royal">
                       {grp.title}
                     </span>
                   </div>
-                  <h2 id={`${grp.id}-heading`} className="font-display text-[30px] sm:text-[38px] font-bold tracking-tight leading-[1.08] text-ink mb-3">
+                  <h2 id={`${grp.id}-heading`} className="font-display text-[30px] sm:text-[44px] font-bold tracking-tight leading-[1.08] text-ink mb-3">
                     {grp.headline}
                   </h2>
-                  <p className="text-[15px] leading-relaxed text-muted mb-5 max-w-[460px]">{grp.lead}</p>
+                  <p className="text-[17px] leading-relaxed text-muted mb-5 max-w-[460px]">{grp.lead}</p>
 
-                  <h3 className="font-display text-[11px] font-bold uppercase tracking-[0.1em] text-royal mb-2.5">
+                  <h3 className="font-display text-[12.5px] font-bold uppercase tracking-[0.1em] text-royal mb-2.5">
                     What we build
                   </h3>
                   <div className="mb-5">
@@ -325,7 +325,7 @@ const Services = () => {
             <h2 id="ventures-heading" className="font-display text-[24px] sm:text-[30px] font-bold tracking-tight text-ink mb-2">
               Other Navedhana ventures
             </h2>
-            <p className="text-[14px] text-muted max-w-lg">
+            <p className="text-[16px] text-muted max-w-lg">
               Navedhana runs ventures outside its technology practice. They are separate from the engineering work above.
             </p>
           </motion.div>
@@ -341,19 +341,19 @@ const Services = () => {
                   className="group h-full flex flex-col justify-between min-h-[124px] p-4 rounded-xl border border-white/10 bg-white/[0.04] hover:border-electric/40 hover:bg-white/[0.07] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-electric focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--hero-bg)] transition-colors duration-300"
                 >
                   <div>
-                    <span className="block font-display text-[10px] font-bold text-electric tabular-nums mb-1.5">
+                    <span className="block font-display text-[12px] font-bold text-electric tabular-nums mb-1.5">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <h3 className="font-display text-[16px] font-semibold text-ink mb-1">{v.title}</h3>
-                    <p className="text-[12.5px] text-muted">{v.desc}</p>
+                    <h3 className="font-display text-[17px] font-semibold text-ink mb-1">{v.title}</h3>
+                    <p className="text-[14px] text-muted">{v.desc}</p>
                   </div>
                   <div className="self-start mt-3 flex items-center gap-2 flex-wrap">
                     {v.status && (
-                      <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[10.5px] font-bold tracking-wide">
+                      <span className="px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-muted font-display text-[12px] font-bold tracking-wide">
                         {v.status}
                       </span>
                     )}
-                    <span className="flex items-center gap-1.5 text-[12px] font-display font-bold text-electric">
+                    <span className="flex items-center gap-1.5 text-[13px] font-display font-bold text-electric">
                       Explore
                       <ArrowUpRight
                         size={14}
@@ -374,7 +374,7 @@ const Services = () => {
           <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink mb-3">
             Not sure which of these you need?
           </h2>
-          <p className="text-[14.5px] text-muted mb-6">
+          <p className="text-[16px] text-muted mb-6">
             Describe the problem. We will tell you what it actually takes to solve it — including when the answer is
             that you do not need custom software.
           </p>

@@ -111,6 +111,9 @@ async function main() {
         await new Promise((r) => setTimeout(r, 1200));
         const hidden = await page.$$eval('#root [style*="opacity: 0"]', (els) => els.length);
         if (hidden) console.warn(`   ${route}: ${hidden} element(s) still at opacity 0`);
+        // Third-party widgets inject their own containers at runtime; saving
+        // them into the HTML made each one mount twice (e.g. two #druja-root).
+        await page.evaluate(() => document.querySelectorAll('#druja-root').forEach((n) => n.remove()));
         const html = await page.content();
 
         const routePath = route === '/' ? 'index.html' : `${route.slice(1)}/index.html`;

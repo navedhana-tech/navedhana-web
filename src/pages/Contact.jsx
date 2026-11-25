@@ -13,16 +13,16 @@ import { useDocumentMeta } from '../hooks/useDocumentMeta';
 // reply speed are what a first-time visitor actually needs to know, not a
 // generic "remote-first" line.
 const CONTACT_POINTS = [
-  { icon: Phone, label: 'Phone', value: '+91 79810 02950', href: 'tel:+91 79810 02950' },
+  { icon: Phone, label: 'Phone', value: '+91 79810 02950', href: 'tel:+917981002950' },
   { icon: Mail, label: 'Email', value: 'contact@navedhana.com', href: 'mailto:contact@navedhana.com' },
   { icon: Clock, label: 'Response Time', value: 'Within one business day', href: null },
 ];
 
 const SEND_ERROR = "Sorry, your message couldn't be sent. Please try again, or email us at contact@navedhana.com.";
 
-const labelClasses = 'block text-[12.5px] font-semibold text-ink/80 mb-1.5';
+const labelClasses = 'block text-[14px] font-semibold text-ink/80 mb-1.5';
 const inputClasses =
-  'w-full px-4 py-3.5 rounded-xl bg-card border border-ink/12 text-ink placeholder:text-muted/50 text-[14.5px] transition-all outline-none hover:border-ink/25 focus:border-electric focus:ring-2 focus:ring-electric/20';
+  'w-full px-4 py-3.5 rounded-xl bg-card border border-ink/12 text-ink placeholder:text-muted/50 text-[16px] transition-all outline-none hover:border-ink/25 focus:border-electric focus:ring-2 focus:ring-electric/20';
 
 // Local, self-contained page effect (scroll progress) — not a shared
 // component, this is the one page in the design that has it.
@@ -114,10 +114,10 @@ const Contact = () => {
           against that budget, not just "smaller than before". */}
       <section className="pt-[88px] sm:pt-[112px] pb-0 px-4 sm:px-8 max-w-7xl mx-auto text-center">
         <SectionKicker centered className="mb-4">Contact Us</SectionKicker>
-        <h1 className="font-display text-[28px] sm:text-[44px] font-bold tracking-tight text-ink mb-5">
+        <h1 className="font-display text-[28px] sm:text-[50px] font-bold tracking-tight text-ink mb-5">
           Tell us the problem.
         </h1>
-        <p className="text-[15px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
+        <p className="text-[17px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
           You don't need to know whether you need AI, automation, or custom software. Tell us what you're trying to
           solve, build, or improve. We'll help you figure out the right approach.
         </p>
@@ -139,15 +139,15 @@ const Contact = () => {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.45 }}
             className="order-2 md:order-1 md:col-span-2"
           >
             <SectionKicker className="mb-[18px] hidden md:block">Get in Touch</SectionKicker>
             <h2 className="hidden md:block font-display text-2xl sm:text-[28px] font-bold tracking-tight text-ink mb-3">
               Let's talk about the problem.
             </h2>
-            <p className="text-[14.5px] font-semibold text-electric mb-3 md:mb-[18px]">We usually reply within one business day.</p>
-            <p className="text-[14.5px] leading-relaxed text-muted mb-5 md:mb-7 max-w-md">
+            <p className="text-[16px] font-semibold text-electric mb-3 md:mb-[18px]">We usually reply within one business day.</p>
+            <p className="text-[16px] leading-relaxed text-muted mb-5 md:mb-7 max-w-md">
               Tell us what you're building, what isn't working, or what you're trying to improve. No obligation, no
               sales pitch. If custom software isn't the right answer, we'll tell you.
             </p>
@@ -160,8 +160,8 @@ const Contact = () => {
                       <c.icon size={18} />
                     </span>
                     <span>
-                      <span className="block font-display text-[10.5px] font-bold uppercase tracking-wide text-muted">{c.label}</span>
-                      <span className="block text-[14.5px] font-semibold text-ink group-hover:text-electric transition-colors break-words">
+                      <span className="block font-display text-[12px] font-bold uppercase tracking-wide text-muted">{c.label}</span>
+                      <span className="block text-[16px] font-semibold text-ink group-hover:text-electric transition-colors break-words">
                         {c.value}
                       </span>
                     </span>
@@ -256,7 +256,7 @@ const Contact = () => {
                     />
                   </div>
                   {error && (
-                    <p role="alert" className="text-[13.5px] text-red-600">
+                    <p role="alert" className="text-[15px] text-red-600">
                       {error}
                     </p>
                   )}
@@ -264,7 +264,7 @@ const Contact = () => {
                     <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto disabled:opacity-50">
                       {isSubmitting ? 'Sending…' : 'Start the Conversation →'}
                     </Button>
-                    <p className="text-[12.5px] text-muted">
+                    <p className="text-[14px] text-muted">
                       We'll review your message and get back to you within one business day.
                     </p>
                   </div>

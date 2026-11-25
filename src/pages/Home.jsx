@@ -1,41 +1,23 @@
 import React from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Database, CheckCircle2, Cpu, Layers, Workflow, Box } from 'lucide-react';
-import HeroCircuitBackground from '../components/hero/HeroCircuitBackground';
+import { Cpu, Layers, Workflow, Box } from 'lucide-react';
 import PolyMeshField from '../components/hero/PolyMeshField';
 import { useIntroDone } from '../lib/introContext';
 import { useReducedMotion } from '../hooks/useReducedMotion';
-import { canHover } from '../lib/canHover';
 import { rise, scaleIn, tiltIn, blurIn, staggerParent, riseChild, growX } from '../lib/motion';
 import ProductsTeaser from '../components/home/ProductsTeaser';
 import SectionKicker from '../components/ui/SectionKicker';
-import PlaceholderShot from '../components/ui/PlaceholderShot';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import Button from '../components/ui/Button';
 import { trackEvent } from '../lib/analytics';
 
 const CAPABILITY_STRIP = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
 
-// `image` is a topical photograph per capability (circuit board, code, server
-// room, 3D printer), rendered as a darkened background inside each card. Kept
-// well under the text via low opacity plus a scrim, since these cards carry a
-// heading and a six-item list that has to stay readable.
-//
-// There is no per-card accent colour: all four take the theme blue from
-// `--accent` on .wwd-card (index.css). The photographs already distinguish
-// the cards, so four separate hues only fought the palette.
 const WWD_CARDS = [
-  { title: 'AI Engineering', icon: Cpu, image: '/assets/photos/service-ai.jpg', items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
-  { title: 'Custom Software', icon: Layers, image: '/assets/photos/service-software.jpg', items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS [Software as a Service]', 'CRM [Customer Relationship Management]'] },
-  { title: 'Intelligent Automation', icon: Workflow, image: '/assets/photos/service-automation.jpg', items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
-  { title: 'Product Engineering', icon: Box, image: '/assets/photos/service-product.jpg', items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
-];
-
-const SW_TAGS = ['Web', 'Mobile', 'Desktop', 'Backend', 'APIs', 'Databases', 'Cloud', 'Integrations', 'Automation'];
-
-const DEV_PRODUCTS = [
-  { title: 'Data Factory', desc: "A data engineering product we're building in-house. More details as it nears release.", icon: <Database size={18} /> },
-  { title: 'QA Foundation Platform', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
+  { title: 'AI Engineering', icon: Cpu, items: ['Generative AI', 'AI Applications', 'AI Agents', 'RAG Systems', 'Machine Learning', 'Natural Language Processing'] },
+  { title: 'Custom Software', icon: Layers, items: ['Web Applications', 'Desktop Applications', 'Mobile Applications', 'Backend Systems', 'SaaS Products', 'CRM Systems'] },
+  { title: 'Intelligent Automation', icon: Workflow, items: ['Workflow Automation', 'Browser Automation', 'Business Process Automation', 'Document Automation'] },
+  { title: 'Product Engineering', icon: Box, items: ['MVP Development', 'Product Architecture', 'Prototyping', 'Production Engineering'] },
 ];
 
 const HOW_STEPS = [
@@ -55,21 +37,16 @@ const PILLARS = [
   { title: 'Build and learn', desc: 'We build our own products as well as software for businesses.' },
 ];
 
-// WWD_CARDS items can carry a parenthetical spell-out ("SaaS [Software as a
-// Service]") — splits that into the short label plus a dim inline note
-// instead of every item needing to be pre-split into a {label, note} shape.
-const ITEM_NOTE_RE = /^(.+?)\s*\[(.+)\]$/;
-
 // HOW_STEPS timeline — one shared stagger container holds BOTH the step
 // nodes and the connector segments between them as alternating direct
 // children (node, line, node, line, ...), so staggerChildren fires them in
 // that literal sequence: node 1 pops in, then the line to node 2 grows,
 // then node 2 pops in, and so on — a genuine step-by-step chain rather than
 // all six nodes fading in together.
-const stepTrackVariants = { hidden: {}, show: { transition: { staggerChildren: 0.18, delayChildren: 0.1 } } };
+const stepTrackVariants = { hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } } };
 const stepNodeVariants = {
   hidden: { opacity: 0, y: 14, scale: 0.8 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
 };
 
 // Mobile-only "snake" version of HOW_STEPS: steps sit in a two-column grid,
@@ -179,13 +156,13 @@ function SnakeSteps({ steps, reducedMotion }) {
             <motion.div
               initial={reducedMotion ? false : { opacity: 0, scale: 0.85, y: 18 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center text-center"
             >
               <div
                 style={{ width: NODE_SIZE, height: NODE_SIZE }}
-                className={`rounded-full border-2 flex items-center justify-center font-display text-[13px] font-bold shadow-sm transition-colors duration-500 ${
+                className={`rounded-full border-2 flex items-center justify-center font-display text-[15px] font-bold shadow-sm transition-colors duration-500 ${
                   i < litCount
                     ? 'bg-electric border-electric text-white'
                     : 'bg-primary border-electric/40 text-electric'
@@ -193,8 +170,8 @@ function SnakeSteps({ steps, reducedMotion }) {
               >
                 {String(i + 1).padStart(2, '0')}
               </div>
-              <h4 className="font-display text-[12.5px] font-bold uppercase tracking-wide text-ink mt-3 mb-1.5">{step.title}</h4>
-              <p className="text-[12.5px] leading-snug text-muted">{step.desc}</p>
+              <h4 className="font-display text-[14px] font-bold uppercase tracking-wide text-ink mt-3 mb-1.5">{step.title}</h4>
+              <p className="text-[14px] leading-snug text-muted">{step.desc}</p>
             </motion.div>
           </div>
         ))}
@@ -207,10 +184,10 @@ function SnakeSteps({ steps, reducedMotion }) {
 // introContext.js) instead of firing on mount, so eyebrow -> headline ->
 // subhead -> CTAs reveal in sequence right after the intro settles into the
 // navbar, per the intro spec's staged hero reveal.
-const heroContainer = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } } };
+const heroContainer = { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } } };
 const heroItem = {
   hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
 };
 
 const Home = () => {
@@ -222,10 +199,10 @@ const Home = () => {
 
   const introDone = useIntroDone();
   const reducedMotion = useReducedMotion();
-  // The wwd-card tilt + spotlight need a real pointer; on touch the CSS behind
-  // them is disabled (`@media (hover: hover)` in index.css), so running the
-  // handlers there would be work with nothing to show for it.
-  const pointerFx = !reducedMotion && canHover();
+  // The staged hero reveal only makes sense straight after the logo intro.
+  // Without the intro (repeat visit, deep link back to /) the hero is on
+  // screen at first paint and should simply be there, not fade in from blank.
+  const [heroStartsVisible] = React.useState(introDone);
 
   return (
   <div className="bg-primary">
@@ -253,14 +230,13 @@ const Home = () => {
           on-screen, which is worse than a few extra px of scroll. */}
       <div className="relative z-10 flex-1 min-h-0 flex items-center pt-[84px] px-4 sm:px-8">
         <div className="relative w-full max-w-7xl mx-auto">
-          {/* min-h only from md: up — that's also where the floating node
-              cards (HeroCircuitBackground) start showing, so mobile/sm never
-              reserves dead vertical space for decoration it isn't drawing. */}
-          <div className="relative md:min-h-[340px] lg:min-h-[400px] flex items-center">
-            <HeroCircuitBackground />
+          {/* No floating icon chips around the headline: at the larger headline
+              size they crowded it, and "code / AI / chart" tiles on a mesh
+              is the most template-looking element an AI-company hero can have. */}
+          <div className="relative flex items-center">
             <motion.div
               variants={heroContainer}
-              initial={reducedMotion ? false : 'hidden'}
+              initial={reducedMotion || heroStartsVisible ? false : 'hidden'}
               animate={introDone ? 'show' : 'hidden'}
               className="relative z-10 w-full max-w-4xl mx-auto text-center"
             >
@@ -279,7 +255,7 @@ const Home = () => {
                   correct on one device and broken on the next one down. */}
               <motion.h1
                 variants={heroItem}
-                className="font-display text-[clamp(24px,7.5vw,34px)] sm:text-[42px] lg:text-[52px] leading-[1.05] font-semibold tracking-tight text-ink hero-text-glow"
+                className="font-display text-[clamp(24px,7.5vw,34px)] sm:text-[56px] lg:text-[76px] leading-[1.02] font-semibold tracking-tight text-ink hero-text-glow"
               >
                 We build the software.
                 <br />
@@ -292,7 +268,7 @@ const Home = () => {
                   spare is exactly what this screen has most of. Hiding it
                   bought nothing and cost the one line that says what the
                   company actually does. */}
-              <motion.p variants={heroItem} className="text-[14.5px] sm:text-base leading-relaxed text-muted mt-3.5 sm:mt-4 max-w-2xl mx-auto hero-text-glow">
+              <motion.p variants={heroItem} className="text-[16px] sm:text-lg lg:text-xl leading-relaxed text-muted mt-4 sm:mt-6 max-w-2xl mx-auto hero-text-glow">
                 Products we've shipped. Systems we've built for others. Same engineering standard either way.
               </motion.p>
               {/* Phones stack the CTAs full-width instead of letting them wrap.
@@ -301,17 +277,16 @@ const Home = () => {
                   of two different widths (197px over 181px), which reads as a
                   layout accident rather than a choice. Stacking makes it
                   deliberate, equal-width, and a full-width tap target. */}
-              <motion.div variants={heroItem} className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-stretch sm:items-center gap-3 sm:gap-3.5 mt-6">
+              <motion.div variants={heroItem} className="flex flex-col sm:flex-row sm:flex-wrap justify-center items-stretch sm:items-center gap-3 sm:gap-4 mt-7 sm:mt-9">
                 <Button
                   to="/contact"
-                  size="sm"
                   hoverEffects={false}
                   className="w-full sm:w-auto"
                   onClick={() => trackEvent('cta_click', { location: 'home_hero' })}
                 >
                   Discuss Your Project →
                 </Button>
-                <Button to="/products" variant="outline" size="sm" hoverEffects={false} className="w-full sm:w-auto">
+                <Button to="/products" variant="outline" hoverEffects={false} className="w-full sm:w-auto">
                   See What We've Built
                 </Button>
               </motion.div>
@@ -338,7 +313,7 @@ const Home = () => {
               <div key={copy} className="flex items-center gap-3 shrink-0 pr-3" aria-hidden={copy === 1}>
                 {CAPABILITY_STRIP.map((c) => (
                   <React.Fragment key={c}>
-                    <span className="font-display text-[12px] font-bold tracking-[0.08em] uppercase text-muted">{c}</span>
+                    <span className="font-display text-[13px] font-bold tracking-[0.08em] uppercase text-muted">{c}</span>
                     <span className="text-ink/20">•</span>
                   </React.Fragment>
                 ))}
@@ -346,7 +321,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-        <div className="hidden sm:flex max-w-7xl mx-auto flex-row flex-wrap justify-center gap-3.5 text-center font-display text-[11.5px] font-bold tracking-[0.12em] uppercase text-muted">
+        <div className="hidden sm:flex max-w-7xl mx-auto flex-row flex-wrap justify-center gap-3.5 text-center font-display text-[13px] font-bold tracking-[0.12em] uppercase text-muted">
           {CAPABILITY_STRIP.map((c, i) => (
             <React.Fragment key={c}>
               <span className="capability-item" style={{ animationDelay: `${i * 2}s` }}>{c}</span>
@@ -363,80 +338,45 @@ const Home = () => {
           the hero above so the opening view is the headline alone. */}
       <ProductsTeaser />
 
-    {/* What We Do — dark-scope reused from the hero (see index.css): the
-        section bg + kicker/heading/link re-theme for the dark background
-        automatically via the same CSS-variable cascade. The cards are now
-        frosted glass panels (`.wwd-card`, index.css) that sit right on that
-        dark background — no light-scope reset needed, since text-ink/
-        text-muted already read as light text via dark-scope. */}
-    <section className="dark-scope bg-[var(--hero-bg)] py-12 sm:py-20 px-4 sm:px-8">
+    {/* What We Do — light, like the sections around it. It used to be a second
+        full-bleed dark band, which made the page flip dark/light/dark/light;
+        the hero and the inset "Why Navedhana" panel are now the only dark
+        moments, so each one reads as deliberate. A faint surface tint plus
+        hairlines still separates it from its neighbours. */}
+    <section className="bg-surface/40 border-y border-ink/[0.06] py-16 sm:py-24 px-4 sm:px-8">
       <div className="max-w-7xl mx-auto">
-        <motion.div {...tiltIn} className="max-w-xl mx-auto mb-11 text-center">
+        <motion.div {...tiltIn} className="max-w-2xl mx-auto mb-12 sm:mb-14 text-center">
           <SectionKicker centered className="mb-3.5">What We Do</SectionKicker>
-          <h2 className="font-display text-[30px] sm:text-[42px] font-bold tracking-tight text-ink">
+          <h2 className="font-display text-[30px] sm:text-[48px] font-bold tracking-tight leading-[1.08] text-ink">
             Four capabilities. One engineering standard.
           </h2>
-          <p className="text-[15px] text-muted mt-3.5">
+          <p className="text-[17px] text-muted mt-4">
             <Button to="/services" variant="link" size="inline">The full breakdown</Button>, or the short version below.
           </p>
         </motion.div>
-        {/* Default `stretch` alignment: all four cards match the tallest, so
-            the row reads as one straight band. `flex flex-col` on the card and
-            `flex-1` on the body then push each card's own background down to
-            fill its share, rather than leaving a transparent gap under the
-            shorter lists. */}
+        {/* Typographic cards — no stock photography. The photos (neon
+            keyboards, server rooms) were the most template-looking thing on
+            the page; the icon, title and list carry the content on their own. */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {WWD_CARDS.map((card, i) => (
             <motion.div
               key={card.title}
               {...scaleIn}
-              transition={{ duration: 0.55, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="wwd-card flex flex-col rounded-2xl bg-primary border border-ink/10 shadow-[0_26px_54px_-28px_rgba(0,0,0,0.75)]"
-              onMouseMove={pointerFx ? (e) => {
-                const r = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - r.left;
-                const y = e.clientY - r.top;
-                e.currentTarget.style.setProperty('--mx', `${x}px`);
-                e.currentTarget.style.setProperty('--my', `${y}px`);
-                const rx = ((y / r.height) - 0.5) * -8;
-                const ry = ((x / r.width) - 0.5) * 8;
-                e.currentTarget.style.transform = `translateY(-4px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-              } : undefined}
-              onMouseLeave={pointerFx ? (e) => { e.currentTarget.style.transform = ''; } : undefined}
+              transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+              className="wwd-card flex flex-col rounded-2xl bg-card border border-ink/10 shadow-[0_1px_2px_rgba(16,25,46,0.04),0_16px_40px_-24px_rgba(16,25,46,0.25)] p-6 sm:p-7"
             >
-              {/* The photo is now a band at the top rather than a wash behind
-                  the text. On a white card there is no scrim strong enough to
-                  keep a photograph readable underneath body copy without
-                  turning it to mud — giving it its own strip keeps the image
-                  at full strength AND the list on clean white. */}
-              <div className="relative h-[100px] sm:h-[112px] shrink-0 overflow-hidden">
-                <img src={card.image} alt="" aria-hidden="true" className="w-full h-full object-cover" />
-                <div
-                  className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent)_20%,transparent),rgba(16,25,46,0.35))]"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="relative z-10 flex-1 p-5 sm:p-6">
-                {/* Pulled up so the tile straddles the photo edge — the one
-                    element tying the two halves of the card together. */}
-                <div className="-mt-[38px] mb-3 w-11 h-11 rounded-xl flex items-center justify-center border bg-card text-electric border-ink/10 shadow-sm">
-                  <card.icon size={20} />
+              <div className="relative z-10 flex-1">
+                <div className="mb-5 w-12 h-12 rounded-xl flex items-center justify-center bg-electric/[0.08] text-electric border border-electric/15">
+                  <card.icon size={22} />
                 </div>
-                <h3 className="font-display text-[16.5px] font-semibold text-ink mb-2 sm:mb-3">{card.title}</h3>
-                <motion.ul {...staggerParent(0.05, 0.12)} className="flex flex-col text-[13px] sm:text-[12.5px] text-muted">
-                {card.items.map((it) => {
-                  const note = it.match(ITEM_NOTE_RE);
-                  return (
-                    <motion.li variants={riseChild} key={it} className="flex items-center gap-2 py-1 sm:py-1.5 border-t border-ink/[0.08] first:border-t-0 first:pt-0 hover:text-ink transition-colors">
-                      {note ? (
-                        <span>
-                          {note[1]} <span className="opacity-60 text-[11px]">({note[2]})</span>
-                        </span>
-                      ) : it}
-                    </motion.li>
-                  );
-                })}
-                </motion.ul>
+                <h3 className="font-display text-[20px] font-semibold text-ink mb-3">{card.title}</h3>
+                <ul className="flex flex-col text-[15px] text-muted">
+                  {card.items.map((it) => (
+                    <li key={it} className="flex items-center gap-2.5 py-2 border-t border-ink/[0.07] first:border-t-0 first:pt-0">
+                      {it}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </motion.div>
           ))}
@@ -458,12 +398,12 @@ const Home = () => {
       <div className="max-w-7xl mx-auto">
         <motion.div {...blurIn} className="max-w-3xl mx-auto mb-9 sm:mb-16 text-center">
           <SectionKicker centered className="mb-4 sm:mb-5">Our Engineering Approach</SectionKicker>
-          <h2 className="font-display text-[36px] sm:text-[50px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
+          <h2 className="font-display text-[36px] sm:text-[56px] font-extrabold tracking-tight leading-[1.1] text-ink mb-5">
             Think deeply.
             <br />
             <span className="text-electric">Build intelligently.</span>
           </h2>
-          <p className="text-[15px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
+          <p className="text-[17px] sm:text-base leading-relaxed text-muted max-w-xl mx-auto">
             We don't start with technology. We start with understanding. Every solution is shaped by the problem,
             engineered for reliability, and built to evolve.
           </p>
@@ -483,11 +423,11 @@ const Home = () => {
           {HOW_STEPS.map((step, i) => (
             <React.Fragment key={step.title}>
               <motion.div variants={stepNodeVariants} className="flex flex-col items-center text-center w-[152px] flex-shrink-0">
-                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[14px] sm:text-[13px] font-bold text-electric mb-4">
+                <div className="w-12 h-12 rounded-full bg-primary border-2 border-electric/40 flex items-center justify-center font-display text-[16px] sm:text-[15px] font-bold text-electric mb-4">
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                <h4 className="font-display text-[12px] font-bold uppercase tracking-wide text-ink mb-2">{step.title}</h4>
-                <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{step.desc}</p>
+                <h4 className="font-display text-[13px] font-bold uppercase tracking-wide text-ink mb-2">{step.title}</h4>
+                <p className="text-[15px] sm:text-[14px] leading-relaxed text-muted">{step.desc}</p>
               </motion.div>
               {i < HOW_STEPS.length - 1 && (
                 <motion.div variants={growX} style={{ transformOrigin: 'left' }} className="flex-1 h-px bg-ink/15 mt-6" />
@@ -513,17 +453,17 @@ const Home = () => {
       <div className="dark-scope bg-[var(--hero-bg)] rounded-[2rem] sm:rounded-[2.5rem] max-w-7xl mx-auto px-6 sm:px-14 py-12 sm:py-16 text-center">
         <motion.div {...rise}>
           <SectionKicker centered className="mb-3.5">Why Navedhana</SectionKicker>
-          <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-5">
+          <h2 className="font-display text-[28px] sm:text-[44px] font-bold tracking-tight text-ink mb-5">
             A software and AI engineering company building real products
           </h2>
           <motion.div {...staggerParent(0.1)} className="flex flex-wrap justify-center gap-x-7 gap-y-2 mb-6">
             {PILLARS.slice(0, 3).map((p) => (
-              <motion.span key={p.title} variants={riseChild} className="font-display text-[14px] sm:text-[13px] font-semibold text-ink/80">
+              <motion.span key={p.title} variants={riseChild} className="font-display text-[16px] sm:text-[15px] font-semibold text-ink/80">
                 {p.title}
               </motion.span>
             ))}
           </motion.div>
-          <p className="text-[14.5px] leading-relaxed text-muted mb-5">
+          <p className="text-[16px] leading-relaxed text-muted mb-5">
             We build our own technology, and we build software for businesses — with the same engineering standard either way.
           </p>
           <Button to="/about" variant="link" size="inline">More About Navedhana →</Button>
@@ -534,8 +474,8 @@ const Home = () => {
     {/* Final CTA */}
     <section className="py-10 sm:py-16 px-4 sm:px-8 text-center">
       <motion.div {...scaleIn} className="max-w-xl mx-auto">
-        <h2 className="font-display text-[28px] sm:text-[38px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
-        <p className="text-[14.5px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>
+        <h2 className="font-display text-[28px] sm:text-[44px] font-bold tracking-tight text-ink mb-3">Have a problem worth solving?</h2>
+        <p className="text-[16px] text-muted mb-6">Tell us what you're building. We'll help you figure out the technology behind it.</p>
         <Button to="/contact" onClick={() => trackEvent('cta_click', { location: 'home_final' })}>Let's Build It →</Button>
       </motion.div>
     </section>

@@ -44,17 +44,17 @@ const Seasonal = () => {
     <section className="relative overflow-hidden pt-[104px] sm:pt-[148px] pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <motion.div {...rise} className="max-w-2xl">
-          <span className="inline-block mb-5 px-4 py-2 rounded-full bg-orange-100 text-orange-600 font-display text-[11px] font-bold tracking-[0.14em] uppercase">
+          <span className="inline-block mb-5 px-4 py-2 rounded-full bg-orange-100 text-orange-600 font-display text-[12.5px] font-bold tracking-[0.14em] uppercase">
             Celebrate Every Festival
           </span>
-          <h1 className="font-display text-[42px] sm:text-[58px] font-extrabold leading-[1.05] tracking-tight mb-5">
+          <h1 className="font-display text-[42px] sm:text-[64px] font-extrabold leading-[1.05] tracking-tight mb-5">
             <span className="block text-orange-600">Seasonal</span>
             <span className="block text-[#1c1a17]">Products</span>
           </h1>
-          <p className="text-[15.5px] sm:text-base leading-relaxed text-[#635c50] max-w-lg mb-7">
+          <p className="text-[17px] sm:text-base leading-relaxed text-[#635c50] max-w-lg mb-7">
             Bringing joy to every festival with vibrant colors, high-flying kites, and authentic seasonal products.
           </p>
-          <span className="inline-flex items-center px-5 py-2.5 rounded-full border-2 border-orange-300 text-orange-600 bg-orange-50 font-display font-bold text-[13.5px]">
+          <span className="inline-flex items-center px-5 py-2.5 rounded-full border-2 border-orange-300 text-orange-600 bg-orange-50 font-display font-bold text-[15px]">
             Launching Soon
           </span>
         </motion.div>
@@ -81,7 +81,7 @@ const Seasonal = () => {
               style={{ background: 'linear-gradient(135deg, #fb923c, #ea580c)' }}
             >
               <span className="font-display text-2xl sm:text-[28px] font-extrabold">Sankranti</span>
-              <span className="text-[13px] sm:text-sm opacity-90 mt-1">Festival Joy</span>
+              <span className="text-[15px] sm:text-sm opacity-90 mt-1">Festival Joy</span>
             </div>
           </div>
         </motion.div>
@@ -89,16 +89,16 @@ const Seasonal = () => {
     </section>
 
     <section className="py-14 sm:py-20 px-4 sm:px-8 max-w-6xl mx-auto text-center">
-      <h2 className="font-display text-[28px] sm:text-[36px] font-bold tracking-tight text-[#1c1a17] mb-2.5">
+      <h2 className="font-display text-[28px] sm:text-[40px] font-bold tracking-tight text-[#1c1a17] mb-2.5">
         Celebrate Every <span className="text-orange-600">Festival</span>
       </h2>
-      <p className="text-[15px] text-[#635c50] mb-10">Premium products for your special occasions</p>
+      <p className="text-[17px] text-[#635c50] mb-10">Premium products for your special occasions</p>
       <div className="grid sm:grid-cols-3 gap-5 text-left">
         {PRODUCTS.map((p) => (
           <div key={p.title} className="p-6 rounded-2xl border border-orange-100 bg-white shadow-sm">
             <h3 className="font-display text-lg font-bold text-[#1c1a17] mb-2">{p.title}</h3>
-            <p className="text-[13.5px] leading-relaxed text-[#635c50] mb-4">{p.desc}</p>
-            <span className="inline-block px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 font-display text-[10.5px] font-bold tracking-wide">
+            <p className="text-[15px] leading-relaxed text-[#635c50] mb-4">{p.desc}</p>
+            <span className="inline-block px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 font-display text-[12px] font-bold tracking-wide">
               Coming Soon
             </span>
           </div>
@@ -116,8 +116,8 @@ const Seasonal = () => {
             <span className="w-12 h-12 rounded-full bg-white/15 text-white flex items-center justify-center mb-3">
               <f.icon size={20} />
             </span>
-            <h3 className="font-display text-[15px] font-bold text-white mb-1">{f.title}</h3>
-            <p className="text-[13px] text-white/80">{f.desc}</p>
+            <h3 className="font-display text-[17px] font-bold text-white mb-1">{f.title}</h3>
+            <p className="text-[15px] text-white/80">{f.desc}</p>
           </div>
         ))}
       </div>
@@ -127,10 +127,10 @@ const Seasonal = () => {
       <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-[#1c1a17] mb-2.5">
         Never Miss a Festival
       </h2>
-      <p className="text-[14.5px] text-[#635c50] mb-7">Get notified when seasonal products are back in stock</p>
+      <p className="text-[16px] text-[#635c50] mb-7">Get notified when seasonal products are back in stock</p>
       <Link
         to="/contact"
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-600 text-white font-display font-bold text-[14.5px] hover:bg-orange-700 transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-orange-600 text-white font-display font-bold text-[16px] hover:bg-orange-700 transition-colors"
       >
         Notify Me
       </Link>

@@ -5,10 +5,13 @@ import SectionKicker from './SectionKicker';
 // Shared centered page header for the interior pages (About/Services/Products).
 // Same staggered kicker -> headline -> subhead reveal Home's hero uses, at
 // page-header scale and on the light background rather than Home's dark scope.
-const container = { hidden: {}, show: { transition: { staggerChildren: 0.12, delayChildren: 0.05 } } };
+// Transform-only: this header is on screen at first paint, so starting it at
+// opacity 0 made every interior page open blank for half a second (and threw
+// away the prerendered text that was already visible).
+const container = { hidden: {}, show: { transition: { staggerChildren: 0.06 } } };
 const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { y: 12 },
+  show: { y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
 };
 
 // Default top padding clears the navbar: 84px tall, so 104px on a phone is
@@ -38,14 +41,14 @@ const PageHero = ({ kicker, title, subtitle, align = 'center', backdrop, classNa
         </motion.div>
         <motion.h1
           variants={item}
-          className="font-display text-[29px] sm:text-[46px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-ink"
+          className="font-display text-[29px] sm:text-[52px] font-bold tracking-tight leading-[1.12] sm:leading-[1.08] text-ink"
         >
           {title}
         </motion.h1>
         {subtitle && (
           <motion.p
             variants={item}
-            className={`text-[15px] sm:text-base leading-relaxed text-muted mt-4 sm:mt-5 max-w-xl ${centered ? 'mx-auto' : ''}`}
+            className={`text-[17px] sm:text-base leading-relaxed text-muted mt-4 sm:mt-5 max-w-xl ${centered ? 'mx-auto' : ''}`}
           >
             {subtitle}
           </motion.p>

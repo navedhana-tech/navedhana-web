@@ -6,8 +6,10 @@
 export const DURATION = {
   micro: 0.15,
   base: 0.3,
-  reveal: 0.7,
-  step: 0.5,
+  // Kept short on purpose: content that is still fading in after the visitor
+  // has started reading feels sluggish, not polished.
+  reveal: 0.5,
+  step: 0.35,
 };
 
 export const EASE_SIGNATURE = [0.16, 1, 0.3, 1];
@@ -26,7 +28,7 @@ export const SPRING = { type: 'spring', stiffness: 300, damping: 30 };
 // reveals. A block that fills 40% of a desktop viewport can easily exceed a
 // phone's entire height, where waiting for a quarter of it means the reveal
 // fires well after the visitor is already reading — so phones trigger earlier.
-const VIEWPORT = { once: true, amount: isPhoneViewport() ? 0.12 : 0.25 };
+const VIEWPORT = { once: true, amount: isPhoneViewport() ? 0.05 : 0.1 };
 
 // Hoisted as a function because VIEWPORT is evaluated before `isPhone` below.
 function isPhoneViewport() {

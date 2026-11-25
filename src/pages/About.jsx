@@ -127,7 +127,7 @@ const About = () => {
               <div className="overflow-hidden">
                 <motion.dd
                   variants={clipChild}
-                  className="font-display text-[30px] sm:text-[36px] font-bold tracking-tight leading-none"
+                  className="font-display text-[30px] sm:text-[40px] font-bold tracking-tight leading-none"
                   style={{ color: ACCENTS[i] }}
                 >
                   {s.value}
@@ -135,7 +135,7 @@ const About = () => {
               </div>
               <motion.dt
                 variants={riseChild}
-                className="font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-[0.12em] uppercase text-muted mt-2.5"
+                className="font-display text-[13px] sm:text-[12px] font-bold tracking-[0.12em] uppercase text-muted mt-2.5"
               >
                 {s.label}
               </motion.dt>
@@ -162,21 +162,21 @@ const About = () => {
                 key={s.title}
                 initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.5 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 className="relative"
               >
                 <motion.span
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
-                  viewport={{ once: true, amount: 0.5 }}
+                  viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.45, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
                   className="absolute -left-9 sm:-left-12 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-primary"
                   style={{ background: ACCENTS[i], boxShadow: `0 0 0 3px color-mix(in srgb, ${ACCENTS[i]} 22%, transparent)` }}
                   aria-hidden="true"
                 />
                 <h3 className="font-display text-[19px] font-semibold text-ink mb-2.5">{s.title}</h3>
-                <p className="text-[14.5px] leading-relaxed text-muted">{s.body}</p>
+                <p className="text-[16px] leading-relaxed text-muted">{s.body}</p>
               </motion.div>
             ))}
           </div>
@@ -195,8 +195,8 @@ const About = () => {
                 key={m.label}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.6, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.45, delay: i * 0.06, ease: [0.16, 1, 0.3, 1] }}
                 onMouseMove={onCardMove}
                 className="glow-card rounded-2xl border border-ink/15 bg-card p-4 sm:p-8"
                 style={{ '--accent': m.accent, borderTopColor: m.accent, borderTopWidth: '3px' }}
@@ -205,7 +205,7 @@ const About = () => {
                   <m.icon size={22} />
                 </AccentIcon>
                 <h3 className="font-display text-[18px] sm:text-[20px] font-semibold text-ink mb-2 sm:mb-3">{m.label}</h3>
-                <p className="text-[14.5px] leading-relaxed text-muted">{m.body}</p>
+                <p className="text-[16px] leading-relaxed text-muted">{m.body}</p>
               </motion.div>
             ))}
           </div>
@@ -217,7 +217,7 @@ const About = () => {
           <motion.div {...slideLeft} className="max-w-xl mx-auto mb-7 sm:mb-10 text-center">
             <SectionKicker centered className="mb-3.5">What We Believe</SectionKicker>
             <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-ink">Our core values</h2>
-            <p className="text-[14.5px] text-muted mt-3.5">The principles that guide every decision we make.</p>
+            <p className="text-[16px] text-muted mt-3.5">The principles that guide every decision we make.</p>
           </motion.div>
           <motion.div
             {...staggerParent(0.07)}
@@ -235,8 +235,8 @@ const About = () => {
                   <p.icon size={19} className="hidden sm:block" />
                 </AccentIcon>
                 <div className="sm:contents">
-                  <h4 className="font-display text-[14.5px] sm:text-[15.5px] font-semibold text-ink mb-0.5 sm:mb-2">{p.title}</h4>
-                  <p className="text-[12.5px] sm:text-[13px] leading-snug text-muted">{p.desc}</p>
+                  <h4 className="font-display text-[16px] sm:text-[17px] font-semibold text-ink mb-0.5 sm:mb-2">{p.title}</h4>
+                  <p className="text-[14px] sm:text-[15px] leading-snug text-muted">{p.desc}</p>
                 </div>
               </motion.div>
             ))}

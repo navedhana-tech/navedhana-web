@@ -40,7 +40,7 @@ const Products = () => {
         initial={{ opacity: 0, scale: 0.98 }}
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
+        transition={{ duration: 0.45 }}
         className="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-ink/15 bg-card shadow-sm hover:shadow-md hover:border-ink/25 hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
       >
         <div className="p-2 flex items-center">
@@ -55,10 +55,10 @@ const Products = () => {
         <div className="p-5 sm:p-9 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-4">
             <img src="/assets/redesign/lekvya-logo.png" alt="Lekvya" className="h-6 w-auto" />
-            <span className="px-2.5 py-1 rounded-full bg-sky/15 text-sky-text font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-wide">LIVE</span>
+            <span className="px-2.5 py-1 rounded-full bg-sky/15 text-sky-text font-display text-[13px] sm:text-[12px] font-bold tracking-wide">LIVE</span>
           </div>
           <h2 className="font-display text-xl font-semibold text-ink mb-3">Lekvya</h2>
-          <p className="text-[14px] leading-relaxed text-muted mb-5">
+          <p className="text-[16px] leading-relaxed text-muted mb-5">
             An AI-powered workflow and client-communication platform for Chartered Accountants and financial-service
             firms — built around scheduling, client management, and document handling.
           </p>
@@ -91,7 +91,7 @@ const Products = () => {
             />
             <div className="p-4 sm:p-6 min-w-0">
               <span
-                className="inline-block mb-3 px-2.5 py-1 rounded-full border font-display text-[11.5px] sm:text-[10.5px] font-bold tracking-wide"
+                className="inline-block mb-3 px-2.5 py-1 rounded-full border font-display text-[13px] sm:text-[12px] font-bold tracking-wide"
                 style={{
                   background: `color-mix(in srgb, ${p.accent} 10%, transparent)`,
                   borderColor: `color-mix(in srgb, ${p.accent} 28%, transparent)`,
@@ -101,7 +101,7 @@ const Products = () => {
                 IN DEVELOPMENT
               </span>
               <h3 className="font-display text-[18px] font-semibold text-ink mb-2.5">{p.title}</h3>
-              <p className="text-[13.5px] leading-relaxed text-muted">{p.desc}</p>
+              <p className="text-[15px] leading-relaxed text-muted">{p.desc}</p>
               {p.to && (
                 <Button to={p.to} variant="link" size="inline" className="inline-block mt-4">
                   Read more →

@@ -101,7 +101,7 @@ const Navbar = ({ introDone = true }) => {
           <span className={`font-display font-semibold text-xl tracking-tight ${overDarkHero ? 'text-white' : 'text-ink'}`}>Navedhana</span>
         </Link>
 
-        <div className={`relative hidden lg:flex items-center gap-2 text-[14.5px] font-medium whitespace-nowrap ${overDarkHero ? 'text-white/70' : 'text-ink/70'}`}>
+        <div className={`relative hidden lg:flex items-center gap-2 text-[16px] font-medium whitespace-nowrap ${overDarkHero ? 'text-white/70' : 'text-ink/70'}`}>
           {links.map((link) => (
             <Link
               key={link.path}
@@ -184,7 +184,7 @@ const Navbar = ({ introDone = true }) => {
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className={`flex items-center min-h-[48px] px-4 rounded-xl text-[16px] font-medium transition-colors ${
+                className={`flex items-center min-h-[48px] px-4 rounded-xl text-[17px] font-medium transition-colors ${
                   isActive(link.path) ? 'bg-ink/[0.06] text-ink' : 'text-ink/70 hover:bg-ink/[0.06]'
                 }`}
               >
@@ -194,7 +194,7 @@ const Navbar = ({ introDone = true }) => {
             <Link
               to="/contact"
               onClick={() => setIsOpen(false)}
-              className="flex items-center justify-center min-h-[52px] mt-2 px-4 rounded-xl bg-electric text-primary font-bold text-[16px]"
+              className="flex items-center justify-center min-h-[52px] mt-2 px-4 rounded-xl bg-electric text-primary font-bold text-[17px]"
             >
               Discuss Your Project →
             </Link>

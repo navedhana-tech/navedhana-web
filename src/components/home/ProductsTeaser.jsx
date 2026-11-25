@@ -49,10 +49,10 @@ const CASCADE_POSITION = [
 // (variants={fadeItem}, or the heading's revealItem) fires in sequence as
 // its column scrolls into view, rather than the whole column fading in as
 // one flat block.
-const columnVariants = { hidden: {}, show: { transition: { staggerChildren: 0.13, delayChildren: 0.05 } } };
+const columnVariants = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } };
 const fadeItem = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
 };
 // Headline gets its own treatment — a clip-reveal (translateY inside an
 // overflow-hidden wrapper) rather than a fade, so the one line that's meant
@@ -60,7 +60,7 @@ const fadeItem = {
 // item in the same fade stagger as the kicker/paragraph/link around it.
 const revealItem = {
   hidden: { y: '100%' },
-  show: { y: '0%', transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+  show: { y: '0%', transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
 };
 
 const ProductCardLink = ({ p, className, style, children }) => {
@@ -98,7 +98,7 @@ const ProductsTeaser = () => (
   <section className="pt-20 sm:pt-24 pb-10 px-4 sm:px-8">
     <div className="w-full max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-4 sm:gap-10 lg:gap-16 items-center">
-        <motion.div variants={columnVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} className="text-center sm:text-left">
+        <motion.div variants={columnVariants} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.15 }} className="text-center sm:text-left">
           {/* Two renderings, same reason as the product list below: centered
               (both flanking rules) reads right on mobile, but the sm:+
               left-aligned kicker only ever had the one leading rule. */}
@@ -109,14 +109,14 @@ const ProductsTeaser = () => (
           <div className="overflow-hidden mb-6">
             <motion.h2
               variants={revealItem}
-              className="font-display text-[28px] sm:text-[52px] lg:text-[58px] font-bold tracking-tight leading-[1.1] text-ink"
+              className="font-display text-[28px] sm:text-[48px] xl:text-[56px] font-bold tracking-tight leading-[1.08] text-ink"
             >
               Products &amp; Platforms We're Building
             </motion.h2>
           </div>
           <motion.p variants={fadeItem} className="flex items-start justify-center sm:justify-start gap-2 text-base leading-relaxed text-muted max-w-md mx-auto sm:mx-0 mb-3 sm:mb-7 text-center sm:text-left">
             <ShieldCheck size={20} className="hidden sm:block text-electric flex-shrink-0 mt-0.5" />
-            <span className="min-w-0">Also trusted for custom product development and automation.</span>
+            <span className="min-w-0">We also design and build custom software and automation for businesses.</span>
           </motion.p>
           <motion.div variants={fadeItem} className="hidden sm:block">
             <Button to="/products" variant="link">View all products →</Button>
@@ -131,7 +131,7 @@ const ProductsTeaser = () => (
           variants={columnVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.15 }}
           className="sm:hidden min-w-0 -mx-4 px-4 py-2"
         >
           <div className="flex items-stretch gap-4 overflow-x-auto snap-x snap-mandatory pb-1 hide-scrollbar">
@@ -150,7 +150,7 @@ const ProductsTeaser = () => (
                       {p.icon}
                     </div>
                     <span
-                      className={`px-2.5 py-1 rounded-full font-display text-[10.5px] font-bold tracking-wide ${
+                      className={`px-2.5 py-1 rounded-full font-display text-[12px] font-bold tracking-wide ${
                         p.live ? 'bg-electric/10 text-electric' : 'bg-ink/[0.06] text-muted'
                       }`}
                     >
@@ -158,7 +158,7 @@ const ProductsTeaser = () => (
                     </span>
                   </div>
                   <h3 className="font-display text-[17px] font-bold text-ink mb-1">{p.name}</h3>
-                  <p className="text-[13.5px] leading-relaxed text-muted">{p.desc}</p>
+                  <p className="text-[15px] leading-relaxed text-muted">{p.desc}</p>
                 </ProductCardLink>
               </motion.div>
             ))}
@@ -173,7 +173,7 @@ const ProductsTeaser = () => (
           variants={columnVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.15 }}
           className="hidden sm:flex lg:hidden flex-col gap-6"
         >
           {HERO_PRODUCTS.map((p) => (
@@ -183,13 +183,13 @@ const ProductsTeaser = () => (
                 className="group rounded-2xl border border-ink/15 bg-card shadow-sm p-5 flex items-center justify-between gap-4 hover:border-electric/30 hover:shadow-md hover:-translate-y-0.5 transition-[transform,box-shadow,border-color] duration-300"
               >
                 <div className="min-w-0">
-                  <span className="font-display text-[10.5px] font-bold tracking-[0.14em] uppercase text-electric">
+                  <span className="font-display text-[12px] font-bold tracking-[0.14em] uppercase text-electric">
                     {p.live ? 'Live Product' : 'In Development'}
                   </span>
                   <h3 className="font-display text-[17px] font-bold text-ink mt-1 group-hover:text-electric transition-colors">
                     {p.name}
                   </h3>
-                  <p className="text-[13px] leading-relaxed text-muted mt-1">{p.desc}</p>
+                  <p className="text-[15px] leading-relaxed text-muted mt-1">{p.desc}</p>
                 </div>
                 <div
                   className={`w-11 h-11 rounded-xl ${p.badgeClass} text-primary flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105`}
@@ -212,15 +212,15 @@ const ProductsTeaser = () => (
           variants={fadeItem}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.15 }}
           className="hidden lg:flex items-center justify-center min-h-[380px]"
         >
-          <div className="relative w-[460px] h-[360px] xl:w-[520px] xl:h-[400px]" style={{ perspective: '1200px' }}>
+          <div className="relative w-[500px] h-[360px] xl:w-[560px] xl:h-[400px]" style={{ perspective: '1200px' }}>
             {HERO_PRODUCTS.map((p, i) => (
               <ProductCardLink
                 key={p.name}
                 p={p}
-                className={`iso-card absolute ${CASCADE_POSITION[i]} w-72 rounded-2xl border border-ink/10 bg-card/90 backdrop-blur-md shadow-[0_20px_45px_-20px_rgba(9,88,214,0.28)] p-5`}
+                className={`iso-card absolute ${CASCADE_POSITION[i]} w-[330px] rounded-2xl border border-ink/10 bg-card/90 backdrop-blur-md shadow-[0_20px_45px_-20px_rgba(9,88,214,0.28)] p-5`}
                 style={{ animationDelay: `${i * 0.6}s` }}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -228,15 +228,15 @@ const ProductsTeaser = () => (
                     {p.icon}
                   </div>
                   <span
-                    className={`px-2.5 py-1 rounded-full font-display text-[11px] sm:text-[10px] font-bold tracking-wide ${
+                    className={`px-2.5 py-1 rounded-full font-display text-[12.5px] sm:text-[12px] font-bold tracking-wide ${
                       p.live ? 'bg-electric/10 text-electric' : 'bg-ink/[0.06] text-muted'
                     }`}
                   >
                     {p.live ? 'Live' : 'Dev'}
                   </span>
                 </div>
-                <h3 className="font-display text-[16px] font-bold text-ink mb-1">{p.name}</h3>
-                <p className="text-[13.5px] sm:text-[12.5px] leading-relaxed text-muted">{p.desc}</p>
+                <h3 className="font-display text-[17px] font-bold text-ink mb-1">{p.name}</h3>
+                <p className="text-[15px] sm:text-[14px] leading-relaxed text-muted">{p.desc}</p>
               </ProductCardLink>
             ))}
           </div>

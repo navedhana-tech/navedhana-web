@@ -26,9 +26,9 @@ const STATIC_VARIANTS = {
 // screens only (a tappable target), collapsing back to normal inline flow at
 // sm:+ where a mouse is doing the pointing.
 const SIZES = {
- sm: 'pl-5 pr-1.5 py-1.5 text-[13.5px] sm:text-[13px]',
- lg: 'pl-6 sm:pl-7 pr-2 py-2 text-[15px] sm:text-base',
- inline: 'text-[14px] sm:text-[13px] min-h-[44px] sm:min-h-0 align-middle',
+ sm: 'pl-5 pr-1.5 py-1.5 text-[15px] sm:text-[15px]',
+ lg: 'pl-6 sm:pl-7 pr-2 py-2 text-[17px] sm:text-base',
+ inline: 'text-[16px] sm:text-[15px] min-h-[44px] sm:min-h-0 align-middle',
 };
 
 // Counterpart to SIZES for a pill with no trailing arrow. The sizes above pad
@@ -39,8 +39,8 @@ const SIZES = {
 // exactly what an outline CTA next to a primary one looks like. Symmetric
 // padding, plus a min-height standing in for the chip the row expects.
 const SIZES_NO_CHIP = {
- sm: 'px-5 py-1.5 min-h-10 text-[13.5px] sm:text-[13px]',
- lg: 'px-6 sm:px-7 py-2 min-h-[50px] text-[15px] sm:text-base',
+ sm: 'px-5 py-1.5 min-h-10 text-[15px] sm:text-[15px]',
+ lg: 'px-6 sm:px-7 py-2 min-h-[50px] text-[17px] sm:text-base',
 };
 
 const CHIP_SIZE = { sm: 'w-7 h-7', lg: 'w-9 h-9' };

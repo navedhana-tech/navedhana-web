@@ -41,7 +41,7 @@ const PlaceholderShot = ({ icon, label, image, className = '' }) => (
         {icon}
       </div>
     )}
-    {label && <span className="relative text-[11px] font-display font-semibold tracking-wide">{label}</span>}
+    {label && <span className="relative text-[12.5px] font-display font-semibold tracking-wide">{label}</span>}
   </div>
 );
 

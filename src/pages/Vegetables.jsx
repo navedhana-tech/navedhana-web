@@ -40,21 +40,21 @@ const Vegetables = () => {
     <section className="relative overflow-hidden pt-[104px] sm:pt-[148px] pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <motion.div {...rise} className="max-w-2xl">
-          <span className="inline-block mb-5 px-4 py-2 rounded-full bg-green-100 text-green-700 font-display text-[11px] font-bold tracking-[0.14em] uppercase">
+          <span className="inline-block mb-5 px-4 py-2 rounded-full bg-green-100 text-green-700 font-display text-[12.5px] font-bold tracking-[0.14em] uppercase">
             Farm to Table
           </span>
-          <h1 className="font-display text-[42px] sm:text-[58px] font-extrabold leading-[1.05] tracking-tight mb-5">
+          <h1 className="font-display text-[42px] sm:text-[64px] font-extrabold leading-[1.05] tracking-tight mb-5">
             <span className="block text-[#1c1a17]">Fresh</span>
             <span className="block text-green-600">Vegetables</span>
             <span className="block text-[#1c1a17]">Supply</span>
           </h1>
-          <p className="text-[15.5px] sm:text-base leading-relaxed text-[#635c50] max-w-lg mb-7">
+          <p className="text-[17px] sm:text-base leading-relaxed text-[#635c50] max-w-lg mb-7">
             Farm-fresh goodness delivered straight to your kitchen. We ensure quality, hygiene, and taste in every
             basket.
           </p>
           <Link
             to="https://fresh.navedhana.com/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white font-display font-bold text-[14.5px] hover:bg-green-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white font-display font-bold text-[16px] hover:bg-green-700 transition-colors"
           >
             Order Now
           </Link>
@@ -75,8 +75,8 @@ const Vegetables = () => {
               ))}
             </div>
             <div className="text-center text-white">
-              <span className="block font-display text-3xl sm:text-[40px] font-extrabold leading-none">100%</span>
-              <span className="text-[13px] sm:text-sm opacity-90">Fresh From Farm Daily</span>
+              <span className="block font-display text-3xl sm:text-[46px] font-extrabold leading-none">100%</span>
+              <span className="text-[15px] sm:text-sm opacity-90">Fresh From Farm Daily</span>
             </div>
           </div>
         </motion.div>
@@ -90,8 +90,8 @@ const Vegetables = () => {
             <span className="w-11 h-11 rounded-xl bg-green-600 text-white flex items-center justify-center mb-4">
               <h.icon size={20} />
             </span>
-            <h3 className="font-display text-[15.5px] font-bold text-[#1c1a17] mb-1.5">{h.title}</h3>
-            <p className="text-[13px] leading-relaxed text-[#635c50]">{h.desc}</p>
+            <h3 className="font-display text-[17px] font-bold text-[#1c1a17] mb-1.5">{h.title}</h3>
+            <p className="text-[15px] leading-relaxed text-[#635c50]">{h.desc}</p>
           </motion.div>
         ))}
       </motion.div>
@@ -102,17 +102,17 @@ const Vegetables = () => {
         className="rounded-[2rem] sm:rounded-[2.5rem] px-6 sm:px-14 py-12 sm:py-16 text-center"
         style={{ background: 'linear-gradient(100deg, #22c55e, #15803d 60%, #22c55e)' }}
       >
-        <h2 className="font-display text-[28px] sm:text-[36px] font-bold tracking-tight text-white mb-2.5">
+        <h2 className="font-display text-[28px] sm:text-[40px] font-bold tracking-tight text-white mb-2.5">
           What We Offer
         </h2>
-        <p className="text-[15px] text-white/85 mb-10">A wide variety of fresh produce</p>
+        <p className="text-[17px] text-white/85 mb-10">A wide variety of fresh produce</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
           {CATEGORIES.map((c) => (
             <div key={c.title} className="p-6 rounded-2xl bg-white shadow-sm flex flex-col items-center">
               <span className="w-11 h-11 rounded-full bg-green-50 text-green-600 flex items-center justify-center mb-3">
                 <c.icon size={20} />
               </span>
-              <h3 className="font-display text-[14.5px] font-bold text-[#1c1a17]">{c.title}</h3>
+              <h3 className="font-display text-[16px] font-bold text-[#1c1a17]">{c.title}</h3>
             </div>
           ))}
         </div>
@@ -123,10 +123,10 @@ const Vegetables = () => {
       <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-[#1c1a17] mb-2.5">
         Ready to Order Fresh?
       </h2>
-      <p className="text-[14.5px] text-[#635c50] mb-7">Get farm-fresh vegetables delivered to your door.</p>
+      <p className="text-[16px] text-[#635c50] mb-7">Get farm-fresh vegetables delivered to your door.</p>
       <Link
         to="/contact"
-        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white font-display font-bold text-[14.5px] hover:bg-green-700 transition-colors"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-green-600 text-white font-display font-bold text-[16px] hover:bg-green-700 transition-colors"
       >
         Contact Us Now
       </Link>

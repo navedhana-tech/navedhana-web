@@ -63,25 +63,25 @@ const Solar = () => {
     <section className="relative overflow-hidden pt-[104px] sm:pt-[148px] pb-16 sm:pb-20 px-4 sm:px-8 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <motion.div {...rise} className="max-w-2xl">
-          <span className="inline-flex items-center gap-1.5 mb-5 px-4 py-2 rounded-full bg-amber-100 text-amber-700 font-display text-[11px] font-bold tracking-[0.14em] uppercase">
+          <span className="inline-flex items-center gap-1.5 mb-5 px-4 py-2 rounded-full bg-amber-100 text-amber-700 font-display text-[12.5px] font-bold tracking-[0.14em] uppercase">
             <Sun size={13} /> PM Surya Ghar Solar
           </span>
-          <h1 className="font-display text-[42px] sm:text-[58px] font-extrabold leading-[1.05] tracking-tight mb-5">
+          <h1 className="font-display text-[42px] sm:text-[64px] font-extrabold leading-[1.05] tracking-tight mb-5">
             <span className="block text-[#0c2340]">Solar Power,</span>
             <span className="block text-sky-600">Simplified</span>
           </h1>
-          <p className="text-[15.5px] sm:text-base leading-relaxed text-[#4b5768] max-w-lg mb-4">
+          <p className="text-[17px] sm:text-base leading-relaxed text-[#4b5768] max-w-lg mb-4">
             End-to-end rooftop solar — design, installation, net metering, and subsidy
             follow-up — for homes, industries, cold storages, colleges, and commercial buildings.
           </p>
-          <p className="text-[14px] leading-relaxed text-[#4b5768] max-w-lg mb-7">
+          <p className="text-[16px] leading-relaxed text-[#4b5768] max-w-lg mb-7">
             A <span className="font-semibold text-[#0c2340]">₹78,000 subsidy</span> is available on qualifying
             residential systems under PM Surya Ghar, with a 25-year solar life and loans arranged through all
             national banks.
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sky-600 text-white font-display font-bold text-[14.5px] hover:bg-sky-700 transition-colors"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sky-600 text-white font-display font-bold text-[16px] hover:bg-sky-700 transition-colors"
           >
             Get a Free Consultation
           </Link>
@@ -104,8 +104,8 @@ const Solar = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0c2340]/90 via-[#0c2340]/10 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-center text-white">
-              <span className="block font-display text-3xl sm:text-[40px] font-extrabold leading-none">3kW</span>
-              <span className="text-[13px] sm:text-sm opacity-90">Up to 360 Units / Month</span>
+              <span className="block font-display text-3xl sm:text-[46px] font-extrabold leading-none">3kW</span>
+              <span className="text-[15px] sm:text-sm opacity-90">Up to 360 Units / Month</span>
             </div>
           </div>
         </motion.div>
@@ -120,8 +120,8 @@ const Solar = () => {
             <span className="w-11 h-11 rounded-xl bg-sky-600 text-white flex items-center justify-center mb-4">
               <h.icon size={20} />
             </span>
-            <h3 className="font-display text-[15.5px] font-bold text-[#0c2340] mb-1.5">{h.title}</h3>
-            <p className="text-[13px] leading-relaxed text-[#4b5768]">{h.desc}</p>
+            <h3 className="font-display text-[17px] font-bold text-[#0c2340] mb-1.5">{h.title}</h3>
+            <p className="text-[15px] leading-relaxed text-[#4b5768]">{h.desc}</p>
           </motion.div>
         ))}
       </motion.div>
@@ -132,14 +132,14 @@ const Solar = () => {
       <h2 className="font-display text-[26px] sm:text-[32px] font-bold tracking-tight text-[#0c2340] mb-2.5">
         For Every Kind of Property
       </h2>
-      <p className="text-[14.5px] text-[#4b5768] mb-10">Full turn-key solar for residential and commercial sectors alike</p>
+      <p className="text-[16px] text-[#4b5768] mb-10">Full turn-key solar for residential and commercial sectors alike</p>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         {SEGMENTS.map((s) => (
           <div key={s.title} className="p-5 rounded-2xl bg-white border border-sky-100 shadow-sm flex flex-col items-center">
             <span className="w-11 h-11 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center mb-3">
               <s.icon size={20} />
             </span>
-            <h3 className="font-display text-[13.5px] font-bold text-[#0c2340]">{s.title}</h3>
+            <h3 className="font-display text-[15px] font-bold text-[#0c2340]">{s.title}</h3>
           </div>
         ))}
       </div>
@@ -154,10 +154,10 @@ const Solar = () => {
         <h2 className="font-display text-[26px] sm:text-[32px] font-bold tracking-tight text-white mb-2.5 text-center">
           What We Supply & Install
         </h2>
-        <p className="text-[14.5px] text-white/80 mb-10 text-center">Designed and commissioned by a qualified, trained professional team</p>
+        <p className="text-[16px] text-white/80 mb-10 text-center">Designed and commissioned by a qualified, trained professional team</p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {SERVICES.map((s) => (
-            <div key={s} className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white text-[13.5px] font-medium">
+            <div key={s} className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-white/10 border border-white/15 text-white text-[15px] font-medium">
               <BadgeCheck size={16} className="shrink-0 text-amber-300" />
               {s}
             </div>
@@ -171,18 +171,18 @@ const Solar = () => {
       <h2 className="font-display text-[26px] sm:text-[32px] font-bold tracking-tight text-[#0c2340] mb-2.5">
         From Application to Commissioning
       </h2>
-      <p className="text-[14.5px] text-[#4b5768] mb-10">We liaison the full paperwork so you don't have to</p>
+      <p className="text-[16px] text-[#4b5768] mb-10">We liaison the full paperwork so you don't have to</p>
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
         {PROCESS.map((p, i) => (
           <div key={p.title} className="relative p-6 rounded-2xl border border-sky-100 bg-white shadow-sm">
-            <span className="absolute -top-3 -left-3 w-7 h-7 rounded-full bg-amber-400 text-[#0c2340] font-display text-[12px] font-bold flex items-center justify-center">
+            <span className="absolute -top-3 -left-3 w-7 h-7 rounded-full bg-amber-400 text-[#0c2340] font-display text-[13px] font-bold flex items-center justify-center">
               {i + 1}
             </span>
             <span className="w-11 h-11 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-4">
               <p.icon size={20} />
             </span>
-            <h3 className="font-display text-[14.5px] font-bold text-[#0c2340] mb-1.5">{p.title}</h3>
-            <p className="text-[13px] leading-relaxed text-[#4b5768]">{p.desc}</p>
+            <h3 className="font-display text-[16px] font-bold text-[#0c2340] mb-1.5">{p.title}</h3>
+            <p className="text-[15px] leading-relaxed text-[#4b5768]">{p.desc}</p>
           </div>
         ))}
       </div>
@@ -196,8 +196,8 @@ const Solar = () => {
             <span className="w-11 h-11 rounded-xl bg-amber-400 text-[#0c2340] flex items-center justify-center mb-4">
               <a.icon size={20} />
             </span>
-            <h3 className="font-display text-[14.5px] font-bold text-[#0c2340] mb-1.5">{a.title}</h3>
-            <p className="text-[13px] leading-relaxed text-[#4b5768]">{a.desc}</p>
+            <h3 className="font-display text-[16px] font-bold text-[#0c2340] mb-1.5">{a.title}</h3>
+            <p className="text-[15px] leading-relaxed text-[#4b5768]">{a.desc}</p>
           </div>
         ))}
       </div>
@@ -209,8 +209,8 @@ const Solar = () => {
         <h2 className="font-display text-2xl sm:text-[30px] font-bold tracking-tight text-[#0c2340] mb-2.5">
           Ready to Go Solar?
         </h2>
-        <p className="text-[14.5px] text-[#4b5768] mb-8">Reach out for a free site feasibility check and subsidy guidance.</p>
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-8 text-[13.5px] text-[#0c2340]">
+        <p className="text-[16px] text-[#4b5768] mb-8">Reach out for a free site feasibility check and subsidy guidance.</p>
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-8 text-[15px] text-[#0c2340]">
           <span className="inline-flex items-center gap-2">
             <MapPin size={16} className="text-sky-600" /> Shamshabad, Hyderabad, Rangareddy District, Telangana
           </span>
@@ -223,7 +223,7 @@ const Solar = () => {
         </div>
         <Link
           to="/contact"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sky-600 text-white font-display font-bold text-[14.5px] hover:bg-sky-700 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-sky-600 text-white font-display font-bold text-[16px] hover:bg-sky-700 transition-colors"
         >
           Contact Us Now
         </Link>

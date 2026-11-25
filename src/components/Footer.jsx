@@ -24,9 +24,10 @@ const COMPANY_LINKS = [
   { name: 'Contact', path: '/contact' },
 ];
 
-// Mirrors OTHER_VENTURES on the Services page (see Services.jsx) — Navedhana's
-// non-software ventures, kept in their own column rather than folded into
-// Company so they don't read as more software offerings.
+// Navedhana's non-software ventures (mirrors OTHER_VENTURES in Services.jsx).
+// One quiet line in the bottom bar, not a full column beside Services and
+// Products: a column made the footer of a software company read as an
+// agri/solar business too.
 const VENTURE_LINKS = [
   { name: 'Agri Tech Service', path: '/vegetables' },
   { name: 'Seasonal Products', path: '/seasonal' },
@@ -37,11 +38,11 @@ const VENTURE_LINKS = [
 // `gap`, so each row is a ~44px tap target on a phone. At 13.5px text with
 // gap-2.5 these were 20px tall — the worst tap targets on the site.
 const FOOTER_LINK =
-  'flex items-center justify-center sm:justify-start min-h-[30px] sm:min-h-0 sm:py-1 text-[12.5px] sm:text-[13.5px] leading-snug text-muted hover:text-ink transition-colors';
+  'flex items-center justify-center sm:justify-start min-h-[44px] sm:min-h-0 sm:py-1 text-[14px] sm:text-[15px] leading-snug text-muted hover:text-ink transition-colors';
 
 const FooterColumn = ({ title, children }) => (
   <motion.div variants={riseChild} className="text-center sm:text-left">
-    <h5 className="text-[11.5px] sm:text-[12.5px] font-bold uppercase tracking-wide text-muted/60 mb-1 sm:mb-4">{title}</h5>
+    <h5 className="text-[13px] sm:text-[14px] font-bold uppercase tracking-wide text-muted/60 mb-1 sm:mb-4">{title}</h5>
     <div className="flex flex-col sm:gap-1.5">{children}</div>
   </motion.div>
 );
@@ -59,44 +60,41 @@ const Footer = () => (
           stagger: it is the end of the page, not a feature of it. */}
       <motion.div
         {...staggerParent(0.06)}
-        className="grid grid-cols-2 md:grid-cols-5 gap-x-4 gap-y-3 sm:gap-10 mb-4 sm:mb-11"
+        className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-3 sm:gap-10 mb-4 sm:mb-11"
       >
         <motion.div variants={riseChild} className="col-span-2 md:col-span-1 text-center sm:text-left">
           <Link to="/" className="flex w-full justify-center sm:inline-flex sm:w-auto sm:justify-start items-center gap-2.5 mb-1.5 sm:mb-3 min-h-[30px] sm:min-h-[44px]">
             <img src="/assets/redesign/logo-blue.png" alt="Navedhana" className="h-7 sm:h-9 w-auto" />
             <span className="font-display font-semibold text-lg sm:text-xl text-ink">Navedhana</span>
           </Link>
-          <p className="text-[12.5px] sm:text-[13.5px] leading-snug sm:leading-relaxed text-muted/80 max-w-[280px] mx-auto sm:mx-0 mb-2 sm:mb-5">
-            Innovating Solution. Growing Futures
+          <p className="text-[14px] sm:text-[15px] leading-snug sm:leading-relaxed text-muted/80 max-w-[280px] mx-auto sm:mx-0 mb-2 sm:mb-5">
+            Innovating Solutions. Growing Futures.
           </p>
           <div className="flex justify-center sm:justify-start gap-2 sm:gap-3">
             <a
               href="https://www.linkedin.com/company/navedhana/home/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
               aria-label="LinkedIn"
             >
-              <Linkedin size={15} className="sm:hidden" />
-              <Linkedin size={18} className="hidden sm:block" />
+              <Linkedin size={18} />
             </a>
             <a
               href="https://www.instagram.com/navedhana.pvt.ltd/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
               aria-label="Instagram"
             >
-              <Instagram size={15} className="sm:hidden" />
-              <Instagram size={18} className="hidden sm:block" />
+              <Instagram size={18} />
             </a>
             <a
               href="mailto:contact@navedhana.com"
-              className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
+              className="w-11 h-11 rounded-full bg-ink/5 border border-ink/15 flex items-center justify-center text-ink/70 hover:bg-ink/10 transition-colors"
               aria-label="Email"
             >
-              <Mail size={15} className="sm:hidden" />
-              <Mail size={18} className="hidden sm:block" />
+              <Mail size={18} />
             </a>
           </div>
         </motion.div>
@@ -131,20 +129,22 @@ const Footer = () => (
           ))}
         </FooterColumn>
 
-        <FooterColumn title="Other Ventures">
-          {VENTURE_LINKS.map((link) => (
-            <Link key={link.name} to={link.path} className={FOOTER_LINK}>
-              {link.name}
-            </Link>
-          ))}
-        </FooterColumn>
       </motion.div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4 pt-2.5 sm:pt-6 border-t border-ink/15 text-[11.5px] sm:text-[12.5px] text-muted/60">
-        <span className="order-2 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
-        <div className="order-1 sm:order-2 flex gap-2">
-          <Link to="/privacy" className="flex items-center min-h-[30px] sm:min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</Link>
-          <Link to="/terms" className="flex items-center min-h-[30px] sm:min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</Link>
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-1 sm:gap-4 pt-2.5 sm:pt-6 border-t border-ink/15 text-[13px] sm:text-[14px] text-muted/60">
+        <span className="order-3 sm:order-1">&copy; {new Date().getFullYear()} Navedhana. All rights reserved.</span>
+        <span className="order-2 flex flex-wrap items-center justify-center gap-x-1">
+          Also from Navedhana:
+          {VENTURE_LINKS.map((link, i) => (
+            <React.Fragment key={link.path}>
+              <Link to={link.path} className="inline-flex items-center min-h-[44px] sm:min-h-0 px-1 hover:text-ink transition-colors">{link.name}</Link>
+              {i < VENTURE_LINKS.length - 1 && <span aria-hidden="true">·</span>}
+            </React.Fragment>
+          ))}
+        </span>
+        <div className="order-1 sm:order-3 flex gap-2">
+          <Link to="/privacy" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Privacy Policy</Link>
+          <Link to="/terms" className="flex items-center min-h-[44px] px-2 hover:text-ink transition-colors">Terms of Service</Link>
         </div>
       </div>
     </div>

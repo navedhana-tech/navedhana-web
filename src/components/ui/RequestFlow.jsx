@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react';
 const RequestFlow = ({ steps, label }) => (
   <div className="p-5 sm:p-6 rounded-2xl bg-primary border border-ink/15">
     {label && (
-      <span className="font-display text-[11px] font-bold tracking-[0.1em] uppercase text-muted/70 mb-4 block">
+      <span className="font-display text-[12.5px] font-bold tracking-[0.1em] uppercase text-muted/70 mb-4 block">
         {label}
       </span>
     )}
@@ -22,10 +22,10 @@ const RequestFlow = ({ steps, label }) => (
             transition={{ duration: 0.4, delay: i * 0.08 }}
             className="flex items-center gap-2 pl-2 pr-3.5 py-2 rounded-full bg-electric/[0.06] border border-electric/20"
           >
-            <span className="w-5 h-5 rounded-full bg-electric text-primary text-[11px] sm:text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+            <span className="w-5 h-5 rounded-full bg-electric text-primary text-[12.5px] sm:text-[12px] font-bold flex items-center justify-center flex-shrink-0">
               {i + 1}
             </span>
-            <span className="font-display text-[14px] sm:text-[13px] font-semibold text-ink whitespace-nowrap">
+            <span className="font-display text-[16px] sm:text-[15px] font-semibold text-ink whitespace-nowrap">
               {step}
             </span>
           </motion.div>

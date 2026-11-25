@@ -16,7 +16,7 @@ const SectionKicker = ({ children, centered = false, size = 'sm', className = ''
       <span className={`${lineWidth} shrink-0 h-px bg-royal/45`} />
       <span
         className={`font-display font-bold tracking-[0.1em] sm:tracking-[0.18em] uppercase text-royal whitespace-nowrap ${
-          size === 'lg' ? 'text-base sm:text-lg' : 'text-[12px] sm:text-xs'
+          size === 'lg' ? 'text-base sm:text-lg' : 'text-[13px] sm:text-xs'
         }`}
       >
         {children}

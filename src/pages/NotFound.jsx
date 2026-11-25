@@ -17,7 +17,7 @@ const NotFound = () => {
       <section className="pt-[104px] sm:pt-[168px] pb-24 px-4 sm:px-8 max-w-2xl mx-auto text-center">
         <SectionKicker centered className="mb-3.5">404</SectionKicker>
         <h1 className="font-display text-[28px] sm:text-4xl font-semibold tracking-tight text-ink mb-3">Page not found</h1>
-        <p className="text-[14.5px] text-muted mb-8">This page doesn't exist or has moved.</p>
+        <p className="text-[16px] text-muted mb-8">This page doesn't exist or has moved.</p>
         <Button to="/">Back to home</Button>
       </section>
     </div>

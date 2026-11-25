@@ -136,8 +136,9 @@
     opacity: 1;
   }
   .wwd-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
-    box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.55), 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    box-shadow: 0 24px 48px -28px rgba(16, 25, 46, 0.35), 0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent);
+    transform: translateY(-3px);
   }
 }
 .wwd-card li::before {
@@ -276,71 +277,6 @@
   40% {
     transform: scale(1.035);
   }
-}
-
-/* Hero floating tech nodes (src/components/hero/HeroCircuitBackground.jsx) —
-   restrained per-node idle motion, transform/opacity only. */
-@keyframes node-pulse-glow {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.55;
-  }
-}
-@keyframes node-drift-y {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-@keyframes node-bar-grow {
-  0%,
-  100% {
-    transform: scaleY(0.7);
-  }
-  50% {
-    transform: scaleY(1);
-  }
-}
-.node-idle-ai {
-  animation: node-pulse-glow 3.2s ease-in-out infinite;
-}
-.node-idle-database {
-  animation: node-drift-y 4s ease-in-out infinite;
-}
-.node-idle-analytics {
-  animation: node-bar-grow 2.6s ease-in-out infinite;
-  transform-origin: bottom;
-}
-
-/* One-shot "signal" traveling along a hero connector line — a short dash
-   sweeping from the center node outward, then gone. */
-@keyframes signal-fade {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  15%,
-  85% {
-    opacity: 1;
-  }
-}
-@keyframes signal-travel {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-.signal-sweep {
-  stroke-dasharray: 6 94;
-  animation: signal-fade 900ms ease-in-out, signal-travel 900ms linear;
 }
 
 /* Capability strip (Home.jsx hero) — a slow highlight sweeps through the
@@ -496,8 +432,8 @@
      mirrors these values for Framer Motion, which is JS-driven and can't read CSS vars. */
   --motion-micro: 150ms;
   --motion-base: 300ms;
-  --motion-reveal: 700ms;
-  --motion-step: 500ms;
+  --motion-reveal: 500ms;
+  --motion-step: 350ms;
 }
 
 /* Route enter (App.jsx). Transform-only, and deliberately NOT a fade.
@@ -567,4 +503,30 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
   }
+
+  /* Balanced wrapping so a heading never ends on one orphaned word
+     ("...building real / products"). */
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+
+  /* Visible keyboard focus everywhere. Only 3 components had their own
+     focus-visible style, so most links/buttons relied on the browser default,
+     which barely shows on the dark sections. Base layer: any component's own
+     focus utilities (e.g. the form inputs' ring + outline-none) still win. */
+  :where(a, button, summary, [tabindex]:not([tabindex='-1'])):focus-visible {
+    outline: 2px solid var(--color-electric);
+    outline-offset: 3px;
+  }
+}
+
+/* Druja chat widget (script in index.html). It themes itself from CSS
+   variables on its host element, which carry into its shadow DOM; its
+   default indigo-to-purple gradient clashed with the brand blue. Outer-page
+   styles beat the widget's own :host defaults; !important beats the inline
+   values it sets on the host. */
+#druja-root {
+  --c: #0958d6 !important;
+  --c2: #38bdf8 !important;
+  --c3: #083f9e !important;
 }
