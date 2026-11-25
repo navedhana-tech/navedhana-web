@@ -28,13 +28,19 @@ const MIME_TYPES = {
 // FIRST run, dist/about/, dist/services/, etc. don't exist yet — only
 // dist/index.html does, from `vite build`. Puppeteer navigating to
 // /about must still get the SPA shell so React Router can render it.
-function serveStatic() {
+//
+// The shell is read once, before anything is written: '/' is prerendered
+// first and overwrites dist/index.html, and serving THAT as the shell leaked
+// the home page's rendered <head> (e.g. a second canonical) into every route.
+function serveStatic(shell) {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
       const urlPath = req.url.split('?')[0];
-      let filePath = path.join(distDir, decodeURIComponent(urlPath));
-      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
-        filePath = indexPath;
+      const filePath = path.join(distDir, decodeURIComponent(urlPath));
+      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory() || filePath === indexPath) {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.end(shell);
+        return;
       }
       fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -59,7 +65,7 @@ async function main() {
     process.exit(1);
   }
 
-  const server = await serveStatic();
+  const server = await serveStatic(fs.readFileSync(indexPath));
   const browser = await puppeteer.launch({
     headless: true,
     // --no-sandbox/--disable-gpu: needed in restricted/CI-like environments

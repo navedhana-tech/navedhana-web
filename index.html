@@ -23,68 +23,6 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#eef3f8" />
     
-    <!-- Dynamic Domain Detection Script -->
-    <script>
-      (function() {
-        const hostname = window.location.hostname;
-        const isFresh = hostname === 'fresh.navedhana.com' || hostname.includes('fresh.navedhana.com');
-        const baseUrl = isFresh ? 'https://fresh.navedhana.com' : 'https://www.navedhana.com';
-        const currentPath = window.location.pathname;
-        const fullUrl = baseUrl + currentPath;
-        // fresh.navedhana.com serves byte-identical content to www — canonical
-        // always points at www so Google consolidates both into one indexed
-        // URL instead of treating them as duplicate content on two domains.
-        const CANONICAL_BASE = 'https://www.navedhana.com';
-        const canonicalUrl = CANONICAL_BASE + currentPath;
-
-        // Set canonical URL
-        let canonical = document.querySelector('link[rel="canonical"]');
-        if (!canonical) {
-          canonical = document.createElement('link');
-          canonical.rel = 'canonical';
-          document.head.appendChild(canonical);
-        }
-        canonical.href = canonicalUrl;
-
-        // fresh.navedhana.com is not promoted in search — noindex it outright
-        // (on top of the canonical pointing at www above) so Google drops it
-        // from the index instead of just consolidating it.
-        if (isFresh) {
-          ['robots', 'googlebot'].forEach((name) => {
-            const tag = document.querySelector('meta[name="' + name + '"]');
-            if (tag) tag.setAttribute('content', 'noindex, follow');
-          });
-        }
-
-        // Update sitemap reference — always www, fresh has no sitemap of its own
-        let sitemap = document.querySelector('link[rel="sitemap"]');
-        if (!sitemap) {
-          sitemap = document.createElement('link');
-          sitemap.rel = 'sitemap';
-          sitemap.type = 'application/xml';
-          document.head.appendChild(sitemap);
-        }
-        sitemap.href = 'https://www.navedhana.com/sitemap.xml';
-
-        // Update preconnect
-        let preconnect = document.querySelector('link[rel="preconnect"]');
-        if (preconnect) {
-          preconnect.href = baseUrl;
-        }
-
-        // Store for use in structured data
-        window.__NAVEDHANA_BASE_URL__ = baseUrl;
-        window.__NAVEDHANA_FULL_URL__ = fullUrl;
-        window.__NAVEDHANA_CANONICAL_URL__ = canonicalUrl;
-      })();
-    </script>
-    
-    <!-- Performance & Preconnect -->
-    <link rel="preconnect" href="https://www.navedhana.com" />
-    <link rel="preconnect" href="https://fresh.navedhana.com" />
-    <link rel="dns-prefetch" href="https://www.navedhana.com" />
-    <link rel="dns-prefetch" href="https://fresh.navedhana.com" />
-
     <!-- Fonts are self-hosted via @fontsource (imported in src/main.jsx). -->
 
     <!-- Google Analytics (GA4) is loaded from src/main.jsx, only when
@@ -106,10 +44,10 @@
     <meta name="target" content="all" />
     <meta name="audience" content="all" />
     
-    <!-- Canonical URL (dynamically set by script above) -->
+    <!-- Canonical URL (path set by the script at the end of <head>) -->
     <link rel="canonical" href="https://www.navedhana.com" id="canonical-link" />
     
-    <!-- Sitemap (dynamically set by script above) -->
+    <!-- Sitemap -->
     <link rel="sitemap" type="application/xml" href="https://www.navedhana.com/sitemap.xml" id="sitemap-link" />
     
     <!-- Open Graph / Facebook -->
@@ -273,15 +211,27 @@
         const isFresh = hostname === 'fresh.navedhana.com' || hostname.includes('fresh.navedhana.com');
         const domainDisplay = isFresh ? 'fresh.navedhana.com' : 'www.navedhana.com';
         const currentPath = window.location.pathname;
-        // Same www-only consolidation as the canonical link above — og:url and
-        // the JSON-LD @ids should point at the one indexed domain, not
-        // whichever host the visitor happens to be on.
+        // Canonical, og:url, twitter:url and the JSON-LD @ids always point at
+        // www — fresh.navedhana.com serves identical content, and there should
+        // be one indexed URL per page whichever host the visitor is on.
         const canonicalUrl = 'https://www.navedhana.com' + currentPath;
 
         // Update page title
         const title = document.getElementById('page-title');
         if (title) {
           title.textContent = 'Navedhana - Software Development & AI Engineering Company | ' + domainDisplay;
+        }
+
+        const canonical = document.getElementById('canonical-link');
+        if (canonical) canonical.href = canonicalUrl;
+
+        // fresh.navedhana.com serves the same content: besides the canonical
+        // pointing at www, noindex it so Google drops it outright.
+        if (isFresh) {
+          ['robots', 'googlebot'].forEach((name) => {
+            const tag = document.querySelector('meta[name="' + name + '"]');
+            if (tag) tag.setAttribute('content', 'noindex, follow');
+          });
         }
 
         // Update Open Graph URL
