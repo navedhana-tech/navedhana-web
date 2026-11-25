@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   preview: {
-    allowedHosts: ['navedhana-web.onrender.com', 'localhost', '127.0.0.1']
+    allowedHosts: ['localhost', '127.0.0.1']
   },
   server: {
     allowedHosts: ['.ngrok-free.dev']

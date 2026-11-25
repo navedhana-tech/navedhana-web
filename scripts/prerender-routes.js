@@ -24,7 +24,7 @@ const MIME_TYPES = {
 
 // A real static server, not a proxy — this actually renders the app.
 // SPA fallback (serve index.html for any path with no matching file, same
-// as render.yaml's `/* -> /index.html` rewrite) is required because on the
+// as the .htaccess SPA rewrite) is required because on the
 // FIRST run, dist/about/, dist/services/, etc. don't exist yet — only
 // dist/index.html does, from `vite build`. Puppeteer navigating to
 // /about must still get the SPA shell so React Router can render it.
@@ -77,7 +77,7 @@ async function main() {
   // was, with no obvious error visible from the pushed commit alone. One
   // route now failing just skips its prerendered HTML (that route still
   // works at runtime via the client-rendered SPA shell + fallback rewrite in
-  // render.yaml) instead of taking every other route down with it.
+  // .htaccess) instead of taking every other route down with it.
   const failed = [];
   try {
     for (const route of routes) {

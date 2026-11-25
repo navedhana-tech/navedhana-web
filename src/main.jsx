@@ -1,5 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import '@fontsource-variable/inter'
+import '@fontsource-variable/space-grotesk'
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/500.css'
 import './index.css'
 import App from './App.jsx'
 
@@ -17,9 +21,10 @@ if (GA_ID && typeof window !== 'undefined') {
   document.head.appendChild(s);
 }
 
-const root = createRoot(document.getElementById('root'));
-
-root.render(
+// createRoot, not hydrateRoot: the prerendered HTML is captured with reduced
+// motion and every scroll reveal finished (so crawlers see the content),
+// which can never match a normal visitor's first render.
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,

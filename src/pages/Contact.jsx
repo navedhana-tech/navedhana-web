@@ -51,6 +51,8 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
   const [error, setError] = useState('');
+  // When the form appeared — a human can't fill four fields in under 3s.
+  const shownAt = useRef(Date.now());
 
   const progressRef = useRef(null);
   useScrollProgress(progressRef);
@@ -61,9 +63,9 @@ const Contact = () => {
     e.preventDefault();
     setError('');
 
-    // Honeypot: hidden from people, filled in by bots. Pretend success so the
-    // bot has nothing to retry against.
-    if (formData.company_website) {
+    // Honeypot (hidden field) or an instant submit means a bot. Pretend
+    // success so it has nothing to retry against.
+    if (formData.company_website || Date.now() - shownAt.current < 3000) {
       setFormSent(true);
       return;
     }
