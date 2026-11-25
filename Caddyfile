@@ -1,0 +1,53 @@
+# Production server config. Nixpacks (Coolify) builds the Vite app and runs
+# Caddy; nixpacks.toml points its start command at this file instead of
+# Nixpacks' bundled Caddyfile, whose `try_files {path} /index.html` never
+# matched the prerendered dist/about/index.html etc., so every URL got the
+# home page's HTML.
+{
+	admin off
+	persist_config off
+	auto_https off # Coolify's proxy terminates HTTPS
+	log {
+		format json
+	}
+	servers {
+		trusted_proxies static private_ranges 100.0.0.0/8
+	}
+}
+
+:{$PORT:3000} {
+	log {
+		format json
+	}
+
+	redir /work /products 301
+
+	root * /app/dist
+	encode gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "SAMEORIGIN"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	# Vite's hashed output (top level of /assets) never changes under the same
+	# name. Subfolders like /assets/photos come from public/ and are unhashed.
+	@hashed path_regexp ^/assets/[^/]+\.(js|css|woff2?)$
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+
+	# For Coolify's healthcheck (set path /health in the app settings).
+	handle /health {
+		respond 200
+	}
+
+	# Real file, then the prerendered page for that route (/about ->
+	# /about/index.html, served without a redirect), then the SPA shell for
+	# anything else (React Router shows the noindexed 404 page).
+	handle {
+		try_files {path} {path}/index.html /index.html
+		file_server
+	}
+}

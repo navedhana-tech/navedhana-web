@@ -19,3 +19,9 @@ aptPkgs = [
   "libglu1",
   "unzip",
 ]
+
+# Serve with the repo's Caddyfile (routing for prerendered pages, security
+# headers, /health) instead of the one bundled with Nixpacks' SPA support.
+# Nixpacks still installs caddy for Vite apps; only the config changes.
+[start]
+cmd = "caddy run --config Caddyfile --adapter caddyfile 2>&1"
