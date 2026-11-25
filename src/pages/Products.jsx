@@ -45,7 +45,7 @@ const Products = () => {
       >
         <div className="p-2 flex items-center">
           <img
-            src="/assets/redesign/lekvya-screenshot.png"
+            src="/assets/redesign/lekvya-screenshot.webp"
             alt="The Lekvya web app, showing its client-communication automation homepage"
             width={1600}
             height={1000}

@@ -21,7 +21,6 @@ const PRODUCT_LINKS = [
 const COMPANY_LINKS = [
   { name: 'Home', path: '/' },
   { name: 'About', path: '/about' },
-  { name: 'Insights', path: '/insights' },
   { name: 'Contact', path: '/contact' },
 ];
 

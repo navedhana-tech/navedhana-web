@@ -23,7 +23,13 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // `motion` is only used as <motion.div>, which core no-unused-vars
+      // doesn't count as a use.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^(?:[A-Z_]|motion$)' }],
     },
+  },
+  {
+    files: ['scripts/**/*.js'],
+    languageOptions: { globals: globals.node },
   },
 ])

@@ -15,7 +15,7 @@ const links = [
 ];
 
 // Full-width on scroll — a flat solid bar with one hairline border, not a
-// floating inset pill. Secondary destinations (AI Agent, Insights, Vegetable
+// floating inset pill. Secondary destinations (AI Agent, Vegetable
 // Service) live in the footer — keeping the primary nav to five links is
 // what lets the dropdown go away entirely. The active link is marked by an
 // underline that slides between links (shared layoutId), not a dot.

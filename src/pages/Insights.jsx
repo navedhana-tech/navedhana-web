@@ -9,6 +9,8 @@ const Insights = () => {
   useDocumentMeta({
     title: 'Insights — Navedhana Software & AI Engineering',
     description: "Writing on software engineering and AI from Navedhana's team. Coming soon.",
+    // Not linked anywhere until there's real content; keep it out of search too.
+    noindex: true,
   });
 
   return (

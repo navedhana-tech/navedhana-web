@@ -13,7 +13,6 @@ const routes = [
   { path: '/products', priority: '0.8', changefreq: 'weekly' },
   { path: '/about', priority: '0.8', changefreq: 'monthly' },
   { path: '/contact', priority: '0.8', changefreq: 'monthly' },
-  { path: '/insights', priority: '0.5', changefreq: 'monthly' },
   // /vegetables, /seasonal, /solar are noindexed (side ventures, not
   // promoted) — excluded here since a noindexed URL shouldn't be sitemapped.
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },

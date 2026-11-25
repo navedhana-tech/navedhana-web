@@ -98,7 +98,7 @@ const Solar = () => {
             style={{ transform: 'rotateY(-28deg)', transformStyle: 'preserve-3d' }}
           >
             <img
-              src="/assets/photos/solar.png"
+              src="/assets/photos/solar.webp"
               alt="Technician installing solar panels on a rooftop"
               className="absolute inset-0 w-full h-full object-cover object-right"
             />
