@@ -353,7 +353,7 @@ const Home = () => {
           <div className="client-marquee overflow-hidden">
           <ul className="client-marquee-track flex w-max items-center">
             {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
-              <li key={i} aria-hidden={i >= CLIENTS.length || undefined} className="flex shrink-0 items-center gap-2.5 h-12 mr-12 sm:mr-20 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100">
+              <li key={i} aria-hidden={i >= CLIENTS.length || undefined} className="flex shrink-0 items-center gap-2.5 h-12 mr-12 sm:mr-20">
                 {c.img && <img src={c.img} alt={c.wordmark ? '' : c.name} className="h-full w-auto" width={c.w} height="56" loading="lazy" />}
                 {c.wordmark && <span className="font-display text-[22px] font-bold tracking-tight text-ink">{c.name}</span>}
               </li>
