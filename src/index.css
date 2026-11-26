@@ -318,6 +318,18 @@
   animation: capability-marquee 16s linear infinite;
 }
 
+/* Client logo marquee (Home.jsx), same -50% loop. Pauses on hover so a logo
+   can be looked at; the edges fade out so logos glide in rather than pop. */
+.client-marquee {
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+.client-marquee-track {
+  animation: capability-marquee 40s linear infinite;
+}
+.client-marquee:hover .client-marquee-track {
+  animation-play-state: paused;
+}
+
 /* Isometric product cascade (ProductsTeaser.jsx, lg:+ only) — a fixed
    rotateX/Y/Z tilt on `transform`, floating idle bob on the standalone
    `translate` property (a separate CSS property from `transform` in modern

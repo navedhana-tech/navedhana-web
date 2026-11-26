@@ -343,18 +343,23 @@ const Home = () => {
       {/* Client strip. Logos come from each client's site (PlanBee's white
           mark recoloured dark). `wordmark` adds the name beside a bare icon. */}
       <section aria-labelledby="clients-heading" className="py-10 sm:py-12 px-4 sm:px-8 border-b border-ink/[0.06]">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <h2 id="clients-heading" className="text-[13px] font-medium uppercase tracking-[0.14em] text-muted mb-6 sm:mb-8">
             Trusted by teams we build for
           </h2>
-          <ul className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-16">
-            {CLIENTS.map((c) => (
-              <li key={c.name} className="flex items-center gap-2.5 h-12 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100">
+          {/* The list is repeated so one half is wider than any screen, then
+              doubled for the seamless -50% loop; only the first copy is read
+              out by screen readers. */}
+          <div className="client-marquee overflow-hidden">
+          <ul className="client-marquee-track flex w-max items-center">
+            {[...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS, ...CLIENTS].map((c, i) => (
+              <li key={i} aria-hidden={i >= CLIENTS.length || undefined} className="flex shrink-0 items-center gap-2.5 h-12 mr-12 sm:mr-20 grayscale opacity-70 transition duration-300 hover:grayscale-0 hover:opacity-100">
                 {c.img && <img src={c.img} alt={c.wordmark ? '' : c.name} className="h-full w-auto" width={c.w} height="56" loading="lazy" />}
                 {c.wordmark && <span className="font-display text-[22px] font-bold tracking-tight text-ink">{c.name}</span>}
               </li>
             ))}
           </ul>
+          </div>
         </div>
       </section>
 
