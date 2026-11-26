@@ -14,8 +14,8 @@ import { trackEvent } from '../lib/analytics';
 const CLIENTS = [
   { name: 'YugMinds', img: '/assets/clients/yugminds.webp', w: 57, wordmark: true },
   { name: 'RoboCoders', img: '/assets/clients/robocoders.webp', w: 100 },
-  { name: 'PlanBee', wordmark: true },
-  { name: 'Tavaro Resorts', wordmark: true },
+  { name: 'PlanBee', img: '/assets/clients/planbee.webp', w: 88, wordmark: true },
+  { name: 'Tavaro Resorts', img: '/assets/clients/tavaro.svg', w: 86 },
 ];
 
 const CAPABILITY_STRIP =['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
@@ -340,8 +340,8 @@ const Home = () => {
     </section>
 
     <div>
-      {/* Client strip. PlanBee and Tavaro Resorts are text wordmarks until we
-          have their logo files: drop them in public/assets/clients and add `img`. */}
+      {/* Client strip. Logos come from each client's site (PlanBee's white
+          mark recoloured dark). `wordmark` adds the name beside a bare icon. */}
       <section aria-labelledby="clients-heading" className="py-10 sm:py-12 px-4 sm:px-8 border-b border-ink/[0.06]">
         <div className="max-w-5xl mx-auto text-center">
           <h2 id="clients-heading" className="text-[13px] font-medium uppercase tracking-[0.14em] text-muted mb-6 sm:mb-8">
