@@ -43,11 +43,25 @@
 		respond 200
 	}
 
+	# fresh.navedhana.com serves this same build; keep it out of search at the
+	# server level rather than relying on the JS in index.html.
+	@fresh host fresh.navedhana.com
+	header @fresh X-Robots-Tag "noindex, follow"
+
 	# Real file, then the prerendered page for that route (/about ->
-	# /about/index.html, served without a redirect), then the SPA shell for
-	# anything else (React Router shows the noindexed 404 page).
+	# /about/index.html, served without a redirect). Every route is
+	# prerendered, so anything else is a genuine 404: served the prerendered
+	# 404 page WITH a 404 status (an SPA-shell fallback returned 200, which
+	# Google treats as a soft 404).
 	handle {
-		try_files {path} {path}/index.html /index.html
+		try_files {path} {path}/index.html
 		file_server
+	}
+	handle_errors {
+		@notfound expression {err.status_code} == 404
+		handle @notfound {
+			rewrite * /404.html
+			file_server
+		}
 	}
 }

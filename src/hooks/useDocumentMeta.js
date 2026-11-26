@@ -21,8 +21,36 @@ const OG_SELECTORS = [
 // noindex: true keeps the page live for visitors but asks search engines not
 // to promote it — for side-venture pages (vegetables, seasonal, solar) that
 // shouldn't compete with the software/AI business in search results.
-export function useDocumentMeta({ title, description, noindex }) {
+//
+// It also rewrites the JSON-LD in index.html (#structured-data) for this page:
+// the WebPage node and breadcrumb describe THIS route instead of the home page,
+// and `schema` (extra nodes such as Service or FAQPage) is appended. Pass
+// `schema` as a module-level constant: it is an effect dependency.
+const SITE = 'https://www.navedhana.com';
+const crumbName = (seg) => seg.split('-').map((w) => (w === 'ai' ? 'AI' : w[0].toUpperCase() + w.slice(1))).join(' ');
+
+export function useDocumentMeta({ title, description, noindex, schema }) {
   useEffect(() => {
+    const ld = document.getElementById('structured-data');
+    const prevLd = ld ? ld.textContent : null;
+    if (ld && !noindex) {
+      try {
+        const data = JSON.parse(prevLd);
+        const { pathname } = window.location;
+        const url = SITE + pathname;
+        const crumbs = [{ '@type': 'ListItem', position: 1, name: 'Home', item: SITE }];
+        if (pathname !== '/') crumbs.push({ '@type': 'ListItem', position: 2, name: crumbName(pathname.split('/')[1]), item: url });
+        data['@graph'] = data['@graph'].map((n) => {
+          if (n['@type'] === 'WebPage') return { ...n, '@id': `${url}#webpage`, url, name: title || n.name, description: description || n.description, breadcrumb: { '@id': `${url}#breadcrumb` } };
+          if (n['@type'] === 'BreadcrumbList') return { ...n, '@id': `${url}#breadcrumb`, itemListElement: crumbs };
+          return n;
+        }).concat(schema || []);
+        ld.textContent = JSON.stringify(data);
+      } catch {
+        // Leave the sitewide defaults in place.
+      }
+    }
+
     const prevTitle = document.title;
     const tags = OG_SELECTORS.map((sel) => document.querySelector(sel));
     const prevValues = tags.map((tag) => (tag ? tag.getAttribute('content') : null));
@@ -42,9 +70,10 @@ export function useDocumentMeta({ title, description, noindex }) {
     }
 
     return () => {
+      if (ld) ld.textContent = prevLd;
       document.title = prevTitle;
       tags.forEach((tag, i) => tag && prevValues[i] !== null && tag.setAttribute('content', prevValues[i]));
       robotsTags.forEach((tag, i) => tag && prevRobots[i] !== null && tag.setAttribute('content', prevRobots[i]));
     };
-  }, [title, description, noindex]);
+  }, [title, description, noindex, schema]);
 }

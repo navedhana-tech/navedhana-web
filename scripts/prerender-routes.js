@@ -8,7 +8,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Routes to prerender
-const routes = ['/', '/about', '/services', '/ai-agent', '/products', '/insights', '/vegetables', '/seasonal', '/solar', '/contact', '/privacy', '/terms'];
+const routes = ['/', '/about', '/services', '/ai-agent', '/products', '/insights', '/vegetables', '/seasonal', '/solar', '/contact', '/privacy', '/terms', '/404'];
+// '/404' hits the catch-all route and is saved as dist/404.html, which the
+// Caddyfile serves (with a 404 status) for any URL that isn't a real page.
 
 const distDir = path.join(__dirname, '..', 'dist');
 const indexPath = path.join(distDir, 'index.html');
@@ -116,7 +118,7 @@ async function main() {
         await page.evaluate(() => document.querySelectorAll('#druja-root').forEach((n) => n.remove()));
         const html = await page.content();
 
-        const routePath = route === '/' ? 'index.html' : `${route.slice(1)}/index.html`;
+        const routePath = route === '/' ? 'index.html' : route === '/404' ? '404.html' : `${route.slice(1)}/index.html`;
         const outputPath = path.join(distDir, routePath);
         const outputDir = path.dirname(outputPath);
         if (!fs.existsSync(outputDir)) {

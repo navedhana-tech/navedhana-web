@@ -20,7 +20,7 @@ const CAPABILITIES = ['Task planning', 'Tool use', 'API integration', 'Memory / 
 
 const AiAgent = () => {
   useDocumentMeta({
-    title: 'AI Agent — Navedhana AI Engineering',
+    title: 'AI Agent That Acts, Not Just Answers — Navedhana',
     description:
       'An AI agent built to act, not just answer: it reasons over a request, uses tools and data, and returns a completed result. Built by Navedhana, an AI development company.',
   });

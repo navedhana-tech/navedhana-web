@@ -1,0 +1,25 @@
+# Navedhana
+
+> Navedhana (Navedhana Profit Amplifier Private Limited) is a software development and AI engineering company based in Hyderabad, India, founded in 2023. It builds AI systems, custom software, intelligent automation and software products for startups and businesses.
+
+Contact: contact@navedhana.com · +91 79810 02950 · https://www.navedhana.com/contact
+
+## Services
+
+- [Services overview](https://www.navedhana.com/services): the four capabilities, what each delivers, how an engagement runs, and common questions
+- [AI Engineering](https://www.navedhana.com/services#ai-engineering): AI agents, RAG systems, intelligent assistants, machine learning and computer vision
+- [Custom Software](https://www.navedhana.com/services#custom-software): business platforms, web, desktop and mobile apps, APIs and integrations, SaaS products
+- [Intelligent Automation](https://www.navedhana.com/services#intelligent-automation): automated processes, AI-powered workflows, document workflows, data pipelines
+- [Product Engineering](https://www.navedhana.com/services#product-engineering): MVPs, production applications, enhancements and architecture improvements
+- [FAQ](https://www.navedhana.com/services#faq): what Navedhana does, how projects work, cost and timelines
+
+## Products
+
+- [Products](https://www.navedhana.com/products): Lekvya (live), plus an AI Agent, Data Factory and a QA Foundation Platform in development
+- [Lekvya](https://ca.navedhana.com/): AI-powered workflow and client-communication platform for Chartered Accountants and financial-service firms
+- [AI Agent](https://www.navedhana.com/ai-agent): an agent that reasons over a request, uses tools and data, and returns a completed result
+
+## Company
+
+- [About](https://www.navedhana.com/about): who Navedhana is and how it works
+- [Contact](https://www.navedhana.com/contact): start a project or ask a question

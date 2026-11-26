@@ -201,7 +201,7 @@ const Home = () => {
   useDocumentMeta({
     title: 'Navedhana — Software Development & AI Engineering Company',
     description:
-      'Navedhana is a software development and AI engineering company building web, mobile, and AI-powered products — custom software, AI agents, RAG systems, and intelligent automation for startups and enterprises.',
+      'Hyderabad-based software development and AI engineering company. We build custom software, AI agents, RAG systems and automation for startups and enterprises.',
   });
 
   const introDone = useIntroDone();
@@ -276,7 +276,7 @@ const Home = () => {
                   bought nothing and cost the one line that says what the
                   company actually does. */}
               <motion.p variants={heroItem} className="text-[16px] sm:text-lg lg:text-xl leading-relaxed text-muted mt-4 sm:mt-6 max-w-2xl mx-auto hero-text-glow">
-                Products we've shipped. Systems we've built for others. Same engineering standard either way.
+                A software development and AI engineering company in Hyderabad. Products we've shipped, systems we've built for others, one engineering standard.
               </motion.p>
               {/* Phones stack the CTAs full-width instead of letting them wrap.
                   Side by side they measure 392px against 358px of available

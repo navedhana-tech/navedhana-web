@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Cpu, Layers, Workflow, Box, Sprout, Gift, Sun, ArrowUpRight } from 'lucide-react';
+import { Cpu, Layers, Workflow, Box, Sprout, Gift, Sun, ArrowUpRight, Plus } from 'lucide-react';
 import PageHero from '../components/ui/PageHero';
 import SectionKicker from '../components/ui/SectionKicker';
 import Button from '../components/ui/Button';
@@ -117,7 +117,58 @@ const ENGAGEMENT = [
 // Derived from what Lekvya already is on this site (an AI-powered workflow and
 // client-communication platform we built and run) — not a claim about metrics,
 // customers or results, none of which appear anywhere on this page.
-const LEKVYA_CAPABILITIES = ['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
+// Visible on the page AND emitted as FAQPage JSON-LD (search and AI answer
+// engines quote these). Keep answers short, factual and in sync with the page.
+const FAQS = [
+  {
+    q: 'What does Navedhana do?',
+    a: 'Navedhana is a software development and AI engineering company based in Hyderabad, India, founded in 2023. We build AI systems, custom software, intelligent automation and software products for startups and businesses.',
+  },
+  {
+    q: 'What kind of AI systems do you build?',
+    a: 'AI agents that reason and use tools to complete tasks, RAG systems that answer from your own documents and data, intelligent assistants embedded in your product, and machine learning and computer vision models trained on your data.',
+  },
+  {
+    q: 'Do I need to know whether I need AI, automation or custom software?',
+    a: 'No. Describe the problem and we will tell you what it actually takes to solve it, including when the answer is that you do not need custom software at all.',
+  },
+  {
+    q: 'How does a project with Navedhana work?',
+    a: 'Five steps: we understand the problem and its users, define the scope and architecture, build in visible increments, validate against real-world conditions, then hand over a maintainable system.',
+  },
+  {
+    q: 'How much does a project cost and how long does it take?',
+    a: 'It depends on scope. Cost and timeline are agreed in the define step, before any building starts, so you know what is being built and what it will take.',
+  },
+  {
+    q: 'What do I receive at the end of a project?',
+    a: 'A deployed, maintainable system with the documentation and knowledge transfer your team needs to run and extend it.',
+  },
+  {
+    q: 'Where is Navedhana based, and do you work with clients elsewhere?',
+    a: 'We are based in Hyderabad, India, and work with clients remotely.',
+  },
+];
+
+const SCHEMA = [
+  ...GROUPS.map((g) => ({
+    '@type': 'Service',
+    '@id': `https://www.navedhana.com/services#${g.id}`,
+    name: g.title,
+    serviceType: g.title,
+    description: `${g.lead} ${g.receive.body}`,
+    provider: { '@id': 'https://www.navedhana.com/#organization' },
+    areaServed: 'Worldwide',
+    url: `https://www.navedhana.com/services#${g.id}`,
+  })),
+  {
+    '@type': 'FAQPage',
+    '@id': 'https://www.navedhana.com/services#faq',
+    mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+
+const LEKVYA_CAPABILITIES =['AI Engineering', 'Custom Software', 'Intelligent Automation', 'Product Engineering'];
 
 // Secondary by design: Navedhana runs these, but this page is for software
 // buyers and the hierarchy should say so. Each links out to its own minimal
@@ -178,9 +229,10 @@ const ServiceReceiveCard = ({ title, body, dark }) => (
 
 const Services = () => {
   useDocumentMeta({
-    title: 'Services — AI Engineering, Custom Software, Automation & Product Engineering | Navedhana',
+    title: 'Software & AI Development Services — Navedhana',
     description:
-      'Navedhana builds AI systems, custom software, intelligent automation and production products. See when each service applies, what we build, what you receive, and how an engagement works.',
+      'AI engineering, custom software, intelligent automation and product engineering: when each fits, what we build, what you receive and how an engagement runs.',
+    schema: SCHEMA,
   });
 
   return (
@@ -366,6 +418,30 @@ const Services = () => {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* Native <details>: no JS, keyboard accessible, and the answers stay in
+          the HTML so crawlers read them even while collapsed. */}
+      <section id="faq" aria-labelledby="faq-heading" className={`${ANCHOR_OFFSET} pt-6 sm:pt-10 pb-4 px-4 sm:px-8`}>
+        <div className="max-w-3xl mx-auto">
+          <motion.div {...rise} className="text-center mb-8 sm:mb-10">
+            <SectionKicker centered className="mb-3.5">FAQ</SectionKicker>
+            <h2 id="faq-heading" className="font-display text-[28px] sm:text-[40px] font-bold tracking-tight text-ink">
+              Common questions
+            </h2>
+          </motion.div>
+          <div className="divide-y divide-ink/10 border-y border-ink/10">
+            {FAQS.map((f) => (
+              <details key={f.q} className="group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-display text-[17px] sm:text-[18px] font-semibold text-ink [&::-webkit-details-marker]:hidden">
+                  <h3>{f.q}</h3>
+                  <Plus size={20} aria-hidden="true" className="flex-shrink-0 text-electric transition-transform duration-300 group-open:rotate-45" />
+                </summary>
+                <p className="pb-5 -mt-1 text-[16px] leading-relaxed text-muted max-w-2xl">{f.a}</p>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

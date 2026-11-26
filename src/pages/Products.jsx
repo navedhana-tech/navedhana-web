@@ -15,11 +15,27 @@ const DEV_PRODUCTS = [
   { title: 'QA Foundation Platform', accent: '#0d9488', image: '/assets/photos/product-qa-foundation.jpg', desc: 'An intelligent QA and software-testing platform, focused on automated testing and engineering infrastructure.', icon: <CheckCircle2 size={18} /> },
 ];
 
+const SCHEMA = [
+  {
+    '@type': 'SoftwareApplication',
+    '@id': 'https://www.navedhana.com/products#lekvya',
+    name: 'Lekvya',
+    url: 'https://ca.navedhana.com/',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    description:
+      'An AI-powered workflow and client-communication platform for Chartered Accountants and financial-service firms, built around scheduling, client management and document handling.',
+    image: 'https://www.navedhana.com/assets/redesign/lekvya-screenshot.webp',
+    publisher: { '@id': 'https://www.navedhana.com/#organization' },
+  },
+];
+
 const Products = () => {
   useDocumentMeta({
     title: 'Products — Navedhana Software & AI Products',
     description:
       'Real products from Navedhana, built to solve problems we understand firsthand: Lekvya (live), and an AI Agent and QA platform in development.',
+    schema: SCHEMA,
   });
 
   return (

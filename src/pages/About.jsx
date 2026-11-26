@@ -85,9 +85,9 @@ const STORY = [
 
 const About = () => {
   useDocumentMeta({
-    title: 'About Navedhana — Software & AI Engineering Team',
+    title: 'About Navedhana — Software & AI Company, Hyderabad',
     description:
-      "Navedhana bridges traditional values and modern technology. Founded in 2023, we're a software development and AI engineering company focused on shipping fewer things, well.",
+      "Navedhana is a software development and AI engineering company founded in 2023 in Hyderabad, India. Who we are, what we've built and how we work.",
   });
 
   const reducedMotion = useReducedMotion();
